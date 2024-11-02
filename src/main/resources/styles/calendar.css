@@ -1,0 +1,46 @@
+/* calendar.css */
+.sidebar {
+    -fx-background-color: #f4f4f4;
+    -fx-border-color: #e0e0e0;
+    -fx-border-width: 0 1 0 0;
+}
+
+.calendar-cell {
+    -fx-background-color: white;
+    -fx-border-color: #e0e0e0;
+    -fx-border-width: 0.5;
+    -fx-padding: 5;
+}
+
+.calendar-cell:hover {
+    -fx-background-color: #f8f9fa;
+}
+
+.calendar-header {
+    -fx-font-weight: bold;
+    -fx-padding: 5;
+    -fx-background-color: #f8f9fa;
+}
+
+.today {
+    -fx-background-color: #e8f4f9;
+}
+
+.calendar-event {
+    -fx-background-color: red;
+    -fx-text-fill: white;
+    -fx-padding: 2 5;
+    -fx-background-radius: 3;
+}
+
+.toolbar {
+    -fx-padding: 10;
+    -fx-background-color: white;
+    -fx-border-color: #e0e0e0;
+    -fx-border-width: 0 0 1 0;
+}
+
+.toggle-button:selected {
+    -fx-background-color: red;
+    -fx-text-fill: white;
+}

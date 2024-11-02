@@ -1,0 +1,13 @@
+.sidebar {
+    -fx-background-color: #f4f4f4;
+}
+
+.sidebar-button {
+    -fx-background-color: transparent;
+    -fx-padding: 10;
+    -fx-alignment: CENTER;
+}
+
+.sidebar-button:hover {
+    -fx-background-color: #e0e0e0;
+}

@@ -6,7 +6,9 @@ module it.unical.informatica.progettouid {
     requires org.kordamp.bootstrapfx.core;
     requires java.sql;
     requires spring.security.crypto;
+    requires java.desktop;
 
+    opens it.unical.informatica.progettouid.controller to javafx.fxml;
     opens it.unical.informatica.progettouid to javafx.fxml;
     exports it.unical.informatica.progettouid;
 }

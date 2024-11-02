@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
+
+<BorderPane stylesheets="@../styles/home.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unical.informatica.progettouid.controller.DashboardClientController">
+
+   <left>
+      <VBox maxWidth="95" minWidth="95" spacing="10" styleClass="sidebar">
+         <padding>
+            <Insets bottom="20" top="20" />
+         </padding>
+         <Button maxWidth="Infinity" styleClass="sidebar-button">
+            <graphic>
+               <VBox alignment="CENTER" spacing="5">
+                  <FontIcon iconLiteral="fas-home" />
+                  <Text text="Home">
+                     <font>
+                        <Font size="9.0" />
+                     </font>
+                  </Text>
+               </VBox>
+            </graphic>
+         </Button>
+         <Button maxWidth="Infinity" styleClass="sidebar-button">
+            <graphic>
+               <VBox alignment="CENTER" spacing="5">
+                  <FontIcon iconLiteral="fas-calendar-alt" />
+                  <Text text="Attività">
+                     <font>
+                        <Font size="9.0" />
+                     </font>
+                  </Text>
+               </VBox>
+            </graphic>
+         </Button>
+         <Button maxWidth="Infinity" styleClass="sidebar-button">
+            <graphic>
+               <VBox alignment="CENTER" spacing="5">
+                  <FontIcon iconLiteral="fas-dumbbell" />
+                  <Text text="Personal trainer">
+                     <font>
+                        <Font size="9.0" />
+                     </font>
+                  </Text>
+               </VBox>
+            </graphic>
+         </Button>
+         <Button maxWidth="Infinity" styleClass="sidebar-button">
+            <graphic>
+               <VBox alignment="CENTER" spacing="5">
+                  <FontIcon iconLiteral="far-clipboard" />
+                  <Text text="Scheda">
+                     <font>
+                        <Font size="9.0" />
+                     </font>
+                  </Text>
+               </VBox>
+            </graphic>
+         </Button>
+         <Button maxWidth="Infinity" styleClass="sidebar-button">
+            <graphic>
+               <VBox alignment="CENTER" spacing="5">
+                  <FontIcon iconLiteral="far-credit-card" />
+                  <Text text="Il tuo abbonamento">
+                     <font>
+                        <Font size="9.0" />
+                     </font>
+                  </Text>
+               </VBox>
+            </graphic>
+         </Button>
+         <Button maxWidth="Infinity" styleClass="sidebar-button">
+            <graphic>
+               <VBox alignment="CENTER" spacing="5">
+                  <FontIcon iconLiteral="far-user" />
+                  <Text text="Account">
+                     <font>
+                        <Font size="9.0" />
+                     </font>
+                  </Text>
+               </VBox>
+            </graphic>
+         </Button>
+         <Button maxWidth="Infinity" styleClass="sidebar-button">
+            <graphic>
+               <VBox alignment="CENTER" spacing="5">
+                  <FontIcon iconLiteral="fas-cogs" />
+                  <Text text="Impostazioni">
+                     <font>
+                        <Font size="9.0" />
+                     </font>
+                  </Text>
+               </VBox>
+            </graphic>
+         </Button>
+         <Button maxWidth="Infinity" styleClass="sidebar-button">
+            <graphic>
+               <VBox alignment="CENTER" spacing="5">
+                  <FontIcon iconLiteral="far-question-circle" />
+                  <Text text="Help">
+                     <font>
+                        <Font size="9.0" />
+                     </font>
+                  </Text>
+               </VBox>
+            </graphic>
+         </Button>
+      </VBox>
+   </left>
+
+   <center>
+      <VBox spacing="20">
+         <padding>
+            <Insets bottom="20" left="20" right="20" top="20" />
+         </padding>
+
+         <!-- Header -->
+         <VBox spacing="5">
+            <Label text="Home">
+               <graphic>
+                  <FontIcon iconLiteral="fas-home" />
+               </graphic>
+            </Label>
+            <Label text="Bentornato user" />
+         </VBox>
+
+         <!-- Info Section -->
+         <HBox spacing="20" VBox.vgrow="NEVER">
+            <Text text="Accessi rimanenti: " />
+            <VBox spacing="5">
+               <Text text="Accessi totali:" />
+               <Text text="Il tuo abbonamento" />
+               <Text text="Scadenza abbonamento:" />
+            </VBox>
+         </HBox>
+
+         <!-- Lists Section -->
+         <HBox spacing="20" VBox.vgrow="ALWAYS">
+            <VBox spacing="5" HBox.hgrow="ALWAYS">
+               <Label text="Corsi di oggi:" />
+               <ListView VBox.vgrow="ALWAYS" />
+            </VBox>
+            <VBox spacing="5" HBox.hgrow="ALWAYS">
+               <Label text="Altri contenuti:" />
+               <ListView VBox.vgrow="ALWAYS" />
+            </VBox>
+         </HBox>
+      </VBox>
+   </center>
+
+</BorderPane>

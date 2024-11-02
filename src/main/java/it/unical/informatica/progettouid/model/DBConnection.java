@@ -74,7 +74,8 @@ public class DBConnection {
             stmt.close();
         }
     }
-
+}
+/*
     public Task<Void> insertUser(String username, String email, String datanascita, String password) {
         return asyncCall(() -> {
             if (isConnected()) {
@@ -260,3 +261,4 @@ public class DBConnection {
 
 }
 
+*/

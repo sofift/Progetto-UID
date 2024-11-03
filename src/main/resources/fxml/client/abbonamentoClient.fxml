@@ -1,0 +1,280 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import org.kordamp.ikonli.javafx.FontIcon?>
+<?import javafx.scene.text.Text?>
+<?import javafx.scene.text.Font?>
+<?import javafx.geometry.Insets?>
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="it.unical.informatica.progettouid.controller.AbbonamentoClientController"
+            prefHeight="400.0" prefWidth="600.0">
+
+    <top>
+        <VBox>
+            <children>
+                <Label alignment="CENTER" maxWidth="Infinity" text="Il tuo abbonamento">
+                    <graphic>
+                        <FontIcon iconLiteral="far-credit-card" />
+                    </graphic>
+                    <padding>
+                        <Insets bottom="10" top="10" />
+                    </padding>
+                    <font>
+                        <Font size="18.0" />
+                    </font>
+                </Label>
+            </children>
+        </VBox>
+    </top>
+
+    <left>
+        <VBox alignment="TOP_CENTER" minWidth="95.0" prefHeight="100.0" spacing="10.0">
+            <padding>
+                <Insets bottom="20.0" left="10.0" right="10.0" top="20.0" />
+            </padding>
+            <children>
+                <Button maxWidth="Infinity" styleClass="nav-button">
+                    <graphic>
+                        <VBox alignment="CENTER" spacing="5">
+                            <children>
+                                <FontIcon iconLiteral="fas-home" />
+                                <Text text="Home">
+                                    <font>
+                                        <Font size="9.0" />
+                                    </font>
+                                </Text>
+                            </children>
+                        </VBox>
+                    </graphic>
+                </Button>
+                <Button maxWidth="Infinity" styleClass="nav-button">
+                    <graphic>
+                        <VBox alignment="CENTER" spacing="5">
+                            <children>
+                                <FontIcon iconLiteral="fas-calendar-alt" />
+                                <Text text="Attività">
+                                    <font>
+                                        <Font size="9.0" />
+                                    </font>
+                                </Text>
+                            </children>
+                        </VBox>
+                    </graphic>
+                </Button>
+                <Button maxWidth="Infinity" styleClass="nav-button">
+                    <graphic>
+                        <VBox alignment="CENTER" spacing="5">
+                            <children>
+                                <FontIcon iconLiteral="fas-dumbbell" />
+                                <Text text="Personal trainer">
+                                    <font>
+                                        <Font size="9.0" />
+                                    </font>
+                                </Text>
+                            </children>
+                        </VBox>
+                    </graphic>
+                </Button>
+                <Button maxWidth="Infinity" styleClass="nav-button">
+                    <graphic>
+                        <VBox alignment="CENTER" spacing="5">
+                            <children>
+                                <FontIcon iconLiteral="far-clipboard" />
+                                <Text text="Scheda">
+                                    <font>
+                                        <Font size="9.0" />
+                                    </font>
+                                </Text>
+                            </children>
+                        </VBox>
+                    </graphic>
+                </Button>
+                <Button maxWidth="Infinity" styleClass="nav-button">
+                    <graphic>
+                        <VBox alignment="CENTER" spacing="5">
+                            <children>
+                                <FontIcon iconLiteral="far-credit-card" />
+                                <Text text="Il tuo abbonamento">
+                                    <font>
+                                        <Font size="9.0" />
+                                    </font>
+                                </Text>
+                            </children>
+                        </VBox>
+                    </graphic>
+                </Button>
+                <Button maxWidth="Infinity" styleClass="nav-button">
+                    <graphic>
+                        <VBox alignment="CENTER" spacing="5">
+                            <children>
+                                <FontIcon iconLiteral="far-user" />
+                                <Text text="Account">
+                                    <font>
+                                        <Font size="9.0" />
+                                    </font>
+                                </Text>
+                            </children>
+                        </VBox>
+                    </graphic>
+                </Button>
+                <Button maxWidth="Infinity" styleClass="nav-button">
+                    <graphic>
+                        <VBox alignment="CENTER" spacing="5">
+                            <children>
+                                <FontIcon iconLiteral="fas-cogs" />
+                                <Text text="Impostazioni">
+                                    <font>
+                                        <Font size="9.0" />
+                                    </font>
+                                </Text>
+                            </children>
+                        </VBox>
+                    </graphic>
+                </Button>
+                <Button maxWidth="Infinity" styleClass="nav-button">
+                    <graphic>
+                        <VBox alignment="CENTER" spacing="5">
+                            <children>
+                                <FontIcon iconLiteral="far-question-circle" />
+                                <Text text="Help">
+                                    <font>
+                                        <Font size="9.0" />
+                                    </font>
+                                </Text>
+                            </children>
+                        </VBox>
+                    </graphic>
+                </Button>
+            </children>
+        </VBox>
+    </left>
+
+    <center>
+        <VBox spacing="15.0" style="-fx-background-color: white; -fx-background-radius: 10;">
+            <padding>
+                <Insets top="20.0" right="20.0" bottom="20.0" left="20.0"/>
+            </padding>
+
+            <Label text="Il tuo abbonamento" style="-fx-font-size: 24; -fx-font-weight: bold;"/>
+
+            <VBox spacing="10.0" style="-fx-background-color: #f8f9fa; -fx-background-radius: 5; -fx-padding: 15;">
+                <HBox spacing="10.0">
+                    <FontIcon iconLiteral="fas-crown" iconSize="24"/>
+                    <Label fx:id="tipoAbbonamentoLabel" text="Premium" style="-fx-font-size: 18; -fx-font-weight: bold;"/>
+                </HBox>
+
+                <VBox spacing="5.0">
+                    <Label text="Data inizio:" style="-fx-font-weight: bold;"/>
+                    <Label fx:id="dataInizioLabel" text="01/03/2024"/>
+
+                    <Label text="Data scadenza:" style="-fx-font-weight: bold;"/>
+                    <Label fx:id="dataScadenzaLabel" text="31/03/2024"/>
+
+                    <Label text="Stato:" style="-fx-font-weight: bold;"/>
+                    <Label fx:id="statoAbbonamentoLabel" text="Attivo" style="-fx-text-fill: #28a745;"/>
+                </VBox>
+            </VBox>
+
+            <Button fx:id="rinnovaButton" text="Rinnova abbonamento"
+                    style="-fx-background-color: #007bff; -fx-text-fill: white; -fx-font-weight: bold;"
+                    maxWidth="Infinity"/>
+
+            <Separator/>
+
+            <VBox spacing="5.0">
+                <Label text="Vantaggi del tuo abbonamento:" style="-fx-font-weight: bold;"/>
+                <Label text="✓ Accesso illimitato alla sala pesi" wrapText="true"/>
+                <Label text="✓ Accesso a tutti i corsi" wrapText="true"/>
+                <Label text="✓ 2 sessioni con personal trainer" wrapText="true"/>
+            </VBox>
+        </VBox>
+    </center>
+
+    <!-- Piani di abbonamento sulla destra -->
+    <right>
+        <ScrollPane fitToWidth="true" style="-fx-background: transparent; -fx-background-color: transparent;" prefWidth="400.0">
+            <VBox spacing="20.0">
+                <padding>
+                    <Insets top="20.0" right="20.0" bottom="20.0" left="20.0"/>
+                </padding>
+
+                <Label text="Piani disponibili" style="-fx-font-size: 24; -fx-font-weight: bold;"/>
+
+                <VBox spacing="20">
+                    <!-- Card Base -->
+                    <VBox styleClass="subscription-card"
+                          style="-fx-background-color: white; -fx-background-radius: 10; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 0);">
+                        <padding>
+                            <Insets top="20" right="20" bottom="20" left="20"/>
+                        </padding>
+
+                        <Label text="Base" style="-fx-font-size: 24; -fx-font-weight: bold;"/>
+                        <Label text="Per chi inizia" style="-fx-text-fill: #6c757d;"/>
+                        <Label text="€29.99/mese" style="-fx-font-size: 28; -fx-font-weight: bold;"/>
+
+                        <VBox spacing="10" VBox.vgrow="ALWAYS">
+                            <Label text="✓ Accesso sala pesi" wrapText="true"/>
+                            <Label text="✓ Accesso spogliatoi" wrapText="true"/>
+                            <Label text="✓ 1 sessione PT gratuita" wrapText="true"/>
+                        </VBox>
+
+                        <Button text="Seleziona" maxWidth="Infinity"
+                                style="-fx-background-color: #007bff; -fx-text-fill: white;"/>
+                    </VBox>
+
+                    <!-- Card Premium -->
+                    <VBox styleClass="subscription-card"
+                          style="-fx-background-color: white; -fx-background-radius: 10; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 0);">
+                        <padding>
+                            <Insets top="20" right="20" bottom="20" left="20"/>
+                        </padding>
+
+                        <Label text="Premium" style="-fx-font-size: 24; -fx-font-weight: bold;"/>
+                        <Label text="Il più popolare" style="-fx-text-fill: #6c757d;"/>
+                        <Label text="€49.99/mese" style="-fx-font-size: 28; -fx-font-weight: bold;"/>
+
+                        <VBox spacing="10" VBox.vgrow="ALWAYS">
+                            <Label text="✓ Tutto del piano Base" wrapText="true"/>
+                            <Label text="✓ Accesso illimitato ai corsi" wrapText="true"/>
+                            <Label text="✓ 2 sessioni PT al mese" wrapText="true"/>
+                            <Label text="✓ Programma personalizzato" wrapText="true"/>
+                        </VBox>
+
+                        <Button text="Seleziona" maxWidth="Infinity"
+                                style="-fx-background-color: #28a745; -fx-text-fill: white;"/>
+                    </VBox>
+
+                    <!-- Card Elite -->
+                    <VBox styleClass="subscription-card"
+                          style="-fx-background-color: white; -fx-background-radius: 10; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 0);">
+                        <padding>
+                            <Insets top="20" right="20" bottom="20" left="20"/>
+                        </padding>
+
+                        <Label text="Elite" style="-fx-font-size: 24; -fx-font-weight: bold;"/>
+                        <Label text="Per i più esigenti" style="-fx-text-fill: #6c757d;"/>
+                        <Label text="€79.99/mese" style="-fx-font-size: 28; -fx-font-weight: bold;"/>
+
+                        <VBox spacing="10" VBox.vgrow="ALWAYS">
+                            <Label text="✓ Tutto del piano Premium" wrapText="true"/>
+                            <Label text="✓ Personal trainer dedicato" wrapText="true"/>
+                            <Label text="✓ Accesso area spa/wellness" wrapText="true"/>
+                            <Label text="✓ Analisi composizione corporea" wrapText="true"/>
+                            <Label text="✓ Parcheggio riservato" wrapText="true"/>
+                        </VBox>
+
+                        <Button text="Seleziona" maxWidth="Infinity"
+                                style="-fx-background-color: #17a2b8; -fx-text-fill: white;"/>
+                    </VBox>
+                </VBox>
+            </VBox>
+        </ScrollPane>
+    </right>
+
+</BorderPane>

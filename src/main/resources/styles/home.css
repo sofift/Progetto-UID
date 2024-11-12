@@ -1,13 +1,235 @@
+/* Root styles */
+.root {
+    -fx-background-color: #f5f5f5;
+    -fx-font-family: "Segoe UI", Arial, sans-serif;
+}
+
+/* Sidebar styles */
 .sidebar {
-    -fx-background-color: #f4f4f4;
+    -fx-background-color: #1a3246;
+    -fx-padding: 20px 0;
 }
 
 .sidebar-button {
     -fx-background-color: transparent;
-    -fx-padding: 10;
-    -fx-alignment: CENTER;
+    -fx-text-fill: #ffffff;
+    -fx-padding: 10px 0;
+    -fx-cursor: hand;
 }
 
 .sidebar-button:hover {
-    -fx-background-color: #e0e0e0;
+    -fx-background-color: #2a4356;
+}
+
+.sidebar-button .ikonli-font-icon {
+    -fx-icon-color: #ffffff;
+    -fx-icon-size: 20px;
+}
+
+.sidebar-button Text {
+    -fx-fill: #ffffff;
+}
+
+
+
+BorderPane > .top{
+    -fx-background-color: #04222a;
+}
+
+
+/* Header section styles */
+VBox > Label:first-child {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: black;
+}
+
+VBox > Label:first-child .ikonli-font-icon {
+    -fx-icon-color: black;
+    -fx-icon-size: 24px;
+}
+
+VBox > Label:nth-child(2) {
+    -fx-font-size: 18px;
+    -fx-text-fill: black;
+}
+
+/* Info section styles */
+HBox Text {
+    -fx-font-size: 14px;
+    -fx-fill: white;
+}
+
+/* Info boxes */
+
+
+/* Lists section styles */
+/* Container for both lists */
+HBox.lists-container {
+    -fx-spacing: 20;
+}
+
+/* List headers */
+VBox > Label {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+    -fx-padding: 0 0 5px 0;
+}
+
+/* Lists styling */
+.list-view {
+    -fx-background-color: white;
+    -fx-background-radius: 4px;
+    -fx-border-radius: 4px;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 10, 0, 0, 0);
+}
+
+.list-view .list-cell {
+    -fx-padding: 8px;
+    -fx-background-color: white;
+}
+
+.list-view .list-cell:hover {
+    -fx-background-color: #f5f5f5;
+}
+
+.list-view .list-cell:selected {
+    -fx-background-color: #2a4356;
+    -fx-text-fill: white;
+}
+
+/* Custom scrollbar */
+.list-view .scroll-bar:vertical {
+    -fx-background-color: #f0f0f0;
+    -fx-pref-width: 12px;
+}
+
+.list-view .scroll-bar:vertical .thumb {
+    -fx-background-color: #999999;
+    -fx-background-radius: 6px;
+}
+
+.list-view .scroll-bar:vertical .thumb:hover {
+    -fx-background-color: #666666;
+}
+
+/* Course list specific styles */
+.course-list {
+    -fx-pref-width: 400px;
+}
+
+.course-list .list-cell {
+    -fx-border-color: transparent transparent #e0e0e0 transparent;
+    -fx-border-width: 0 0 1 0;
+}
+
+/* Course row styles */
+.course-row {
+    -fx-spacing: 10;
+    -fx-alignment: center-left;
+}
+
+.course-name {
+    -fx-font-weight: bold;
+}
+
+.course-time {
+    -fx-text-fill: #666666;
+}
+
+.course-instructor {
+    -fx-text-fill: #666666;
+    -fx-font-style: italic;
+}
+
+/* Table header style for the course list */
+.course-header {
+    -fx-background-color: #f8f9fa;
+    -fx-padding: 8px;
+    -fx-border-color: #e0e0e0;
+    -fx-border-width: 0 0 1 0;
+    -fx-font-weight: bold;
+}
+
+/* Notification list styles */
+.notification-list .list-cell {
+    -fx-padding: 10px;
+    -fx-border-color: transparent transparent #e0e0e0 transparent;
+    -fx-border-width: 0 0 1 0;
+}
+
+/* Notification item styles */
+.notification-item {
+    -fx-spacing: 10;
+}
+
+.notification-content {
+    -fx-font-size: 14px;
+}
+
+.notification-time {
+    -fx-font-size: 12px;
+    -fx-text-fill: #666666;
+}
+
+/* Dismiss button styles */
+.dismiss-button {
+    -fx-background-color: transparent;
+    -fx-text-fill: #999999;
+    -fx-cursor: hand;
+}
+
+.dismiss-button:hover {
+    -fx-text-fill: #666666;
+}
+
+/* Global styles for icons */
+.ikonli-font-icon {
+    -fx-icon-color: #666666;
+}
+
+/* Stili per il VBox centrale */
+.centerVBox {
+    -fx-background-color: linear-gradient(to bottom, #2d5d76 50%, white 50%);
+    -fx-padding: 20px;
+    -fx-spacing: 20px;
+}
+
+/* Header section styles solo per il VBox centrale */
+.centerVBox > VBox > Label:first-child {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+}
+
+.centerVBox > VBox > Label:first-child .ikonli-font-icon {
+    -fx-icon-color: white;
+    -fx-icon-size: 24px;
+}
+
+.centerVBox > VBox > Label:nth-child(2) {
+    -fx-font-size: 18px;
+    -fx-text-fill: white;
+}
+/* Stili per le VBox con sfondo bianco */
+/* Stili per le VBox con sfondo bianco */
+.whiteBox {
+    -fx-background-color: white;
+    -fx-padding: 15px;
+    -fx-border-radius: 8px;
+    -fx-background-radius: 8px;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.1), 10, 0, 0, 5);
+}
+
+/* Stili per i label con testo blu scuro */
+.whiteBox > Label {
+    -fx-text-fill: #1a3246; /* Colore blu scuro */
+    -fx-font-weight: bold;
+    -fx-font-size: 16px;
+}
+
+/* Stili per il testo all'interno della ListView */
+.whiteBox .list-view .list-cell {
+    -fx-text-fill: #1a3246; /* Colore blu scuro */
 }

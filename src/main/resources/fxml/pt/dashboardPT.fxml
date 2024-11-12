@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.URL?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.chart.BarChart?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
+
+<BorderPane xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unical.informatica.progettouid.controller.DashboardPTController">
+
+    <top>
+        <VBox>
+            <children>
+                <Label alignment="CENTER" maxWidth="Infinity" text="Dashboard">
+                    <graphic>
+                        <FontIcon iconLiteral="fas-tachometer-alt" />
+                    </graphic>
+                    <padding>
+                        <Insets bottom="10" top="10" />
+                    </padding>
+                    <font>
+                        <Font size="18.0" />
+                    </font>
+                </Label>
+            </children>
+        </VBox>
+    </top>
+
+
+
+    <left>
+        <VBox maxWidth="95" minWidth="95" spacing="10" styleClass="sidebar">
+            <padding>
+                <Insets bottom="20" top="20" />
+            </padding>
+            <Button maxWidth="Infinity" styleClass="sidebar-button">
+                <graphic>
+                    <VBox alignment="CENTER" spacing="5">
+                        <FontIcon iconLiteral="fas-home" />
+                        <Text text="Home">
+                            <font>
+                                <Font size="9.0" />
+                            </font>
+                        </Text>
+                    </VBox>
+                </graphic>
+            </Button>
+            <Button maxWidth="Infinity" styleClass="sidebar-button">
+                <graphic>
+                    <VBox alignment="CENTER" spacing="5">
+                        <FontIcon iconLiteral="fas-calendar-alt" />
+                        <Text text="Attività">
+                            <font>
+                                <Font size="9.0" />
+                            </font>
+                        </Text>
+                    </VBox>
+                </graphic>
+            </Button>
+            <Button maxWidth="Infinity" styleClass="sidebar-button">
+                <graphic>
+                    <VBox alignment="CENTER" spacing="5">
+                        <FontIcon iconLiteral="far-clipboard" />
+                        <Text text="Crea scheda">
+                            <font>
+                                <Font size="9.0" />
+                            </font>
+                        </Text>
+                    </VBox>
+                </graphic>
+            </Button>
+            <Button maxWidth="Infinity" styleClass="sidebar-button">
+                <graphic>
+                    <VBox alignment="CENTER" spacing="5">
+                        <FontIcon iconLiteral="far-user" />
+                        <Text text="Account">
+                            <font>
+                                <Font size="9.0" />
+                            </font>
+                        </Text>
+                    </VBox>
+                </graphic>
+            </Button>
+            <Button maxWidth="Infinity" styleClass="sidebar-button">
+                <graphic>
+                    <VBox alignment="CENTER" spacing="5">
+                        <FontIcon iconLiteral="fas-cogs" />
+                        <Text text="Impostazioni">
+                            <font>
+                                <Font size="9.0" />
+                            </font>
+                        </Text>
+                    </VBox>
+                </graphic>
+            </Button>
+            <Button maxWidth="Infinity" styleClass="sidebar-button">
+                <graphic>
+                    <VBox alignment="CENTER" spacing="5">
+                        <FontIcon iconLiteral="far-question-circle" />
+                        <Text text="Help">
+                            <font>
+                                <Font size="9.0" />
+                            </font>
+                        </Text>
+                    </VBox>
+                </graphic>
+            </Button>
+        </VBox>
+    </left>
+
+    <center>
+        <ScrollPane fitToWidth="true" styleClass="dashboard-scroll">
+            <VBox spacing="20" styleClass="main-content">
+                <padding>
+                    <Insets bottom="20" left="20" right="20" top="20" />
+                </padding>
+
+                <HBox maxHeight="200" spacing="20">
+                    <VBox maxHeight="200" styleClass="dashboard-card" HBox.hgrow="ALWAYS">
+                        <HBox alignment="CENTER" spacing="30" styleClass="stats-container">
+                            <VBox alignment="CENTER" maxHeight="120" maxWidth="120" styleClass="stat-circle, stat-circle-scheduled">
+                                <Label styleClass="stat-circle-value" text="€25,687.50" />
+                                <Label styleClass="stat-circle-label" text="Scheduled" />
+                            </VBox>
+
+                            <VBox alignment="CENTER" maxHeight="120" maxWidth="120" styleClass="stat-circle, stat-circle-paid">
+                                <Label styleClass="stat-circle-value" text="€11,936.34" />
+                                <Label styleClass="stat-circle-label" text="Paid" />
+                            </VBox>
+
+                            <VBox alignment="CENTER" maxHeight="120" maxWidth="120" styleClass="stat-circle, stat-circle-overdue">
+                                <Label styleClass="stat-circle-value" text="€220.00" />
+                                <Label styleClass="stat-circle-label" text="Overdue" />
+                            </VBox>
+                        </HBox>
+                    </VBox>
+
+                    <VBox maxHeight="200" styleClass="dashboard-card" HBox.hgrow="ALWAYS">
+                        <BarChart fx:id="weeklyAttendanceChart" animated="false" legendVisible="false" maxHeight="180" title="Affluenza Settimanale">
+                            <xAxis>
+                                <CategoryAxis label="" tickLabelRotation="0">
+                                    <tickLabelFont>
+                                        <Font size="10" />
+                                    </tickLabelFont>
+                                </CategoryAxis>
+                            </xAxis>
+                            <yAxis>
+                                <NumberAxis label="" tickLabelRotation="0">
+                                    <tickLabelFont>
+                                        <Font size="10" />
+                                    </tickLabelFont>
+                                </NumberAxis>
+                            </yAxis>
+                        </BarChart>
+                    </VBox>
+                </HBox>
+
+                <HBox spacing="20">
+                    <VBox styleClass="dashboard-card" HBox.hgrow="ALWAYS">
+                        <HBox alignment="CENTER_LEFT" spacing="10">
+                            <FontIcon iconLiteral="fas-calendar-check" styleClass="card-icon" />
+                            <Label styleClass="card-title" text="My Bookings" />
+                        </HBox>
+                        <ListView fx:id="todayActivitiesList" VBox.vgrow="ALWAYS" />
+                    </VBox>
+
+                    <VBox styleClass="dashboard-card" HBox.hgrow="ALWAYS">
+                        <HBox alignment="CENTER_LEFT" spacing="10">
+                            <FontIcon iconLiteral="fas-bell" styleClass="card-icon" />
+                            <Label styleClass="card-title" text="Notifications" />
+                            <Region HBox.hgrow="ALWAYS" />
+                            <Button styleClass="dismiss-button" text="DISMISS ALL" />
+                        </HBox>
+                        <ListView fx:id="notificationsList" VBox.vgrow="ALWAYS" />
+                    </VBox>
+                </HBox>
+            </VBox>
+        </ScrollPane>
+    </center>
+   <stylesheets>
+      <URL value="@../../styles/homePT.css" />
+      <URL value="@../../styles/home.css" />
+   </stylesheets>
+
+</BorderPane>

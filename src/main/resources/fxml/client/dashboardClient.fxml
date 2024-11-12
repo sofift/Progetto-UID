@@ -13,6 +13,24 @@
 
 <BorderPane stylesheets="@../../styles/home.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unical.informatica.progettouid.controller.DashboardClientController">
 
+   <top>
+      <VBox styleClass="top">
+         <children>
+            <Label text="Home">
+               <graphic>
+                  <FontIcon iconLiteral="fas-home" />
+               </graphic>
+            <padding>
+                  <Insets bottom="10" top="10" />
+               </padding>
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+         </children>
+      </VBox>
+   </top>
+
    <left>
       <VBox maxWidth="95" minWidth="95" spacing="10" styleClass="sidebar">
          <padding>
@@ -118,22 +136,15 @@
    </left>
 
    <center>
-      <VBox spacing="20">
+      <VBox id="centerVBox" spacing="20" styleClass="centerVBox">
          <padding>
             <Insets bottom="20" left="20" right="20" top="20" />
          </padding>
 
-         <!-- Header -->
          <VBox spacing="5">
-            <Label text="Home">
-               <graphic>
-                  <FontIcon iconLiteral="fas-home" />
-               </graphic>
-            </Label>
             <Label text="Bentornato user" />
          </VBox>
 
-         <!-- Info Section -->
          <HBox spacing="20" VBox.vgrow="NEVER">
             <Text text="Accessi rimanenti: " />
             <VBox spacing="5">
@@ -143,13 +154,12 @@
             </VBox>
          </HBox>
 
-         <!-- Lists Section -->
          <HBox spacing="20" VBox.vgrow="ALWAYS">
-            <VBox spacing="5" HBox.hgrow="ALWAYS">
+            <VBox spacing="5" styleClass="whiteBox" HBox.hgrow="ALWAYS">
                <Label text="Corsi di oggi:" />
                <ListView VBox.vgrow="ALWAYS" />
             </VBox>
-            <VBox spacing="5" HBox.hgrow="ALWAYS">
+            <VBox spacing="5" styleClass="whiteBox" HBox.hgrow="ALWAYS">
                <Label text="Altri contenuti:" />
                <ListView VBox.vgrow="ALWAYS" />
             </VBox>

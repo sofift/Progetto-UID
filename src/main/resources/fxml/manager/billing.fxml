@@ -1,0 +1,299 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.LineChart?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
+
+<BorderPane stylesheets="@../../styles/home.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unical.informatica.progettouid.controller.BillingController">
+
+    <top>
+        <VBox styleClass="top">
+            <children>
+                <Label text="Billing">
+                    <graphic>
+                        <FontIcon iconLiteral="fas-home" />
+                    </graphic>
+                    <padding>
+                        <Insets bottom="10" top="10" />
+                    </padding>
+                    <font>
+                        <Font size="18.0" />
+                    </font>
+                </Label>
+            </children>
+        </VBox>
+    </top>
+
+    <left>
+        <VBox maxWidth="95" minWidth="95" spacing="10" styleClass="sidebar">
+            <padding>
+                <Insets bottom="20" top="20" />
+            </padding>
+            <Button maxWidth="Infinity" styleClass="sidebar-button">
+                <graphic>
+                    <VBox alignment="CENTER" spacing="5">
+                        <FontIcon iconLiteral="fas-home" />
+                        <Text text="Home">
+                            <font>
+                                <Font size="9.0" />
+                            </font>
+                        </Text>
+                    </VBox>
+                </graphic>
+            </Button>
+            <Button maxWidth="Infinity" styleClass="sidebar-button">
+                <graphic>
+                    <VBox alignment="CENTER" spacing="5">
+                        <FontIcon iconLiteral="fas-user-check" />
+                        <Text text="Check-in">
+                            <font>
+                                <Font size="9.0" />
+                            </font>
+                        </Text>
+                    </VBox>
+                </graphic>
+            </Button>
+            <Button maxWidth="Infinity" styleClass="sidebar-button">
+                <graphic>
+                    <VBox alignment="CENTER" spacing="5">
+                        <children>
+                            <FontIcon iconLiteral="fas-users" />
+                            <Text text="Membri">
+                                <font>
+                                    <Font size="9.0" />
+                                </font>
+                            </Text>
+                        </children>
+                    </VBox>
+                </graphic>
+            </Button>
+            <Button maxWidth="Infinity" styleClass="sidebar-button">
+                <graphic>
+                    <VBox alignment="CENTER" spacing="5">
+                        <FontIcon iconLiteral="fas-user-plus" />
+                        <Text text="Aggiungi cliente">
+                            <font>
+                                <Font size="9.0" />
+                            </font>
+                        </Text>
+                    </VBox>
+                </graphic>
+            </Button>
+            <Button maxWidth="Infinity" styleClass="sidebar-button">
+                <graphic>
+                    <VBox alignment="CENTER" spacing="5">
+                        <FontIcon iconLiteral="fas-walking" />
+                        <Text text="Aggiungi corso">
+                            <font>
+                                <Font size="9.0" />
+                            </font>
+                        </Text>
+                    </VBox>
+                </graphic>
+            </Button>
+            <Button maxWidth="Infinity" styleClass="sidebar-button">
+                <graphic>
+                    <VBox alignment="CENTER" spacing="5">
+                        <FontIcon iconLiteral="far-credit-card" />
+                        <Text text="Billing">
+                            <font>
+                                <Font size="9.0" />
+                            </font>
+                        </Text>
+                    </VBox>
+                </graphic>
+            </Button>
+            <Button maxWidth="Infinity" styleClass="sidebar-button">
+                <graphic>
+                    <VBox alignment="CENTER" spacing="5">
+                        <FontIcon iconLiteral="far-user" />
+                        <Text text="Account">
+                            <font>
+                                <Font size="9.0" />
+                            </font>
+                        </Text>
+                    </VBox>
+                </graphic>
+            </Button>
+            <Button maxWidth="Infinity" styleClass="sidebar-button">
+                <graphic>
+                    <VBox alignment="CENTER" spacing="5">
+                        <FontIcon iconLiteral="fas-cogs" />
+                        <Text text="Impostazioni">
+                            <font>
+                                <Font size="9.0" />
+                            </font>
+                        </Text>
+                    </VBox>
+                </graphic>
+            </Button>
+            <Button maxWidth="Infinity" styleClass="sidebar-button">
+                <graphic>
+                    <VBox alignment="CENTER" spacing="5">
+                        <FontIcon iconLiteral="far-question-circle" />
+                        <Text text="Help">
+                            <font>
+                                <Font size="9.0" />
+                            </font>
+                        </Text>
+                    </VBox>
+                </graphic>
+            </Button>
+        </VBox>
+    </left>
+
+    <center>
+        <VBox spacing="10">
+            <HBox alignment="CENTER_LEFT" styleClass="header">
+                <Label styleClass="title" text="Billing">
+                    <graphic>
+                        <FontIcon iconLiteral="far-credit-card" />
+                    </graphic>
+                </Label>
+            </HBox>
+
+            <TabPane fx:id="billingTabPane" styleClass="billing-tabs">
+                <Tab closable="false" text="Overview">
+                    <VBox spacing="20">
+                        <!-- Sezione totali -->
+                        <HBox spacing="15" styleClass="totals-section">
+                            <VBox styleClass="total-card">
+                                <Label styleClass="amount" text="25,712.50" />
+                                <Label styleClass="label" text="Scheduled" />
+                            </VBox>
+                            <VBox styleClass="total-card">
+                                <Label styleClass="amount" text="11,236.34" />
+                                <Label styleClass="label" text="Paid" />
+                            </VBox>
+                            <VBox styleClass="total-card">
+                                <Label styleClass="amount" text="220.00" />
+                                <Label styleClass="label" text="Overdue" />
+                            </VBox>
+                        </HBox>
+
+                        <!-- Grafico delle entrate -->
+                        <VBox styleClass="chart-section">
+                            <Label styleClass="section-title" text="Revenue" />
+                            <LineChart fx:id="revenueChart" styleClass="revenue-chart">
+                                <xAxis>
+                                    <CategoryAxis label="Month" />
+                                </xAxis>
+                                <yAxis>
+                                    <NumberAxis label="Amount ($)" />
+                                </yAxis>
+                            </LineChart>
+                        </VBox>
+
+                        <!-- Sezione abbonamenti scaduti -->
+                        <VBox styleClass="overdue-section">
+                            <Label styleClass="section-title" text="Overdue Payments" />
+                            <TableView fx:id="overduePaymentsTable">
+                                <columns>
+                                    <TableColumn fx:id="overdueNameColumn" text="MEMBER" />
+                                    <TableColumn fx:id="overdueAmountColumn" text="AMOUNT" />
+                                    <TableColumn fx:id="overdueDescriptionColumn" text="DESCRIPTION" />
+                                    <TableColumn fx:id="overdueDateColumn" text="STATUS" />
+                                    <TableColumn fx:id="overdueActionColumn" text="ACTION" />
+                                </columns>
+                            </TableView>
+                        </VBox>
+
+                        <!-- Sezione pagamenti recenti -->
+                        <VBox styleClass="recent-payments-section">
+                            <Label styleClass="section-title" text="Recent Payments" />
+                            <TableView fx:id="recentPaymentsTable">
+                                <columns>
+                                    <TableColumn fx:id="recentNameColumn" text="MEMBER" />
+                                    <TableColumn fx:id="recentAmountColumn" text="AMOUNT" />
+                                    <TableColumn fx:id="recentDescriptionColumn" text="DESCRIPTION" />
+                                    <TableColumn fx:id="recentDateColumn" text="STATUS" />
+                                    <TableColumn fx:id="recentActionColumn" text="ACTION" />
+                                </columns>
+                            </TableView>
+                        </VBox>
+                    </VBox>
+                </Tab>
+
+                <Tab closable="false" text="Payments">
+                    <VBox spacing="10">
+                        <!-- Barra di ricerca e filtri -->
+                        <HBox alignment="CENTER_LEFT" spacing="10" styleClass="search-bar">
+                            <TextField fx:id="searchField" promptText="Search first or last name..." styleClass="search-field" />
+                            <Button styleClass="filter-button" text="FILTER">
+                                <graphic>
+                                    <FontIcon iconLiteral="fas-filter" />
+                                </graphic>
+                            </Button>
+                            <Region HBox.hgrow="ALWAYS" />
+                            <Button styleClass="action-button" text="PRINT" />
+                            <Button styleClass="action-button" text="EXPORT" />
+                        </HBox>
+                  <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE">
+                    <tabs>
+                      <Tab text="Pagati">
+                        <content>
+                          <AnchorPane>
+                                 <children>
+                  
+                                          <!-- Tabella principale dei pagamenti -->
+                                          <TableView fx:id="paymentsTable" prefHeight="400.0" prefWidth="500.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                              <columns>
+                                                  <TableColumn fx:id="memberColumn" text="MEMBER" />
+                                                  <TableColumn fx:id="amountColumn" text="AMOUNT" />
+                                                  <TableColumn fx:id="descriptionColumn" text="DESCRIPTION" />
+                                                  <TableColumn fx:id="statusColumn" text="STATUS" />
+                                                  <TableColumn fx:id="invoiceColumn" text="INVOICE" />
+                                              </columns>
+                                          </TableView>
+                                 </children>
+                              </AnchorPane>
+                        </content>
+                      </Tab>
+                      <Tab text="Scaduti">
+                        <content>
+                          <AnchorPane>
+                                 <children>
+                                    <TableView fx:id="paymentsTable1" prefHeight="400.0" prefWidth="500.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                       <columns>
+                                          <TableColumn fx:id="memberColumn1" text="MEMBER" />
+                                          <TableColumn fx:id="amountColumn1" text="AMOUNT" />
+                                          <TableColumn fx:id="descriptionColumn1" text="DESCRIPTION" />
+                                          <TableColumn fx:id="statusColumn1" text="STATUS" />
+                                          <TableColumn fx:id="invoiceColumn1" text="INVOICE" />
+                                       </columns>
+                                    </TableView>
+                                 </children>
+                              </AnchorPane>
+                        </content>
+                      </Tab>
+                    </tabs>
+                  </TabPane>
+                    </VBox>
+                </Tab>
+
+                <Tab closable="false" text="Recurring" />
+                <Tab closable="false" text="Discounts" />
+                <Tab closable="false" text="Payment Forms" />
+                <Tab closable="false" text="Accounting" />
+                <Tab closable="false" text="Settings" />
+            </TabPane>
+        </VBox>
+    </center>
+
+</BorderPane>

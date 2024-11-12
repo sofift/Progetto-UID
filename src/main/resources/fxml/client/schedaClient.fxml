@@ -14,7 +14,6 @@
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="it.unical.informatica.progettouid.controller.SchedaClientController"
             prefHeight="400.0" prefWidth="600.0">
-    <!-- Top section rimane uguale -->
     <top>
         <VBox>
             <children>
@@ -155,7 +154,6 @@
         </VBox>
     </left>
 
-    <!-- Center section per la scheda -->
     <center>
         <ScrollPane fitToWidth="true">
             <content>
@@ -164,7 +162,6 @@
                         <Insets top="20" right="20" bottom="20" left="20"/>
                     </padding>
 
-                    <!-- Informazioni generali -->
                     <VBox spacing="10" styleClass="info-section">
                         <Label text="Informazioni Generali" styleClass="section-header">
                             <graphic>
@@ -179,7 +176,6 @@
                         </GridPane>
                     </VBox>
 
-                    <!-- TabPane per i giorni della settimana -->
                     <TabPane fx:id="weekdayTabs" styleClass="workout-tabs">
                         <Tab text="Lunedì" closable="false">
                             <VBox fx:id="mondayExercises" spacing="10"/>
@@ -204,7 +200,6 @@
                         </Tab>
                     </TabPane>
 
-                    <!-- Note e Raccomandazioni -->
                     <VBox spacing="10" styleClass="notes-section">
                         <Label text="Note e Raccomandazioni" styleClass="section-header">
                             <graphic>
@@ -218,7 +213,6 @@
         </ScrollPane>
     </center>
 
-    <!-- Right section per info PT e controlli -->
     <right>
         <VBox spacing="20" maxWidth="250.0" minWidth="200.0">
             <padding>
@@ -232,12 +226,9 @@
                         <FontIcon iconLiteral="fas-user-tie"/>
                     </graphic>
                 </Label>
-                <VBox fx:id="ptInfoContainer" spacing="5">
-                    <!-- Contenuto aggiunto dinamicamente -->
-                </VBox>
+                <VBox fx:id="ptInfoContainer" spacing="5"></VBox>
             </VBox>
 
-            <!-- Azioni scheda -->
             <VBox spacing="10" styleClass="actions-section">
                 <Button maxWidth="Infinity" styleClass="action-button">
                     <graphic>
@@ -265,7 +256,6 @@
                 </Button>
             </VBox>
 
-            <!-- Statistiche -->
             <VBox spacing="10" styleClass="stats-section">
                 <Label text="Statistiche" styleClass="section-header">
                     <graphic>
@@ -273,7 +263,6 @@
                     </graphic>
                 </Label>
                 <VBox fx:id="statsContainer" spacing="5">
-                    <!-- Contenuto aggiunto dinamicamente -->
                 </VBox>
             </VBox>
         </VBox>

@@ -196,7 +196,6 @@
         </VBox>
     </center>
 
-    <!-- Piani di abbonamento sulla destra -->
     <right>
         <ScrollPane fitToWidth="true" style="-fx-background: transparent; -fx-background-color: transparent;" prefWidth="400.0">
             <VBox spacing="20.0">
@@ -207,7 +206,6 @@
                 <Label text="Piani disponibili" style="-fx-font-size: 24; -fx-font-weight: bold;"/>
 
                 <VBox spacing="20">
-                    <!-- Card Base -->
                     <VBox styleClass="subscription-card"
                           style="-fx-background-color: white; -fx-background-radius: 10; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 0);">
                         <padding>
@@ -228,7 +226,6 @@
                                 style="-fx-background-color: #007bff; -fx-text-fill: white;"/>
                     </VBox>
 
-                    <!-- Card Premium -->
                     <VBox styleClass="subscription-card"
                           style="-fx-background-color: white; -fx-background-radius: 10; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 0);">
                         <padding>
@@ -250,7 +247,6 @@
                                 style="-fx-background-color: #28a745; -fx-text-fill: white;"/>
                     </VBox>
 
-                    <!-- Card Elite -->
                     <VBox styleClass="subscription-card"
                           style="-fx-background-color: white; -fx-background-radius: 10; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 0);">
                         <padding>

@@ -11,7 +11,7 @@
 <?import javafx.scene.text.Text?>
 <?import org.kordamp.ikonli.javafx.FontIcon?>
 
-<BorderPane stylesheets="@../../styles/home.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unical.informatica.progettouid.controller.DashboardClientController">
+<BorderPane fx:id="mainPane" stylesheets="@../../styles/home.css" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unical.informatica.progettouid.controller.client.DashboardClientController">
 
    <top>
       <VBox styleClass="top">
@@ -36,7 +36,7 @@
          <padding>
             <Insets bottom="20" top="20" />
          </padding>
-         <Button maxWidth="Infinity" styleClass="sidebar-button">
+         <Button fx:id="dashboardClient" maxWidth="Infinity" onAction="#onNavigationButtonClick" styleClass="sidebar-button">
             <graphic>
                <VBox alignment="CENTER" spacing="5">
                   <FontIcon iconLiteral="fas-home" />
@@ -48,7 +48,7 @@
                </VBox>
             </graphic>
          </Button>
-         <Button maxWidth="Infinity" styleClass="sidebar-button">
+         <Button fx:id="attivitaClient" maxWidth="Infinity" onAction="#onNavigationButtonClick" styleClass="sidebar-button">
             <graphic>
                <VBox alignment="CENTER" spacing="5">
                   <FontIcon iconLiteral="fas-calendar-alt" />
@@ -60,7 +60,7 @@
                </VBox>
             </graphic>
          </Button>
-         <Button maxWidth="Infinity" styleClass="sidebar-button">
+         <Button fx:id="prenotazionePT" maxWidth="Infinity" onAction="#onNavigationButtonClick" styleClass="sidebar-button">
             <graphic>
                <VBox alignment="CENTER" spacing="5">
                   <FontIcon iconLiteral="fas-dumbbell" />
@@ -72,7 +72,7 @@
                </VBox>
             </graphic>
          </Button>
-         <Button maxWidth="Infinity" styleClass="sidebar-button">
+         <Button fx:id="schedaClient" maxWidth="Infinity" onAction="#onNavigationButtonClick" styleClass="sidebar-button">
             <graphic>
                <VBox alignment="CENTER" spacing="5">
                   <FontIcon iconLiteral="far-clipboard" />
@@ -84,7 +84,7 @@
                </VBox>
             </graphic>
          </Button>
-         <Button maxWidth="Infinity" styleClass="sidebar-button">
+         <Button fx:id="abbonamentoClient" maxWidth="Infinity" onAction="#onNavigationButtonClick" styleClass="sidebar-button">
             <graphic>
                <VBox alignment="CENTER" spacing="5">
                   <FontIcon iconLiteral="far-credit-card" />
@@ -96,7 +96,7 @@
                </VBox>
             </graphic>
          </Button>
-         <Button maxWidth="Infinity" styleClass="sidebar-button">
+         <Button maxWidth="Infinity" onAction="#onNavigationButtonClick" styleClass="sidebar-button">
             <graphic>
                <VBox alignment="CENTER" spacing="5">
                   <FontIcon iconLiteral="far-user" />
@@ -108,7 +108,7 @@
                </VBox>
             </graphic>
          </Button>
-         <Button maxWidth="Infinity" styleClass="sidebar-button">
+         <Button maxWidth="Infinity" onAction="#onNavigationButtonClick" styleClass="sidebar-button">
             <graphic>
                <VBox alignment="CENTER" spacing="5">
                   <FontIcon iconLiteral="fas-cogs" />
@@ -120,7 +120,7 @@
                </VBox>
             </graphic>
          </Button>
-         <Button maxWidth="Infinity" styleClass="sidebar-button">
+         <Button maxWidth="Infinity" onAction="#onNavigationButtonClick" styleClass="sidebar-button">
             <graphic>
                <VBox alignment="CENTER" spacing="5">
                   <FontIcon iconLiteral="far-question-circle" />

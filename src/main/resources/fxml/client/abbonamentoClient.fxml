@@ -10,9 +10,8 @@
 <?import javafx.scene.text.Text?>
 <?import javafx.scene.text.Font?>
 <?import javafx.geometry.Insets?>
-<BorderPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="it.unical.informatica.progettouid.controller.AbbonamentoClientController"
+<BorderPane xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="it.unical.informatica.progettouid.controller.client.AbbonamentoClientController"
             prefHeight="400.0" prefWidth="600.0">
 
     <top>

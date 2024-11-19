@@ -74,8 +74,8 @@ public class DBConnection {
             stmt.close();
         }
     }
-}
-/*
+
+
     public Task<Void> insertUser(String username, String email, String datanascita, String password) {
         return asyncCall(() -> {
             if (isConnected()) {
@@ -91,9 +91,9 @@ public class DBConnection {
             return null;
         });
     }
-
+}
     // CREAZIONE DELLA PLAYLIST AGGIUNTA DALL'UTENTE
-
+/*
     public Task<Void> insertPlaylistFotUser(String username, String nome) {
         return asyncCall(() -> {
             if (isConnected()) {

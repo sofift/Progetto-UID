@@ -16,7 +16,7 @@
 <?import org.kordamp.ikonli.javafx.FontIcon?>
 
 <BorderPane xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="it.unical.informatica.progettouid.controller.AttivitaClientController"
+            fx:controller="it.unical.informatica.progettouid.controller.client.AttivitaClientController"
             stylesheets="@../../styles/calendar.css">
    <left>
       <VBox spacing="10" alignment="TOP_CENTER" styleClass="sidebar-left" maxWidth="100" minWidth="95">

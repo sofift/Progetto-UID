@@ -68,6 +68,7 @@
                 <configuration>
                     <source>21</source>
                     <target>21</target>
+                    <compilerArgs>--enable-preview</compilerArgs>
                 </configuration>
             </plugin>
             <plugin>
@@ -80,7 +81,7 @@
                         <id>default-cli</id>
                         <configuration>
                             <mainClass>
-                                it.unical.informatica.progettouid/it.unical.informatica.progettouid.HelloApplication
+                                it.unical.informatica.progettouid/it.unical.informatica.progettouid.FlexFit
                             </mainClass>
                             <launcher>app</launcher>
                             <jlinkZipName>app</jlinkZipName>

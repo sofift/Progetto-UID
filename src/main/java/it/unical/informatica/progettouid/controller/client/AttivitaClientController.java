@@ -1,4 +1,4 @@
-package it.unical.informatica.progettouid.controller;
+package it.unical.informatica.progettouid.controller.client;
 
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;

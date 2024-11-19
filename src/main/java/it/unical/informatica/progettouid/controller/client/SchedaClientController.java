@@ -1,11 +1,11 @@
-package it.unical.informatica.progettouid.controller;
+package it.unical.informatica.progettouid.controller.client;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.geometry.Pos;
-import org.kordamp.ikonli.javafx.FontIcon;
+
 import java.net.URL;
 import java.util.ResourceBundle;
 

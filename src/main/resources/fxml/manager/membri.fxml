@@ -115,6 +115,7 @@
                 </graphic>
             </Button>
             <Button maxWidth="Infinity" styleClass="sidebar-button">
+            <Button maxWidth="Infinity" styleClass="sidebar-button">
                 <graphic>
                     <VBox alignment="CENTER" spacing="5">
                         <FontIcon iconLiteral="far-user" />

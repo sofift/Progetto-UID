@@ -76,19 +76,69 @@ public class DBConnection {
     }
 
 
-    public Task<Void> insertUser(String username, String email, String datanascita, String password) {
+    public Task<Void> insertClient(String username, String cognome, String abbonamento, String datadinascita) {
         return asyncCall(() -> {
             if (isConnected()) {
-                String query = "INSERT INTO Users (Username, Email, DataNascita, Password) VALUES(?, ?, ?, ?);";
+                String query = "INSERT INTO Clienti (Username, Cognome, Abbonamento, DataNascita) VALUES(?, ?, ?, ?);";
                 try (PreparedStatement stmt = con.prepareStatement(query)) {
                     stmt.setString(1, username);
-                    stmt.setString(2, email);
-                    stmt.setString(3, datanascita);
-                    stmt.setString(4, password);
+                    stmt.setString(2, cognome);
+                    stmt.setString(3, abbonamento);
+                    stmt.setString(4, datadinascita);
                     stmt.executeUpdate();
                 }
             }
             return null;
+        });
+    }
+
+    // get personal trainer
+    public Task<List<PersonalTrainer>> getAllPt() {
+        return asyncCall(() -> {
+            List<PersonalTrainer> trainers = FXCollections.observableArrayList();
+            if (isConnected()) {
+                String query = "SELECT * FROM PersonalTrainer ;";
+                PreparedStatement stmt = con.prepareStatement(query);
+                ResultSet rs = stmt.executeQuery();
+                while (rs.next()) {
+                    trainers.add(new PersonalTrainer(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5)));
+
+                }
+                stmt.close();
+            }
+            return trainers;
+        });
+    }
+
+    public Task<List<Corsi>> getCorsiDiOggi() {
+        return asyncCall(() -> {
+            String today = String.valueOf(LocalDate.now());
+            List<Corsi> corsi = FXCollections.observableArrayList();
+            if (isConnected()) {
+                String query = "SELECT Corsi.*, OrarioCorsi.oraInizio, OrarioCorsi.oraFine, PersonalTrainer.nome " +
+                                "FROM Corsi, OrarioCorsi, PersonalTrainer " +
+                                "WHERE OrarioCorsi.giorno = ? " +
+                                "ORDER BY OrarioCorsi.oraInizio  ;";
+                PreparedStatement stmt = con.prepareStatement(query);
+                stmt.setString(1, today);
+                ResultSet rs = stmt.executeQuery();
+
+                while (rs.next()) {
+                    corsi.add(new Corsi(
+                            rs.getInt(1),
+                            rs.getString(2),
+                            rs.getString(3),
+                            rs.getInt(4),
+                            rs.getInt(5),
+                            rs.getString(6),
+                            rs.getString(7),
+                            rs.getString(8)
+                    ));
+
+                }
+                stmt.close();
+            }
+            return corsi;
         });
     }
 }

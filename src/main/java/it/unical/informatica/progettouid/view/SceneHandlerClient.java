@@ -6,6 +6,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -42,24 +43,72 @@ public class SceneHandlerClient {
     public void setDashboardView() throws Exception {
         FXMLLoader loader = new FXMLLoader(FlexFit.class.getResource("/fxml/client/dashboardClient.fxml"));
         Node view = loader.load();
-        mainPane.setCenter(view);
+        if (view instanceof BorderPane) {
+            BorderPane loadedBorderPane = (BorderPane) view;
+            mainPane.setCenter(loadedBorderPane.getCenter());
+
+            if (loadedBorderPane.getRight() != null) {
+                mainPane.setRight(loadedBorderPane.getRight());
+            } else {
+                mainPane.setRight(null);
+            }
+        } else {
+            mainPane.setCenter(view);
+            mainPane.setRight(null);
+        }
     }
 
     public void setAttivitaView() throws Exception {
         FXMLLoader loader = new FXMLLoader(FlexFit.class.getResource("/fxml/client/attivitaClient.fxml"));
         Node view = loader.load();
-        mainPane.setCenter(view);
+        if (view instanceof BorderPane) {
+            BorderPane loadedBorderPane = (BorderPane) view;
+            mainPane.setCenter(loadedBorderPane.getCenter());
+
+            if (loadedBorderPane.getRight() != null) {
+                mainPane.setRight(loadedBorderPane.getRight());
+            } else {
+                mainPane.setRight(null);
+            }
+        } else {
+            mainPane.setCenter(view);
+            mainPane.setRight(null);
+        }
     }
 
     public void setPrenotazioniView() throws Exception {
-        FXMLLoader loader = new FXMLLoader(FlexFit.class.getResource("/fxml/client/prenotazioneClient.fxml"));
+        FXMLLoader loader = new FXMLLoader(FlexFit.class.getResource("/fxml/client/prenotazionePT.fxml"));
         Node view = loader.load();
-        mainPane.setCenter(view);
+        if (view instanceof BorderPane) {
+            BorderPane loadedBorderPane = (BorderPane) view;
+            mainPane.setCenter(loadedBorderPane.getCenter());
+
+            if (loadedBorderPane.getRight() != null) {
+                mainPane.setRight(loadedBorderPane.getRight());
+            } else {
+                mainPane.setRight(null);
+            }
+        } else {
+            mainPane.setCenter(view);
+            mainPane.setRight(null);
+        }
     }
 
     public void setSchedaView() throws Exception {
         FXMLLoader loader = new FXMLLoader(FlexFit.class.getResource("/fxml/client/schedaClient.fxml"));
         Node view = loader.load();
-        mainPane.setCenter(view);
+        if (view instanceof BorderPane) {
+            BorderPane loadedBorderPane = (BorderPane) view;
+            mainPane.setCenter(loadedBorderPane.getCenter());
+
+            if (loadedBorderPane.getRight() != null) {
+                mainPane.setRight(loadedBorderPane.getRight());
+            } else {
+                mainPane.setRight(null);
+            }
+        } else {
+            mainPane.setCenter(view);
+            mainPane.setRight(null);
+        }
     }
 }

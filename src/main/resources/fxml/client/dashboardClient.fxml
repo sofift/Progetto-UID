@@ -11,7 +11,7 @@
 <?import javafx.scene.text.Text?>
 <?import org.kordamp.ikonli.javafx.FontIcon?>
 
-<BorderPane fx:id="mainPane" stylesheets="@../../styles/home.css" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unical.informatica.progettouid.controller.client.DashboardClientController">
+<BorderPane fx:id="mainPane" stylesheets="@../../styles/home.css" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/22" fx:controller="it.unical.informatica.progettouid.controller.client.DashboardClientController">
 
    <top>
       <VBox styleClass="top">
@@ -157,7 +157,7 @@
          <HBox spacing="20" VBox.vgrow="ALWAYS">
             <VBox spacing="5" styleClass="whiteBox" HBox.hgrow="ALWAYS">
                <Label text="Corsi di oggi:" />
-               <ListView VBox.vgrow="ALWAYS" />
+               <ListView fx:id="corsiListView" VBox.vgrow="ALWAYS" />
             </VBox>
             <VBox spacing="5" styleClass="whiteBox" HBox.hgrow="ALWAYS">
                <Label text="Altri contenuti:" />

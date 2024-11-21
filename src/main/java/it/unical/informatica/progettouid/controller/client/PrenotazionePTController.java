@@ -1,61 +1,69 @@
 package it.unical.informatica.progettouid.controller.client;
 
+import it.unical.informatica.progettouid.model.DBConnection;
+import it.unical.informatica.progettouid.model.PersonalTrainer;
+import it.unical.informatica.progettouid.view.SceneHandlerClient;
+import javafx.concurrent.Task;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
-import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
-import java.net.URL;
+
 import java.time.LocalDate;
-import java.util.ResourceBundle;
+import java.util.List;
 
-public class PrenotazionePTController implements Initializable {    // l'interfaccia Initializable permette di usare il metodo initialize per caricare i dati alla creazione del controller.
-
+public class PrenotazionePTController{
     @FXML
     private VBox trainerListContainer;
-
     @FXML
     private VBox bookingFormContainer;
 
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
+    public void initialize() {
         loadTrainers();
     }
 
-    // caricamento dei trainer (da collegare al DB)
+    // caricamento dei trainer
     private void loadTrainers() {
-        // Dati di esempio dei trainer
-        String[][] trainers = {
-                {"Mario Rossi", "Specializzato in bodybuilding", "5 anni di esperienza"},
-                {"Laura Bianchi", "Esperta in fitness funzionale", "8 anni di esperienza"},
-                {"Giovanni Verdi", "Personal trainer certification ISSA", "3 anni di esperienza"}
-        };
+        Task<List<PersonalTrainer>> task = DBConnection.getInstance().getAllPt();
 
-        for (String[] trainer : trainers) {
-            trainerListContainer.getChildren().add(createTrainerCard(trainer[0], trainer[1], trainer[2]));
+        task.setOnSucceeded(event -> {
+            List<PersonalTrainer> trainers = task.getValue();
+            displayPersonal(trainers);
+        });
+
+        task.setOnFailed(event -> {
+            System.out.println("Errore durante il caricamento dei personal(listVirw): " + task.getException().getMessage());
+        });
+
+        new Thread(task).start();
+
+    }
+
+    private void displayPersonal(List<PersonalTrainer> trainers) {
+        for(PersonalTrainer trainer : trainers) {
+            trainerListContainer.getChildren().add(createTrainerCard(trainer));
         }
     }
 
     // creazione sezione per ogni trainer --> il CSS è da mettere nel foglio di stile
-    private VBox createTrainerCard(String name, String specialization, String experience) {
+    private VBox createTrainerCard(PersonalTrainer trainer) {
         VBox card = new VBox();
-        card.setStyle("-fx-background-color: white; -fx-border-color: #cccccc; " +
-                "-fx-border-radius: 5; -fx-background-radius: 5; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 0);");
-        card.setPadding(new Insets(15));
-        card.setSpacing(5);
+//        card.setStyle("-fx-background-color: white; -fx-border-color: #cccccc; " +
+//                "-fx-border-radius: 5; -fx-background-radius: 5; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 0);");
+//        card.setPadding(new Insets(15));
+//        card.setSpacing(5);
 
-        Label nameLabel = new Label(name);
-        nameLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 14px;");
+        Label nameLabel = new Label(STR."\{trainer.getNome()} \{trainer.getCognome()}");
+//        nameLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 14px;");
 
-        Text specLabel = new Text(specialization);
-        Text expLabel = new Text(experience);
+        Text specLabel = new Text(trainer.getSpecializzazione());
 
         Button bookButton = new Button("Prenota sessione");
-        bookButton.setStyle("-fx-background-color: #4CAF50; -fx-text-fill: white;");
-        bookButton.setOnAction(e -> showBookingForm(name));
+//        bookButton.setStyle("-fx-background-color: #4CAF50; -fx-text-fill: white;");
+        bookButton.setOnAction(e -> showBookingForm(trainer.getNome()));
 
-        card.getChildren().addAll(nameLabel, specLabel, expLabel, bookButton);
+        card.getChildren().addAll(nameLabel, specLabel, bookButton);
         return card;
     }
 
@@ -81,7 +89,7 @@ public class PrenotazionePTController implements Initializable {    // l'interfa
 
         Button confirmButton = new Button("Conferma Prenotazione");
         confirmButton.setMaxWidth(Double.MAX_VALUE);
-        confirmButton.setStyle("-fx-background-color: #4CAF50; -fx-text-fill: white;");
+//        confirmButton.setStyle("-fx-background-color: #4CAF50; -fx-text-fill: white;");
         confirmButton.setOnAction(e -> handleBooking(trainerName, datePicker.getValue(),
                 timeComboBox.getValue(), notes.getText()));
 
@@ -115,5 +123,28 @@ public class PrenotazionePTController implements Initializable {    // l'interfa
         alert.setHeaderText(null);
         alert.setContentText(content);
         alert.showAndWait();
+    }
+
+    @FXML
+    public void onNavigationButtonClick(ActionEvent event) {
+        Button button = (Button) event.getSource();
+        try {
+            switch (button.getId()) {
+                case "dashboardClient":
+                    SceneHandlerClient.getInstance().setDashboardView();
+                    break;
+                case "attivitaClient":
+                    SceneHandlerClient.getInstance().setAttivitaView();
+                    break;
+                case "prenotazionePT":
+                    SceneHandlerClient.getInstance().setPrenotazioniView();
+                    break;
+                case "schedaClient":
+                    SceneHandlerClient.getInstance().setSchedaView();
+                    break;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

@@ -1,5 +1,7 @@
 package it.unical.informatica.progettouid.controller.client;
 
+import it.unical.informatica.progettouid.view.SceneHandlerClient;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -156,5 +158,26 @@ public class SchedaClientController implements Initializable {
         alert.showAndWait();
     }
 
-    // Altri metodi di utility...
+    @FXML
+    public void onNavigationButtonClick(ActionEvent event) {
+        Button button = (Button) event.getSource();
+        try {
+            switch (button.getId()) {
+                case "dashboardClient":
+                    SceneHandlerClient.getInstance().setDashboardView();
+                    break;
+                case "attivitaClient":
+                    SceneHandlerClient.getInstance().setAttivitaView();
+                    break;
+                case "prenotazionePT":
+                    SceneHandlerClient.getInstance().setPrenotazioniView();
+                    break;
+                case "schedaClient":
+                    SceneHandlerClient.getInstance().setSchedaView();
+                    break;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }

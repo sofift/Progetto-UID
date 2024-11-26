@@ -8,130 +8,125 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Priority?>
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 <?import org.kordamp.ikonli.javafx.FontIcon?>
 
-<BorderPane xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="it.unical.informatica.progettouid.controller.client.AttivitaClientController"
-            stylesheets="@../../styles/calendar.css">
+<BorderPane stylesheets="@../../styles/calendar.css" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/22" fx:controller="it.unical.informatica.progettouid.controller.client.AttivitaClientController">
    <left>
-      <VBox spacing="10" alignment="TOP_CENTER" styleClass="sidebar-left" maxWidth="100" minWidth="95">
+      <VBox maxWidth="95" minWidth="95" spacing="10" styleClass="sidebar">
          <padding>
-            <Insets top="20" bottom="20" left="10" right="10"/>
+            <Insets bottom="20" top="20" />
          </padding>
-         <children>
-            <Button maxWidth="Infinity" styleClass="nav-button">
-               <graphic>
-                  <VBox alignment="CENTER" spacing="5">
-                     <FontIcon iconLiteral="fas-home"/>
-                     <Text text="Home">
-                        <font>
-                           <Font size="9.0"/>
-                        </font>
-                     </Text>
-                  </VBox>
-               </graphic>
-            </Button>
-            <Button maxWidth="Infinity" styleClass="nav-button">
-               <graphic>
-                  <VBox alignment="CENTER" spacing="5">
-                     <FontIcon iconLiteral="fas-calendar-alt"/>
-                     <Text text="Attività">
-                        <font>
-                           <Font size="9.0"/>
-                        </font>
-                     </Text>
-                  </VBox>
-               </graphic>
-            </Button>
-            <Button maxWidth="Infinity" styleClass="nav-button">
-               <graphic>
-                  <VBox alignment="CENTER" spacing="5">
-                     <FontIcon iconLiteral="fas-dumbbell"/>
-                     <Text text="Personal trainer">
-                        <font>
-                           <Font size="9.0"/>
-                        </font>
-                     </Text>
-                  </VBox>
-               </graphic>
-            </Button>
-            <Button maxWidth="Infinity" styleClass="nav-button">
-               <graphic>
-                  <VBox alignment="CENTER" spacing="5">
-                     <FontIcon iconLiteral="far-clipboard"/>
-                     <Text text="Scheda">
-                        <font>
-                           <Font size="9.0"/>
-                        </font>
-                     </Text>
-                  </VBox>
-               </graphic>
-            </Button>
-            <Button maxWidth="Infinity" styleClass="nav-button">
-               <graphic>
-                  <VBox alignment="CENTER" spacing="5">
-                     <FontIcon iconLiteral="far-credit-card"/>
-                     <Text text="Il tuo abbonamento">
-                        <font>
-                           <Font size="9.0"/>
-                        </font>
-                     </Text>
-                  </VBox>
-               </graphic>
-            </Button>
-            <Button maxWidth="Infinity" styleClass="nav-button">
-               <graphic>
-                  <VBox alignment="CENTER" spacing="5">
-                     <FontIcon iconLiteral="far-user"/>
-                     <Text text="Account">
-                        <font>
-                           <Font size="9.0"/>
-                        </font>
-                     </Text>
-                  </VBox>
-               </graphic>
-            </Button>
-            <Button maxWidth="Infinity" styleClass="nav-button">
-               <graphic>
-                  <VBox alignment="CENTER" spacing="5">
-                     <FontIcon iconLiteral="fas-cogs"/>
-                     <Text text="Impostazioni">
-                        <font>
-                           <Font size="9.0"/>
-                        </font>
-                     </Text>
-                  </VBox>
-               </graphic>
-            </Button>
-            <Button maxWidth="Infinity" styleClass="nav-button">
-               <graphic>
-                  <VBox alignment="CENTER" spacing="5">
-                     <FontIcon iconLiteral="far-question-circle"/>
-                     <Text text="Help">
-                        <font>
-                           <Font size="9.0"/>
-                        </font>
-                     </Text>
-                  </VBox>
-               </graphic>
-            </Button>
-         </children>
+         <Button fx:id="dashboardClient" maxWidth="Infinity" onAction="#onNavigationButtonClick" styleClass="sidebar-button">
+            <graphic>
+               <VBox alignment="CENTER" spacing="5">
+                  <FontIcon iconLiteral="fas-home" />
+                  <Text text="Home">
+                     <font>
+                        <Font size="9.0" />
+                     </font>
+                  </Text>
+               </VBox>
+            </graphic>
+         </Button>
+         <Button fx:id="attivitaClient" maxWidth="Infinity" onAction="#onNavigationButtonClick" styleClass="sidebar-button">
+            <graphic>
+               <VBox alignment="CENTER" spacing="5">
+                  <FontIcon iconLiteral="fas-calendar-alt" />
+                  <Text text="Attività">
+                     <font>
+                        <Font size="9.0" />
+                     </font>
+                  </Text>
+               </VBox>
+            </graphic>
+         </Button>
+         <Button fx:id="prenotazionePT" maxWidth="Infinity" onAction="#onNavigationButtonClick" styleClass="sidebar-button">
+            <graphic>
+               <VBox alignment="CENTER" spacing="5">
+                  <FontIcon iconLiteral="fas-dumbbell" />
+                  <Text text="Personal trainer">
+                     <font>
+                        <Font size="9.0" />
+                     </font>
+                  </Text>
+               </VBox>
+            </graphic>
+         </Button>
+         <Button fx:id="schedaClient" maxWidth="Infinity" onAction="#onNavigationButtonClick" styleClass="sidebar-button">
+            <graphic>
+               <VBox alignment="CENTER" spacing="5">
+                  <FontIcon iconLiteral="far-clipboard" />
+                  <Text text="Scheda">
+                     <font>
+                        <Font size="9.0" />
+                     </font>
+                  </Text>
+               </VBox>
+            </graphic>
+         </Button>
+         <Button fx:id="abbonamentoClient" maxWidth="Infinity" onAction="#onNavigationButtonClick" styleClass="sidebar-button">
+            <graphic>
+               <VBox alignment="CENTER" spacing="5">
+                  <FontIcon iconLiteral="far-credit-card" />
+                  <Text text="Il tuo abbonamento">
+                     <font>
+                        <Font size="9.0" />
+                     </font>
+                  </Text>
+               </VBox>
+            </graphic>
+         </Button>
+         <Button maxWidth="Infinity" onAction="#onNavigationButtonClick" styleClass="sidebar-button">
+            <graphic>
+               <VBox alignment="CENTER" spacing="5">
+                  <FontIcon iconLiteral="far-user" />
+                  <Text text="Account">
+                     <font>
+                        <Font size="9.0" />
+                     </font>
+                  </Text>
+               </VBox>
+            </graphic>
+         </Button>
+         <Button maxWidth="Infinity" onAction="#onNavigationButtonClick" styleClass="sidebar-button">
+            <graphic>
+               <VBox alignment="CENTER" spacing="5">
+                  <FontIcon iconLiteral="fas-cogs" />
+                  <Text text="Impostazioni">
+                     <font>
+                        <Font size="9.0" />
+                     </font>
+                  </Text>
+               </VBox>
+            </graphic>
+         </Button>
+         <Button maxWidth="Infinity" onAction="#onNavigationButtonClick" styleClass="sidebar-button">
+            <graphic>
+               <VBox alignment="CENTER" spacing="5">
+                  <FontIcon iconLiteral="far-question-circle" />
+                  <Text text="Help">
+                     <font>
+                        <Font size="9.0" />
+                     </font>
+                  </Text>
+               </VBox>
+            </graphic>
+         </Button>
       </VBox>
    </left>
 
    <top>
       <VBox>
-         <Label text="Attività in programma" alignment="CENTER" maxWidth="Infinity">
+         <Label alignment="CENTER" maxWidth="Infinity" text="Attività in programma">
             <graphic>
-               <FontIcon iconLiteral="fas-calendar-alt"/>
+               <FontIcon iconLiteral="fas-calendar-alt" />
             </graphic>
             <padding>
-               <Insets top="10" bottom="10"/>
+               <Insets bottom="10" top="10" />
             </padding>
          </Label>
       </VBox>
@@ -140,63 +135,66 @@
    <center>
       <VBox spacing="10">
          <padding>
-            <Insets left="10" right="10"/>
+            <Insets left="10" right="10" />
          </padding>
          <children>
             <HBox alignment="CENTER_LEFT" spacing="10">
                <padding>
-                  <Insets bottom="10" top="10"/>
+                  <Insets bottom="10" top="10" />
                </padding>
                <children>
                   <Button fx:id="todayButton" text="Oggi">
                      <graphic>
-                        <FontIcon iconLiteral="fas-calendar-day"/>
+                        <FontIcon iconLiteral="fas-calendar-day" />
                      </graphic>
                   </Button>
                   <Button fx:id="prevButton">
                      <graphic>
-                        <FontIcon iconLiteral="fas-chevron-left"/>
+                        <FontIcon iconLiteral="fas-chevron-left" />
                      </graphic>
                   </Button>
                   <Button fx:id="nextButton">
                      <graphic>
-                        <FontIcon iconLiteral="fas-chevron-right"/>
+                        <FontIcon iconLiteral="fas-chevron-right" />
                      </graphic>
                   </Button>
-                  <Label fx:id="currentDateLabel" style="-fx-font-size: 18; -fx-font-weight: bold;"/>
-                  <Region HBox.hgrow="ALWAYS"/>
-                  <ToggleButton text="Giorno"/>
-                  <ToggleButton text="Settimana"/>
-                  <ToggleButton selected="true" text="Mese"/>
+                  <Label fx:id="currentDateLabel" style="-fx-font-size: 18; -fx-font-weight: bold;" />
+                  <Region HBox.hgrow="ALWAYS" />
+                  <ToggleButton text="Giorno" />
+                  <ToggleButton text="Settimana" />
+                  <ToggleButton selected="true" text="Mese" />
                   <Button style="-fx-font-weight: bold;" text="+">
                      <graphic>
-                        <FontIcon iconLiteral="fas-plus"/>
+                        <FontIcon iconLiteral="fas-plus" />
                      </graphic>
                   </Button>
                </children>
             </HBox>
-            <GridPane fx:id="calendarGrid" gridLinesVisible="true" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS"/>
+            <GridPane fx:id="calendarGrid" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS">
+               <padding>
+                  <Insets bottom="10.0" left="10.0" right="10.0" />
+               </padding></GridPane>
          </children>
       </VBox>
    </center>
 
    <right>
-      <VBox spacing="10" styleClass="sidebar-right" minWidth="200" maxWidth="250">
+      <VBox maxWidth="250" minWidth="200" spacing="10" styleClass="sidebar-right">
          <padding>
-            <Insets top="20" right="10" bottom="20" left="10"/>
+            <Insets bottom="20" left="10" right="10" top="20" />
          </padding>
          <children>
-            <Label style="-fx-font-weight: bold;" text="Calendari"/>
+            <Label style="-fx-font-weight: bold;" text="Calendari" />
             <VBox spacing="5">
                <children>
-                  <CheckBox selected="true" text="Attività di Gruppo"/>
-                  <CheckBox text="Corsi Speciali"/>
-                  <CheckBox text="Eventi"/>
-                  <CheckBox text="Manutenzione"/>
+                  <CheckBox selected="true" text="Attività di Gruppo" />
+                  <CheckBox text="Corsi Speciali" />
+                  <CheckBox text="Eventi" />
+                  <CheckBox text="Manutenzione" />
                </children>
             </VBox>
-            <Label style="-fx-font-weight: bold;" text="Mini Calendario"/>
-            <GridPane fx:id="miniCalendar" hgap="2" vgap="2" VBox.vgrow="NEVER"/>
+            <Label style="-fx-font-weight: bold;" text="Mini Calendario" />
+            <GridPane fx:id="miniCalendar" hgap="2" vgap="2" VBox.vgrow="NEVER" />
          </children>
       </VBox>
    </right>

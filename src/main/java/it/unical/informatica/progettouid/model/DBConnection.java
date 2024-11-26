@@ -91,6 +91,28 @@ public class DBConnection {
             return null;
         });
     }
+
+    // In DBConnection.java
+
+    public Task<Boolean> validateAdminCredentials(String username, String password) {
+        return asyncCall(() -> {
+            if (isConnected()) {
+                String query = "SELECT Password FROM Admin WHERE Username = ?;";
+                try (PreparedStatement stmt = con.prepareStatement(query)) {
+                    stmt.setString(1, username);
+                    try (ResultSet rs = stmt.executeQuery()) {
+                        if (rs.next()) {
+                            String storedPassword = rs.getString("Password");
+                            // In una vera applicazione, dovresti usare BCrypt o altro sistema di hashing
+                            return storedPassword.equals(password);
+                        }
+                    }
+                }
+            }
+            return false;
+        });
+    }
+
 }
     // CREAZIONE DELLA PLAYLIST AGGIUNTA DALL'UTENTE
 /*

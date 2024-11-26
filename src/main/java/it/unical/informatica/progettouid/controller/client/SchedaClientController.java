@@ -175,6 +175,9 @@ public class SchedaClientController implements Initializable {
                 case "schedaClient":
                     SceneHandlerClient.getInstance().setSchedaView();
                     break;
+                case "abbonamentoClient":
+                    SceneHandlerClient.getInstance().setAbbonamentoView();
+                    break;
             }
         } catch (Exception e) {
             e.printStackTrace();

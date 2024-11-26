@@ -1,9 +1,13 @@
 package it.unical.informatica.progettouid.controller.client;
 
+import it.unical.informatica.progettouid.model.Corsi;
+import it.unical.informatica.progettouid.model.DBConnection;
 import it.unical.informatica.progettouid.view.SceneHandlerClient;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Dialog;
@@ -13,6 +17,12 @@ import javafx.scene.layout.*;
 
 import java.time.*;
 import java.time.format.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+
+// DA MODIFICARE, SIA IL CSS E SIA LA GESTIONE DEL CALENDARIO
 
 public class AttivitaClientController {
     @FXML private GridPane calendarGrid;
@@ -24,12 +34,31 @@ public class AttivitaClientController {
 
     private LocalDate currentDate = LocalDate.now();
     private final DateTimeFormatter monthFormatter = DateTimeFormatter.ofPattern("MMMM yyyy");
-
+    private Map<LocalDate, List<Corsi>> corsiPerGiorno = new HashMap<>();
     @FXML
     public void initialize() {
         setupButtons();
+        loadCorsiMensili();
         updateCalendar();
         updateMiniCalendar();
+    }
+
+    private void loadCorsiMensili() {
+        LocalDate firstOfMonth = currentDate.withDayOfMonth(1);
+        LocalDate lastOfMonth = currentDate.withDayOfMonth(currentDate.lengthOfMonth());
+
+        Task<Map<LocalDate, List<Corsi>>> task = DBConnection.getInstance().getCorsiMensili(firstOfMonth, lastOfMonth);
+
+        task.setOnSucceeded(event -> {
+            corsiPerGiorno = task.getValue();
+            updateCalendar(); // Aggiorna il calendario con i nuovi corsi
+        });
+
+        task.setOnFailed(event -> {
+            System.out.println("Errore durante il caricamento dei corsi: " + task.getException().getMessage());
+        });
+
+        new Thread(task).start();
     }
 
     private void setupButtons() {
@@ -91,21 +120,46 @@ public class AttivitaClientController {
 
     private VBox createDayCell(int day) {
         VBox cell = new VBox(5);
-        cell.setStyle("-fx-padding: 5; -fx-border-color: #e0e0e0;");
+        cell.setStyle("-fx-background-color: white; -fx-padding: 5; -fx-border-color: #e0e0e0;");
+        cell.setMaxWidth(Double.MAX_VALUE);
+        cell.setMaxHeight(Double.MAX_VALUE);
+        VBox.setVgrow(cell, Priority.ALWAYS);
 
         Label dayLabel = new Label(String.valueOf(day));
         dayLabel.setStyle("-fx-font-weight: bold;");
+        dayLabel.setMaxWidth(Double.MAX_VALUE);
+        dayLabel.setAlignment(Pos.TOP_LEFT);
 
-        cell.getChildren().add(dayLabel);
+        ScrollPane scrollPane = new ScrollPane();
+        scrollPane.setFitToWidth(true);
+        scrollPane.setStyle("-fx-background: transparent;");
+        VBox.setVgrow(scrollPane, Priority.ALWAYS);
 
-        // Aggiungi gestione click per aggiungere nuove attività
-        cell.setOnMouseClicked(e -> showNewActivityDialog(LocalDate.of(
-                currentDate.getYear(),
-                currentDate.getMonth(),
-                day
-        )));
+        VBox corsiContainer = new VBox(2);
+        corsiContainer.setStyle("-fx-background-color: transparent;");
+
+        scrollPane.setContent(corsiContainer);
+        cell.getChildren().addAll(dayLabel, scrollPane);
 
         return cell;
+    }
+
+    private HBox createCorsoBox(Corsi corso) {
+        HBox corsoBox = new HBox(5);
+        corsoBox.setStyle("-fx-background-color: #e3f2fd; -fx-padding: 5; " +
+                "-fx-background-radius: 5; -fx-border-radius: 5;");
+        corsoBox.setMaxWidth(Double.MAX_VALUE);
+        HBox.setHgrow(corsoBox, Priority.ALWAYS);
+
+        Label timeLabel = new Label(corso.getOraInizio());
+        Label nameLabel = new Label(corso.getNome());
+        HBox.setHgrow(nameLabel, Priority.ALWAYS);
+
+        Button prenotaBtn = new Button("👤");
+        prenotaBtn.setStyle("-fx-font-size: 10; -fx-padding: 2;");
+
+        corsoBox.getChildren().addAll(timeLabel, nameLabel, prenotaBtn);
+        return corsoBox;
     }
 
     private void showNewActivityDialog(LocalDate date) {
@@ -158,9 +212,14 @@ public class AttivitaClientController {
                 case "schedaClient":
                     SceneHandlerClient.getInstance().setSchedaView();
                     break;
+                case "abbonamentoClient":
+                    SceneHandlerClient.getInstance().setAbbonamentoView();
+                    break;
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
+
 }

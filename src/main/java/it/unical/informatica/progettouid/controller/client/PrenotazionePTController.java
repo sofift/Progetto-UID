@@ -142,6 +142,9 @@ public class PrenotazionePTController{
                 case "schedaClient":
                     SceneHandlerClient.getInstance().setSchedaView();
                     break;
+                case "abbonamentoClient":
+                    SceneHandlerClient.getInstance().setAbbonamentoView();
+                    break;
             }
         } catch (Exception e) {
             e.printStackTrace();

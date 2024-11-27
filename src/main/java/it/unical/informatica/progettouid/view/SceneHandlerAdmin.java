@@ -26,7 +26,7 @@ public class SceneHandlerAdmin {
 
     public void init(Stage primaryStage) throws Exception {
         this.stage = primaryStage;
-        FXMLLoader loader = new FXMLLoader(FlexFit.class.getResource("/fxml/admin/adminDashboard.fxml"));
+        FXMLLoader loader = new FXMLLoader(FlexFit.class.getResource("/fxml/admin/dashboardAdmin.fxml"));
         Parent root = loader.load();
         this.mainPane = (BorderPane) root;
         this.scene = new Scene(root, 1000, 600);
@@ -37,13 +37,13 @@ public class SceneHandlerAdmin {
     }
 
     public void loadDashboard(String username) throws Exception{
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/admin/adminDashboard.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/admin/dashboardAdmin.fxml"));
         Node view = loader.load();
         mainPane.setCenter(view);
     }
 
     public void setDashboardView() throws Exception {
-        FXMLLoader loader = new FXMLLoader(FlexFit.class.getResource("/fxml/admin/adminDashboard.fxml"));
+        FXMLLoader loader = new FXMLLoader(FlexFit.class.getResource("/fxml/admin/dashboardAdmin.fxml"));
         Node view = loader.load();
         mainPane.setCenter(view);
     }
@@ -78,7 +78,7 @@ public class SceneHandlerAdmin {
     }
     // da modificare con aggiunti PT fxml
     public void setAddPersonalTrainer() throws Exception {
-        FXMLLoader loader = new FXMLLoader(FlexFit.class.getResource("/fxml/admin/adminDashboard.fxml"));
+        FXMLLoader loader = new FXMLLoader(FlexFit.class.getResource("/fxml/admin/dashboardAdmin.fxml"));
         Node view = loader.load();
         mainPane.setCenter(view);
     }
@@ -90,13 +90,13 @@ public class SceneHandlerAdmin {
 
     // da aggiungere con account
     public void setAccount() throws Exception {
-        FXMLLoader loader = new FXMLLoader(FlexFit.class.getResource("/fxml/admin/adminDashboard.fxml"));
+        FXMLLoader loader = new FXMLLoader(FlexFit.class.getResource("/fxml/admin/dashboardAdmin.fxml"));
         Node view = loader.load();
         mainPane.setCenter(view);
     }
     // modificare con impostazioni
     public void setSettings() throws Exception {
-        FXMLLoader loader = new FXMLLoader(FlexFit.class.getResource("/fxml/admin/adminDashboard.fxml"));
+        FXMLLoader loader = new FXMLLoader(FlexFit.class.getResource("/fxml/admin/dashboardAdmin.fxml"));
         Node view = loader.load();
         mainPane.setCenter(view);
     }

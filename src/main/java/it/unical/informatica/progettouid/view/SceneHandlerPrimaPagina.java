@@ -1,6 +1,5 @@
 package it.unical.informatica.progettouid.view;
 
-
 import it.unical.informatica.progettouid.FlexFit;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -13,12 +12,13 @@ public class SceneHandlerPrimaPagina {
     private Scene scene;
     private Stage stage;
     private BorderPane mainPane;
+    private static final double WINDOW_WIDTH = 1000;
+    private static final double WINDOW_HEIGHT = 600;
 
     public Stage getStage() {
         return stage;
     }
 
-    // Enumerazione per i tipi di utente
     public enum UserType {
         CLIENT,
         ADMIN,
@@ -38,43 +38,67 @@ public class SceneHandlerPrimaPagina {
         this.stage = primaryStage;
         this.stage.setTitle("FlexFit Gym");
 
-        // Carica la prima pagina come root
-        FXMLLoader loader = new FXMLLoader(FlexFit.class.getResource("/fxml/primaPagina.fxml"));
-        Parent root = loader.load();
-        this.mainPane = new BorderPane();
-        this.mainPane.setCenter(root);
+        // Inizializza il BorderPane se non esiste
+        if (this.mainPane == null) {
+            this.mainPane = new BorderPane();
+            this.scene = new Scene(mainPane, WINDOW_WIDTH, WINDOW_HEIGHT);
+            this.stage.setScene(scene);
+            this.stage.setWidth(WINDOW_WIDTH);
+            this.stage.setHeight(WINDOW_HEIGHT);
+        }
 
-        this.scene = new Scene(mainPane, 1000, 600);
-        this.stage.setScene(scene);
-        this.stage.setWidth(1000);
-        this.stage.setHeight(600);
+        loadPrimaPagina();
         this.stage.show();
+    }
+
+    public void loadPrimaPagina() throws Exception {
+        try {
+            FXMLLoader loader = new FXMLLoader(FlexFit.class.getResource("/fxml/primaPagina.fxml"));
+            Parent root = loader.load();
+            mainPane.setCenter(root);
+            stage.setTitle("FlexFit Gym");
+        } catch (Exception e) {
+            System.err.println("Errore nel caricamento della prima pagina: " + e.getMessage());
+            throw e;
+        }
     }
 
     public void loadLoginScreen(UserType userType) throws Exception {
         String fxmlPath = switch (userType) {
-            case CLIENT -> "/fxml/client/ClientLogin.fxml";
+            case CLIENT -> "/fxml/client/clientLogin.fxml";
             case ADMIN -> "/fxml/admin/adminLogin.fxml";
-            case TRAINER -> "/fxml/pt/PTLogin.fxml";
+            case TRAINER -> "/fxml/pt/trainerLogin.fxml";
         };
 
-        FXMLLoader loader = new FXMLLoader(FlexFit.class.getResource(fxmlPath));
-        Parent view = loader.load();
-        mainPane.setCenter(view);
-        stage.setTitle("Login " + getUserTypeTitle(userType));
+        try {
+            FXMLLoader loader = new FXMLLoader(FlexFit.class.getResource(fxmlPath));
+            Parent view = loader.load();
+            mainPane.setCenter(view);
+            stage.setTitle("Login " + getUserTypeTitle(userType));
+        } catch (Exception e) {
+            System.err.println("Errore nel caricamento della pagina di login: " + e.getMessage());
+            System.err.println("Path tentato: " + fxmlPath);
+            throw e;
+        }
     }
 
     public void loadMainInterface(UserType userType) throws Exception {
         String fxmlPath = switch (userType) {
             case CLIENT -> "/fxml/client/dashboardClient.fxml";
-            case ADMIN -> "/fxml/admin/aggiungiUtente.fxml";
-            case TRAINER -> "/fxml/pt/dashboardPT.fxml";
+            case ADMIN -> "/fxml/admin/dashboardAdmin.fxml";
+            case TRAINER -> "/fxml/pt/dashboardTrainer.fxml";
         };
 
-        FXMLLoader loader = new FXMLLoader(FlexFit.class.getResource(fxmlPath));
-        Parent view = loader.load();
-        mainPane.setCenter(view);
-        stage.setTitle("Dashboard " + getUserTypeTitle(userType));
+        try {
+            FXMLLoader loader = new FXMLLoader(FlexFit.class.getResource(fxmlPath));
+            Parent view = loader.load();
+            mainPane.setCenter(view);
+            stage.setTitle("Dashboard " + getUserTypeTitle(userType));
+        } catch (Exception e) {
+            System.err.println("Errore nel caricamento della dashboard: " + e.getMessage());
+            System.err.println("Path tentato: " + fxmlPath);
+            throw e;
+        }
     }
 
     private String getUserTypeTitle(UserType userType) {

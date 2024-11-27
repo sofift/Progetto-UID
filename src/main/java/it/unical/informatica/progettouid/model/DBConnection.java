@@ -267,6 +267,19 @@ public class DBConnection {
         });
     }
 
+
+// implementare metodi per la validazione delle credenziali
+    public boolean validateAdminCredentials(String username, String password) {
+        return true;
+    }
+
+    public boolean validateClientCredentials(String username, String password) {
+        return true;
+    }
+
+    public boolean validateTrainerCredentials(String username, String password) {
+        return true;
+    }
 }
     // CREAZIONE DELLA PLAYLIST AGGIUNTA DALL'UTENTE
 /*

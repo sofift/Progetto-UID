@@ -1,69 +1,96 @@
 package it.unical.informatica.progettouid.controller.Trainer;
 
+import it.unical.informatica.progettouid.model.DBConnection;
 import it.unical.informatica.progettouid.view.SceneHandlerPrimaPagina;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.TextField;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.*;
+import javafx.scene.layout.VBox;
 
 public class TrainerLoginController {
+    @FXML private TextField emailField;
+    @FXML private PasswordField passwordField;
+    @FXML private Button loginButton;
+    @FXML private Button backButton;
+    @FXML private VBox loginForm;
+    // @FXML private ProgressIndicator progressIndicator;
 
     @FXML
-    private TextField emailField;
+    public void initialize() {
+        // progressIndicator.setVisible(false);
 
-    @FXML
-    private PasswordField passwordField;
+        // Abilita/disabilita il pulsante di login
+        loginButton.disableProperty().bind(
+                emailField.textProperty().isEmpty()
+                        .or(passwordField.textProperty().isEmpty())
+        );
 
-    @FXML
-    private Button loginButton;
+        // Aggiungi listener per il tasto Invio
+        passwordField.setOnKeyPressed(event -> {
+            if (event.getCode().toString().equals("ENTER") && !loginButton.isDisabled()) {
+                handleLogin();
+            }
+        });
+    }
 
-    @FXML
-    private Button backButton;
+    private boolean validateCredentials(String email, String password) {
+        try {
+            // Qui inserire la logica di validazione con il database
+            return DBConnection.getInstance().validateTrainerCredentials(email, password);
+        } catch (Exception e) {
+            System.err.println("Errore durante la validazione delle credenziali: " + e.getMessage());
+            return false;
+        }
+    }
 
     @FXML
     public void handleLogin() {
         String email = emailField.getText().trim();
         String password = passwordField.getText().trim();
 
-        if (email.isEmpty() || password.isEmpty()) {
-            showAlert(AlertType.ERROR,
-                    "Errore di Login",
-                    "Campi mancanti",
-                    "Per favore compila tutti i campi.");
-            return;
-        }
+        //progressIndicator.setVisible(true);
+        loginForm.setDisable(true);
 
-        try {
-            // TODO: Implementare la logica di autenticazione del PT
-            if (validateCredentials(email, password)) {
-                // TODO: Implementare la navigazione alla dashboard del PT
-                showAlert(AlertType.INFORMATION,
-                        "Login Successo",
-                        "Accesso Personal Trainer",
-                        "Login effettuato con successo.");
-            } else {
-                showAlert(AlertType.ERROR,
-                        "Errore di Login",
-                        "Credenziali non valide",
-                        "Email o password non corrette.");
+        // Esegui la validazione in un thread separato
+        new Thread(() -> {
+            try {
+                if (validateCredentials(email, password)) {
+                    Platform.runLater(() -> {
+                        try {
+                            SceneHandlerPrimaPagina.getInstance()
+                                    .loadMainInterface(SceneHandlerPrimaPagina.UserType.TRAINER);
+                        } catch (Exception e) {
+                            showAlert(Alert.AlertType.ERROR,
+                                    "Errore di Navigazione",
+                                    "Impossibile caricare la dashboard",
+                                    "Si è verificato un errore: " + e.getMessage());
+                            e.printStackTrace();
+                        }
+                    });
+                } else {
+                    Platform.runLater(() -> {
+                        showAlert(Alert.AlertType.ERROR,
+                                "Errore di Login",
+                                "Credenziali non valide",
+                                "Email o password non corrette.");
+                        passwordField.clear();
+                    });
+                }
+            } finally {
+                Platform.runLater(() -> {
+                    // progressIndicator.setVisible(false);
+                    loginForm.setDisable(false);
+                });
             }
-        } catch (Exception e) {
-            showAlert(AlertType.ERROR,
-                    "Errore di Sistema",
-                    "Errore durante il login",
-                    "Si è verificato un errore: " + e.getMessage());
-            e.printStackTrace();
-        }
+        }).start();
     }
 
     @FXML
     public void handleBack() {
         try {
-            SceneHandlerPrimaPagina.getInstance().init(SceneHandlerPrimaPagina.getInstance().getStage());
+            SceneHandlerPrimaPagina.getInstance().loadPrimaPagina();
         } catch (Exception e) {
-            showAlert(AlertType.ERROR,
+            showAlert(Alert.AlertType.ERROR,
                     "Errore di Navigazione",
                     "Impossibile tornare indietro",
                     "Si è verificato un errore: " + e.getMessage());
@@ -71,17 +98,13 @@ public class TrainerLoginController {
         }
     }
 
-    private boolean validateCredentials(String email, String password) {
-        // TODO: Implementare la vera validazione delle credenziali
-        // Per ora ritorna true per simulare un login di successo
-        return true;
-    }
-
-    private void showAlert(AlertType type, String title, String header, String content) {
-        Alert alert = new Alert(type);
-        alert.setTitle(title);
-        alert.setHeaderText(header);
-        alert.setContentText(content);
-        alert.showAndWait();
+    private void showAlert(Alert.AlertType type, String title, String header, String content) {
+        Platform.runLater(() -> {
+            Alert alert = new Alert(type);
+            alert.setTitle(title);
+            alert.setHeaderText(header);
+            alert.setContentText(content);
+            alert.showAndWait();
+        });
     }
 }

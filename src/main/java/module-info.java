@@ -11,6 +11,11 @@ module it.unical.informatica.progettouid {
     opens it.unical.informatica.progettouid.controller to javafx.fxml;
     opens it.unical.informatica.progettouid to javafx.fxml;
     exports it.unical.informatica.progettouid;
+    exports it.unical.informatica.progettouid.controller.Admin;
+    exports it.unical.informatica.progettouid.controller.Trainer;
+    exports it.unical.informatica.progettouid.controller.client;
     opens it.unical.informatica.progettouid.controller.client to javafx.fxml;
+    opens it.unical.informatica.progettouid.controller.Admin to javafx.fxml;
+    opens it.unical.informatica.progettouid.controller.Trainer to javafx.fxml;
     opens it.unical.informatica.progettouid.model to javafx.fxml;
 }

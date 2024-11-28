@@ -17,7 +17,7 @@
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.DatePicker?>
-<BorderPane stylesheets="@../../styles/home.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unical.informatica.progettouid.controller.CreaSchedaController">
+<BorderPane stylesheets="@../../styles/home.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unical.informatica.progettouid.controller.Trainer.CreaSchedaController">
 
     <top>
         <VBox styleClass="top">

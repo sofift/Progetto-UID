@@ -268,18 +268,63 @@ public class DBConnection {
     }
 
 
-// implementare metodi per la validazione delle credenziali
-    public boolean validateAdminCredentials(String username, String password) {
-        return true;
+    public Task<Trainer> authenticateTrainer(String email, String password) {
+        return asyncCall(() -> {
+            if (isConnected()) {
+                String query = "SELECT * FROM PersonalTrainer WHERE email = ?;";
+                try (PreparedStatement stmt = con.prepareStatement(query)) {
+                    stmt.setString(1, email);
+                    try (ResultSet rs = stmt.executeQuery()) {
+                        String storedHash = rs.getString("Password");
+                        if (rs.next() && BCrypt.checkpw(password, storedHash)) {
+
+                            return new Trainer(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5), rs.getString(6), rs.getString(7));
+                        }
+                    }
+                }
+            }
+            return null;
+        });
     }
 
-    public boolean validateClientCredentials(String username, String password) {
-        return true;
+    public Task<Admin> authenticateAdmin(String email, String password) {
+        return asyncCall(() -> {
+            if (isConnected()) {
+                String query = "SELECT * FROM Admin WHERE email = ?;";
+                try (PreparedStatement stmt = con.prepareStatement(query)) {
+                    stmt.setString(1, email);
+                    try (ResultSet rs = stmt.executeQuery()) {
+                        String storedHash = rs.getString("Password");
+                        if (rs.next() && BCrypt.checkpw(password, storedHash)) {
+
+                            return new Admin(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5));
+                        }
+                    }
+                }
+            }
+            return null;
+        });
     }
 
-    public boolean validateTrainerCredentials(String username, String password) {
-        return true;
+    public Task<Client> authenticateUser(String email, String password) {
+        return asyncCall(() -> {
+            if (isConnected()) {
+                String query = "SELECT * FROM Clienti WHERE email = ?;";
+                try (PreparedStatement stmt = con.prepareStatement(query)) {
+                    stmt.setString(1, email);
+                    try (ResultSet rs = stmt.executeQuery()) {
+                        String storedHash = rs.getString("Password");
+                        if (rs.next() && BCrypt.checkpw(password, storedHash)) {
+
+                            return new Client(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4));
+                        }
+                    }
+                }
+            }
+            return null;
+        });
     }
+
 }
     // CREAZIONE DELLA PLAYLIST AGGIUNTA DALL'UTENTE
 /*

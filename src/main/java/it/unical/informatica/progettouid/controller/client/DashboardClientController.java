@@ -6,15 +6,14 @@ import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
+import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import javafx.scene.text.Text;
 
 import java.util.List;
+import java.util.Optional;
 
 
 public class DashboardClientController {
@@ -35,28 +34,28 @@ public class DashboardClientController {
     public void initialize() {
         //currentClient = SessionManager.getInstance().getLoggedClient();
         bentornatoLabel.setText("Bentornato" );//+ currentClient.getNome());
-        mostraStatoAbbonamento();
+        //mostraStatoAbbonamento();
         loadCorsiOggi();
     }
 
-    private void mostraStatoAbbonamento() {
-        Task<Abbonamento> task = DBConnection.getInstance().getAccessiRimanenti(currentClient.getId());
-
-        task.setOnSucceeded(event -> {
-            Abbonamento abbonamento= task.getValue();
-
-            accessiRimanentiText.setText("" + abbonamento.getAccessiRimanenti());
-            accessiTotaliText.setText("" + abbonamento.getAccessiTotali());
-            scadenzaAbbText.setText(abbonamento.getDataScadenza());
-        });
-
-        task.setOnFailed(event -> {
-            System.out.println("Errore durante il caricamento dei dati del client: " + task.getException().getMessage());
-        });
-
-        new Thread(task).start();
-
-    }
+//    private void mostraStatoAbbonamento() {
+//        Task<Abbonamento> task = DBConnection.getInstance().getAccessiRimanenti(currentClient.getId());
+//
+//        task.setOnSucceeded(event -> {
+//            Abbonamento abbonamento= task.getValue();
+//
+//            accessiRimanentiText.setText("" + abbonamento.getAccessiRimanenti());
+//            accessiTotaliText.setText("" + abbonamento.getAccessiTotali());
+//            scadenzaAbbText.setText(abbonamento.getDataScadenza());
+//        });
+//
+//        task.setOnFailed(event -> {
+//            System.out.println("Errore durante il caricamento dei dati del client: " + task.getException().getMessage());
+//        });
+//
+//        new Thread(task).start();
+//
+//    }
 
     private void loadCorsiOggi() {
         Task<List<Corsi>> task = DBConnection.getInstance().getCorsiDiOggi();
@@ -106,6 +105,21 @@ public class DashboardClientController {
             Label posti = new Label(String.valueOf(c.getMaxPartecipanti()));
 
             Button prenota = new Button("Prenota");
+            prenota.setOnAction(e -> {
+                Alert confirmDialog = new Alert(Alert.AlertType.CONFIRMATION);
+                confirmDialog.setTitle("Conferma prenotazione");
+                confirmDialog.setHeaderText(null);
+                confirmDialog.setContentText("Confermi la prenotazione per il corso " + c.getNome() + "?");
+
+                Optional<ButtonType> result = confirmDialog.showAndWait();
+                if (result.isPresent() && result.get() == ButtonType.OK) {
+                    Alert successDialog = new Alert(Alert.AlertType.INFORMATION);
+                    successDialog.setTitle("Successo");
+                    successDialog.setHeaderText(null);
+                    successDialog.setContentText("Prenotazione effettuata con successo!");
+                    successDialog.showAndWait();
+                }
+            });
 
             content.getChildren().addAll(nomeCorso, orario, trainer, posti, prenota);
             corsiListView.getItems().add(content);

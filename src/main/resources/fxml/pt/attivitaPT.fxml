@@ -20,7 +20,7 @@
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.StackPane?>
 <BorderPane xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="it.unical.informatica.progettouid.controller.AttivitaPTController"
+            fx:controller="it.unical.informatica.progettouid.controller.Trainer.AttivitaPTController"
             stylesheets="@../../styles/calendar.css">
     <left>
         <VBox spacing="10" alignment="TOP_CENTER" styleClass="sidebar-left" maxWidth="100" minWidth="95">

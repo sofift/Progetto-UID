@@ -1,15 +1,14 @@
 // AttivitaPTController.java
-package it.unical.informatica.progettouid.controller;
+package it.unical.informatica.progettouid.controller.Trainer;
 
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
-import javafx.scene.text.Text;
+
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
-import java.time.format.TextStyle;
 import java.util.Locale;
 
 public class AttivitaPTController {

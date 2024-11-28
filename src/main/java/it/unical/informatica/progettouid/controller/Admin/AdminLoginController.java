@@ -28,64 +28,64 @@ public class AdminLoginController {
         // Aggiungi listener per il tasto Invio
         passwordField.setOnKeyPressed(event -> {
             if (event.getCode().toString().equals("ENTER") && !loginButton.isDisabled()) {
-                handleLogin();
+                //handleLogin();
             }
         });
     }
 
-    private boolean validateCredentials(String username, String password) {
-        try {
-            // Qui inserire la logica di validazione con il database
-            return DBConnection.getInstance().validateAdminCredentials(username, password);
-        } catch (Exception e) {
-            System.err.println("Errore durante la validazione delle credenziali: " + e.getMessage());
-            return false;
-        }
-    }
+//    private boolean validateCredentials(String username, String password) {
+//        try {
+//            // Qui inserire la logica di validazione con il database
+//            return DBConnection.getInstance().authenticateAdmin(username, password);
+//        } catch (Exception e) {
+//            System.err.println("Errore durante la validazione delle credenziali: " + e.getMessage());
+//            return false;
+//        }
+//    }
 
     @FXML
-    public void handleLogin() {
-        String username = usernameField.getText().trim();
-        String password = passwordField.getText().trim();
+//    public void handleLogin() {
+//        String username = usernameField.getText().trim();
+//        String password = passwordField.getText().trim();
+//
+//        //progressIndicator.setVisible(true);
+//        loginForm.setDisable(true);
+//
+//        // Esegui la validazione in un thread separato
+//        new Thread(() -> {
+//            try {
+//                if (a(username, password)) {
+//                    Platform.runLater(() -> {
+//                        try {
+//                            SceneHandlerPrimaPagina.getInstance()
+//                                    .loadMainInterface(SceneHandlerPrimaPagina.UserType.ADMIN);
+//                        } catch (Exception e) {
+//                            showAlert(Alert.AlertType.ERROR,
+//                                    "Errore di Navigazione",
+//                                    "Impossibile caricare la dashboard",
+//                                    "Si è verificato un errore: " + e.getMessage());
+//                            e.printStackTrace();
+//                        }
+//                    });
+//                } else {
+//                    Platform.runLater(() -> {
+//                        showAlert(Alert.AlertType.ERROR,
+//                                "Errore di Login",
+//                                "Credenziali non valide",
+//                                "Username o password non corrette.");
+//                        passwordField.clear();
+//                    });
+//                }
+//            } finally {
+//                Platform.runLater(() -> {
+//                    //progressIndicator.setVisible(false);
+//                    loginForm.setDisable(false);
+//                });
+//            }
+//        }).start();
+//    }
 
-        //progressIndicator.setVisible(true);
-        loginForm.setDisable(true);
-
-        // Esegui la validazione in un thread separato
-        new Thread(() -> {
-            try {
-                if (validateCredentials(username, password)) {
-                    Platform.runLater(() -> {
-                        try {
-                            SceneHandlerPrimaPagina.getInstance()
-                                    .loadMainInterface(SceneHandlerPrimaPagina.UserType.ADMIN);
-                        } catch (Exception e) {
-                            showAlert(Alert.AlertType.ERROR,
-                                    "Errore di Navigazione",
-                                    "Impossibile caricare la dashboard",
-                                    "Si è verificato un errore: " + e.getMessage());
-                            e.printStackTrace();
-                        }
-                    });
-                } else {
-                    Platform.runLater(() -> {
-                        showAlert(Alert.AlertType.ERROR,
-                                "Errore di Login",
-                                "Credenziali non valide",
-                                "Username o password non corrette.");
-                        passwordField.clear();
-                    });
-                }
-            } finally {
-                Platform.runLater(() -> {
-                    //progressIndicator.setVisible(false);
-                    loginForm.setDisable(false);
-                });
-            }
-        }).start();
-    }
-
-    @FXML
+    //@FXML
     public void handleBack() {
         try {
             SceneHandlerPrimaPagina.getInstance().loadPrimaPagina();

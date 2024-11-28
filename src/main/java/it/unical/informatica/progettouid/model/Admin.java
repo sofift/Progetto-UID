@@ -1,20 +1,18 @@
 package it.unical.informatica.progettouid.model;
 
-public class Client {
+public class Admin {
     private final int id;
     private final String nome;
     private final String cognome;
     private final String email;
-    //private final String password;
+    private final String password;
 
-
-
-    public Client(int id, String nome, String cognome, String email /*String password*/) {
+    public Admin(int id, String nome, String cognome, String email, String password) {
         this.id = id;
         this.nome = nome;
         this.cognome = cognome;
         this.email = email;
-        //his.password = password;
+        this.password = password;
     }
 
     public int getId() {
@@ -33,5 +31,7 @@ public class Client {
         return email;
     }
 
-
+    public String getPassword() {
+        return password;
+    }
 }

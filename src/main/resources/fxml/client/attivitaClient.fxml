@@ -14,6 +14,8 @@
 <?import javafx.scene.text.Text?>
 <?import org.kordamp.ikonli.javafx.FontIcon?>
 
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.RowConstraints?>
 <BorderPane stylesheets="@../../styles/calendar.css" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/22" fx:controller="it.unical.informatica.progettouid.controller.client.AttivitaClientController">
    <left>
       <VBox maxWidth="95" minWidth="95" spacing="10" styleClass="sidebar">
@@ -170,10 +172,16 @@
                   </Button>
                </children>
             </HBox>
-            <GridPane fx:id="calendarGrid" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS">
-               <padding>
-                  <Insets bottom="10.0" left="10.0" right="10.0" />
-               </padding></GridPane>
+            <GridPane fx:id="calendarGrid" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS" style="-fx-background-color: white;">
+               <columnConstraints>
+                  <ColumnConstraints percentWidth="14.28" />
+                  <!-- Ripeti per 7 colonne -->
+               </columnConstraints>
+               <rowConstraints>
+                  <RowConstraints percentHeight="16.66" />
+                  <!-- Ripeti per 6 righe -->
+               </rowConstraints>
+            </GridPane>
          </children>
       </VBox>
    </center>

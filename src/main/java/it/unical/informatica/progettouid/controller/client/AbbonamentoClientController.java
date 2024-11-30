@@ -78,11 +78,11 @@ public class AbbonamentoClientController {
 
         for(TipiAbbonamento p : piani) {
             VBox vbox = new VBox();
-            Label nome = new Label(p.getNome());
-            Label destinatoA = new Label(p.getDedicatoA());
-            Label prezzo = new Label("" + p.getPrezzo());
+            Label nome = new Label(p.nome());
+            Label destinatoA = new Label(p.dedicatoA());
+            Label prezzo = new Label("" + p.prezzo());
 
-            Text descrizione = new Text(p.getDescrizione());
+            Text descrizione = new Text(p.descrizione());
             Button seleziona = new Button("Seleziona");
 
             vbox.getChildren().addAll(nome, destinatoA, prezzo, descrizione, seleziona);

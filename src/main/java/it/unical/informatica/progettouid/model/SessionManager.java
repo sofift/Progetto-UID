@@ -4,7 +4,7 @@ import it.unical.informatica.progettouid.view.SceneHandlerClient;
 
 public class SessionManager {
     private static SessionManager instance  = null;
-    private Client loggedClient;
+    private ClientData loggedClient;
 
     private SessionManager() {}
 
@@ -16,11 +16,11 @@ public class SessionManager {
     }
 
 
-    public void setLoggedClient(Client client) {
+    public void setLoggedClient(ClientData client) {
         this.loggedClient = client;
     }
 
-    public Client getLoggedClient() {
+    public ClientData getLoggedClient() {
         if (loggedClient == null) {
             throw new IllegalStateException("Nessun client loggato");
         }

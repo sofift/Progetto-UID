@@ -93,23 +93,23 @@ public class DashboardClientController {
             // visualizza nome corso, orario, durata e personal
             content.setAlignment(Pos.CENTER_LEFT);
 
-            Label nomeCorso = new Label(c.getNome());
+            Label nomeCorso = new Label(c.nome());
             nomeCorso.setPrefWidth(150); // Fissa larghezza per allineamento
 
-            Label orario = new Label(c.getOraInizio());
+            Label orario = new Label(c.oraInizio());
             orario.setPrefWidth(100);
 
-            Label trainer = new Label(c.getPT());
+            Label trainer = new Label(c.PT());
             trainer.setPrefWidth(150);
 
-            Label posti = new Label(String.valueOf(c.getMaxPartecipanti()));
+            Label posti = new Label(String.valueOf(c.maxPartecipanti()));
 
             Button prenota = new Button("Prenota");
             prenota.setOnAction(e -> {
                 Alert confirmDialog = new Alert(Alert.AlertType.CONFIRMATION);
                 confirmDialog.setTitle("Conferma prenotazione");
                 confirmDialog.setHeaderText(null);
-                confirmDialog.setContentText("Confermi la prenotazione per il corso " + c.getNome() + "?");
+                confirmDialog.setContentText("Confermi la prenotazione per il corso " + c.nome() + "?");
 
                 Optional<ButtonType> result = confirmDialog.showAndWait();
                 if (result.isPresent() && result.get() == ButtonType.OK) {

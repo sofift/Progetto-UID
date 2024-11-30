@@ -1,37 +1,28 @@
 package it.unical.informatica.progettouid.model;
 
-public class Admin {
-    private final int id;
-    private final String nome;
-    private final String cognome;
-    private final String email;
-    private final String password;
-
-    public Admin(int id, String nome, String cognome, String email, String password) {
-        this.id = id;
-        this.nome = nome;
-        this.cognome = cognome;
-        this.email = email;
-        this.password = password;
-    }
-
-    public int getId() {
+public record Admin(int id, String nome, String cognome, String email, String password) {
+    @Override
+    public int id() {
         return id;
     }
 
-    public String getNome() {
+    @Override
+    public String nome() {
         return nome;
     }
 
-    public String getCognome() {
+    @Override
+    public String cognome() {
         return cognome;
     }
 
-    public String getEmail() {
+    @Override
+    public String email() {
         return email;
     }
 
-    public String getPassword() {
+    @Override
+    public String password() {
         return password;
     }
 }

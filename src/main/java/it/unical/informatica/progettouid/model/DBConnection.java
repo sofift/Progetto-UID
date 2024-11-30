@@ -93,6 +93,23 @@ public class DBConnection {
         });
     }
 
+    public Task<List<Client>> getAllClient() {
+        return asyncCall(() -> {
+            List<Client> clients = FXCollections.observableArrayList();
+            if (isConnected()) {
+                String query = "SELECT * FROM Clienti ;";
+                PreparedStatement stmt = con.prepareStatement(query);
+                ResultSet rs = stmt.executeQuery();
+                while (rs.next()) {
+                    clients.add(new Client(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5), rs.getInt(6)));
+
+                }
+                stmt.close();
+            }
+            return clients;
+        });
+    }
+
     // get personal trainer
     public Task<List<PersonalTrainer>> getAllPt() {
         return asyncCall(() -> {
@@ -306,19 +323,55 @@ public class DBConnection {
         });
     }
 
-    public Task<Client> authenticateUser(String email, String password) {
+    public Task<ClientData> authenticateUser(String email, String password) {
         return asyncCall(() -> {
             if (isConnected()) {
-                String query = "SELECT * FROM Clienti WHERE email = ?;";
+                String query = "SELECT u.ID as UserID, u.Email, u.Password,\n" +
+                        "                       c.ID as ClientID, c.Nome, c.Cognome, \n" +
+                        "                       c.Abbonamento, c.DataNascita\n" +
+                        "                FROM Users u\n" +
+                        "                JOIN Clienti c ON u.ID = c.UserID\n" +
+                        "                WHERE u.Email = ?;";
                 try (PreparedStatement stmt = con.prepareStatement(query)) {
                     stmt.setString(1, email);
                     try (ResultSet rs = stmt.executeQuery()) {
                         String storedHash = rs.getString("Password");
                         if (rs.next() && BCrypt.checkpw(password, storedHash)) {
+                            Users user = new Users(
+                                    rs.getInt(1),
+                                    rs.getString(2),
+                                    storedHash
+                            );
 
-                            return new Client(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4));
+                            Client client = new Client(
+                                    rs.getInt(1),
+                                    rs.getString(2),
+                                    rs.getString(3),
+                                    rs.getString(4),
+                                    rs.getString(5),
+                                    rs.getInt(6)
+                            );
+                            return ClientData.fromUsersAndClient(user, client);
                         }
                     }
+                }
+            }
+            return null;
+        });
+    }
+
+    public Task<Void> insertPrenotazionePT(int trainerId, String data, String oraPrenotazione, String notes) {
+        return asyncCall(() -> {
+            if (isConnected()) {
+                int idClient = SessionManager.getInstance().getLoggedClient().id();
+                String query = "INSERT INTO PrenotazionePT (idPT, idClient, data, oraPrenotazione, notes) VALUES(?, ?, ?, ?, ?);";
+                try (PreparedStatement stmt = con.prepareStatement(query)) {
+                    stmt.setInt(1, trainerId);
+                    stmt.setInt(2, idClient);
+                    stmt.setString(3, data);
+                    stmt.setString(4, oraPrenotazione);
+                    stmt.setString(5, notes);
+                    stmt.executeUpdate();
                 }
             }
             return null;

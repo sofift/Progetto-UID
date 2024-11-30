@@ -2,6 +2,7 @@ package it.unical.informatica.progettouid.controller.client;
 
 import it.unical.informatica.progettouid.model.DBConnection;
 import it.unical.informatica.progettouid.model.PersonalTrainer;
+import it.unical.informatica.progettouid.model.SessionManager;
 import it.unical.informatica.progettouid.view.SceneHandlerClient;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
@@ -11,6 +12,7 @@ import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 public class PrenotazionePTController{
@@ -18,6 +20,7 @@ public class PrenotazionePTController{
     private VBox trainerListContainer;
     @FXML
     private VBox bookingFormContainer;
+    private String trainerID = null;
 
     public void initialize() {
         loadTrainers();
@@ -28,8 +31,13 @@ public class PrenotazionePTController{
         Task<List<PersonalTrainer>> task = DBConnection.getInstance().getAllPt();
 
         task.setOnSucceeded(event -> {
+            trainerListContainer.getChildren().clear();
             List<PersonalTrainer> trainers = task.getValue();
-            displayPersonal(trainers);
+            if (trainers.isEmpty()) {
+                showAlertSucc("Errore", "Erorre nel caricamento dei trainer");
+            } else {
+                displayPersonal(trainers);
+            }
         });
 
         task.setOnFailed(event -> {
@@ -54,23 +62,25 @@ public class PrenotazionePTController{
 //        card.setPadding(new Insets(15));
 //        card.setSpacing(5);
 
-        Label nameLabel = new Label(STR."\{trainer.getNome()} \{trainer.getCognome()}");
+        Label nameLabel = new Label(STR."\{trainer.name()} \{trainer.name()}");
 //        nameLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 14px;");
 
-        Text specLabel = new Text(trainer.getSpecializzazione());
+        Text specLabel = new Text(trainer.specializzazione());
 
         Button bookButton = new Button("Prenota sessione");
 //        bookButton.setStyle("-fx-background-color: #4CAF50; -fx-text-fill: white;");
-        bookButton.setOnAction(e -> showBookingForm(trainer.getNome()));
+        bookButton.setOnAction(e -> showBookingForm(trainer));
+
 
         card.getChildren().addAll(nameLabel, specLabel, bookButton);
         return card;
     }
 
-    private void showBookingForm(String trainerName) {
+    // mostra form laterale per la prenotazione
+    private void showBookingForm(PersonalTrainer trainer) {
         bookingFormContainer.getChildren().clear();         // pulisce la aprte destra del border pane ogni votla che si preme sul button prenotazione
 
-        Label title = new Label("Prenota sessione con " + trainerName);
+        Label title = new Label("Prenota sessione con " + trainer.name());
         title.setStyle("-fx-font-size: 16px; -fx-font-weight: bold;");
 
         DatePicker datePicker = new DatePicker(LocalDate.now());
@@ -90,7 +100,7 @@ public class PrenotazionePTController{
         Button confirmButton = new Button("Conferma Prenotazione");
         confirmButton.setMaxWidth(Double.MAX_VALUE);
 //        confirmButton.setStyle("-fx-background-color: #4CAF50; -fx-text-fill: white;");
-        confirmButton.setOnAction(e -> handleBooking(trainerName, datePicker.getValue(),
+        confirmButton.setOnAction(e -> handleBooking(trainer.id(), datePicker.getValue(),
                 timeComboBox.getValue(), notes.getText()));
 
         bookingFormContainer.getChildren().addAll(
@@ -106,19 +116,53 @@ public class PrenotazionePTController{
     }
 
     // gestione prenotazione
-    private void handleBooking(String trainerName, LocalDate date, String time, String notes) {
-        if (date == null || time == null || time.isEmpty()) {
-            showAlert("Errore", "Per favore seleziona data e ora");
+    private void handleBooking(int trainerID, LocalDate date, String time, String notes) {
+        if (!validateBookingInput(date, time)) {
             return;
         }
 
-        // Qui implementa la logica per salvare la prenotazione
-        showAlert("Conferma", String.format("Prenotazione confermata!\n\nPersonal Trainer: %s\nData: %s\nOra: %s",
-                trainerName, date, time));
+        // aggiungi prenotazione al database
+        Task<Void> task = DBConnection.getInstance().insertPrenotazionePT(trainerID, date.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")), time, notes);
+
+        task.setOnSucceeded(event -> {
+            showAlertSucc("Conferma", String.format("Prenotazione confermata!\n\nPersonal Trainer: %s\nData: %s\nOra: %s",
+                    trainerID, date, time));
+        });
+
+        task.setOnFailed(event -> {
+            showError("Errore prenotazione",
+                    "Si è verificato un errore durante la prenotazione.");
+        });
+        // Avvia il task in un nuovo thread
+        new Thread(task).start();
+
+
     }
 
-    private void showAlert(String title, String content) {
+    private boolean validateBookingInput(LocalDate date, String time) {
+        if (date == null || time == null || time.isEmpty()) {
+            showError("Dati mancanti", "Seleziona data e ora per la prenotazione.");
+            return false;
+        }
+
+        if (date.isBefore(LocalDate.now())) {
+            showError("Data non valida", "Seleziona una data futura.");
+            return false;
+        }
+
+        return true;
+    }
+
+    private void showAlertSucc(String title, String content) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(content);
+        alert.showAndWait();
+    }
+
+    private void showError(String title, String content) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle(title);
         alert.setHeaderText(null);
         alert.setContentText(content);

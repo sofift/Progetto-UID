@@ -1,57 +1,28 @@
 package it.unical.informatica.progettouid.model;
 
-public class PersonalTrainer {
-    protected int id;
-    protected String nome;
-    protected String cognome;
-    protected String dataDiNascita;
-    protected String specializzazione;
-
-    public PersonalTrainer(int id, String name, String surname, String dateborn, String specializzazione) {
-        this.id = id;
-        this.nome = name;
-        this.cognome = surname;
-        this.dataDiNascita = dateborn;
-        this.specializzazione = specializzazione;
-    }
-
-    public int getId() {
+public record PersonalTrainer(int id, String name, String surname, String dateborn, String specializzazione) {
+    @Override
+    public int id() {
         return id;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    @Override
+    public String name() {
+        return name;
     }
 
-    public String getNome() {
-        return nome;
+    @Override
+    public String surname() {
+        return surname;
     }
 
-    public void setNome(String nome) {
-        this.nome = nome;
+    @Override
+    public String dateborn() {
+        return dateborn;
     }
 
-    public String getCognome() {
-        return cognome;
-    }
-
-    public void setCognome(String cognome) {
-        this.cognome = cognome;
-    }
-
-    public String getDataDiNascita() {
-        return dataDiNascita;
-    }
-
-    public void setDataDiNascita(String dataDiNascita) {
-        this.dataDiNascita = dataDiNascita;
-    }
-
-    public String getSpecializzazione() {
+    @Override
+    public String specializzazione() {
         return specializzazione;
-    }
-
-    public void setSpecializzazione(String specializzazione) {
-        this.specializzazione = specializzazione;
     }
 }

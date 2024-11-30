@@ -1,49 +1,38 @@
 package it.unical.informatica.progettouid.model;
 
-public class TipiAbbonamento {
-    private final int id;
-    private final String nome;
-    private final String descrizione;
-    private final int accessiTotali;
-    private final int durataMesi;
-    private final int prezzo;
-    private final String dedicatoA;
-
-    public TipiAbbonamento(int id, String nome, String descrizione, int accessiTotali, int durataMesi, int prezzo, String dedicatoA) {
-        this.id = id;
-        this.nome = nome;
-        this.descrizione = descrizione;
-        this.accessiTotali = accessiTotali;
-        this.durataMesi = durataMesi;
-        this.prezzo = prezzo;
-        this.dedicatoA = dedicatoA;
-    }
-
-    public int getId() {
+public record TipiAbbonamento(int id, String nome, String descrizione, int accessiTotali, int durataMesi, int prezzo, String dedicatoA) {
+    @Override
+    public int id() {
         return id;
     }
 
-    public String getNome() {
+    @Override
+    public String nome() {
         return nome;
     }
 
-    public String getDescrizione() {
+    @Override
+    public String descrizione() {
         return descrizione;
     }
 
-    public int getAccessiTotali() {
+    @Override
+    public int accessiTotali() {
         return accessiTotali;
     }
 
-    public int getDurataMesi() {
+    @Override
+    public int durataMesi() {
         return durataMesi;
     }
 
-    public int getPrezzo() {
+    @Override
+    public int prezzo() {
         return prezzo;
     }
 
-    public String getDedicatoA() {
+    @Override
+    public String dedicatoA() {
         return dedicatoA;
     }
 }

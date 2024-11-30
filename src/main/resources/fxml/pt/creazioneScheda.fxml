@@ -2,21 +2,24 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Spinner?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 <?import org.kordamp.ikonli.javafx.FontIcon?>
 
-<?import javafx.scene.control.TextArea?>
-<?import javafx.scene.control.TableView?>
-<?import javafx.scene.control.Tab?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TabPane?>
-<?import javafx.scene.control.ComboBox?>
-<?import javafx.scene.control.DatePicker?>
 <BorderPane stylesheets="@../../styles/home.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unical.informatica.progettouid.controller.Trainer.CreaSchedaController">
 
     <top>
@@ -144,90 +147,263 @@
     <center>
         <VBox spacing="20" styleClass="content-area">
             <padding>
-                <Insets top="20" right="20" bottom="20" left="20"/>
+                <Insets bottom="20" left="20" right="20" top="20" />
             </padding>
 
-            <HBox spacing="15" alignment="CENTER_LEFT">
-                <Label text="Cliente:" styleClass="form-label"/>
-                <ComboBox fx:id="clienteComboBox" prefWidth="200"/>
-                <Label text="Data inizio:" styleClass="form-label"/>
-                <DatePicker fx:id="dataInizioPicker"/>
-                <Label text="Durata (settimane):" styleClass="form-label"/>
-                <ComboBox fx:id="durataComboBox" prefWidth="100"/>
+            <HBox alignment="CENTER_LEFT" spacing="15">
+                <Label styleClass="form-label" text="Cliente:" />
+                <ComboBox fx:id="clienteComboBox" prefWidth="200" />
+                <Label styleClass="form-label" text="Data inizio:" />
+                <DatePicker fx:id="dataInizioPicker" />
+            <Label styleClass="form-label" text="Scadenza:" />
+            <DatePicker fx:id="dataInizioPicker1" />
+                <Label styleClass="form-label" text="Durata (settimane):" />
+            <TextField fx:id="durataField" prefWidth="100.0" />
             </HBox>
+                <Button fx:id="aggiungiEsercizioButton" onAction="#formAggiungiEsercizio" text="Aggiungi Esercizio">
+                    <graphic>
+                        <FontIcon iconLiteral="fas-plus" />
+                    </graphic>
+                </Button>
 
             <TabPane fx:id="giorniTabPane" VBox.vgrow="ALWAYS">
-                <Tab text="Lunedì" closable="false">
+                <Tab closable="false" text="Lunedì">
                     <VBox spacing="10">
-                        <HBox spacing="10" alignment="CENTER_LEFT">
-                            <Button text="Aggiungi Esercizio">
-                                <graphic>
-                                    <FontIcon iconLiteral="fas-plus"/>
-                                </graphic>
-                            </Button>
-                        </HBox>
-                        <TableView fx:id="eserciziTable" VBox.vgrow="ALWAYS">
+                        <HBox alignment="CENTER_LEFT" spacing="10" />
+                        <TableView VBox.vgrow="ALWAYS">
                             <columns>
-                                <TableColumn text="Esercizio" fx:id="nomeEsercizioColumn"/>
-                                <TableColumn text="Serie" fx:id="serieColumn"/>
-                                <TableColumn text="Ripetizioni" fx:id="ripetizioniColumn"/>
-                                <TableColumn text="Recupero" fx:id="recuperoColumn"/>
-                                <TableColumn text="Note" fx:id="noteColumn"/>
-                                <TableColumn text="Azioni" fx:id="azioniColumn"/>
+                                <TableColumn fx:id="nomeEsercizioColumn" text="Esercizio" />
+                                <TableColumn fx:id="serieColumn" text="Serie" />
+                                <TableColumn fx:id="ripetizioniColumn" text="Ripetizioni" />
+                                <TableColumn fx:id="recuperoColumn" text="Recupero" />
+                                <TableColumn fx:id="noteColumn" text="Note" />
+                                <TableColumn fx:id="azioniColumn" text="Azioni" />
                             </columns>
                         </TableView>
                     </VBox>
                 </Tab>
+            <Tab closable="false" text="Martedì">
+               <content>
+                   <VBox spacing="10">
+                       <HBox alignment="CENTER_LEFT" spacing="10" />
+                       <TableView VBox.vgrow="ALWAYS">
+                           <columns>
+                               <TableColumn fx:id="nomeEsercizioColumn" text="Esercizio" />
+                               <TableColumn fx:id="serieColumn" text="Serie" />
+                               <TableColumn fx:id="ripetizioniColumn" text="Ripetizioni" />
+                               <TableColumn fx:id="recuperoColumn" text="Recupero" />
+                               <TableColumn fx:id="noteColumn" text="Note" />
+                               <TableColumn fx:id="azioniColumn" text="Azioni" />
+                           </columns>
+                       </TableView>
+                   </VBox>
+               </content>
+            </Tab>
+            <Tab closable="false" text="Mercoledì">
+               <content>
+                  <VBox spacing="10">
+                     <children>
+                        <HBox alignment="CENTER_LEFT" spacing="10" />
+                        <TableView VBox.vgrow="ALWAYS">
+                           <columns>
+                              <TableColumn fx:id="nomeEsercizioColumn2" text="Esercizio" />
+                              <TableColumn fx:id="serieColumn2" text="Serie" />
+                              <TableColumn fx:id="ripetizioniColumn2" text="Ripetizioni" />
+                              <TableColumn fx:id="recuperoColumn2" text="Recupero" />
+                              <TableColumn fx:id="noteColumn2" text="Note" />
+                              <TableColumn fx:id="azioniColumn2" text="Azioni" />
+                           </columns>
+                        </TableView>
+                     </children>
+                  </VBox>
+               </content>
+            </Tab>
+            <Tab closable="false" text="Giovedì">
+               <content>
+                  <VBox spacing="10">
+                     <children>
+                        <HBox alignment="CENTER_LEFT" spacing="10" />
+                        <TableView VBox.vgrow="ALWAYS">
+                           <columns>
+                              <TableColumn fx:id="nomeEsercizioColumn3" text="Esercizio" />
+                              <TableColumn fx:id="serieColumn3" text="Serie" />
+                              <TableColumn fx:id="ripetizioniColumn3" text="Ripetizioni" />
+                              <TableColumn fx:id="recuperoColumn3" text="Recupero" />
+                              <TableColumn fx:id="noteColumn3" text="Note" />
+                              <TableColumn fx:id="azioniColumn3" text="Azioni" />
+                           </columns>
+                        </TableView>
+                     </children>
+                  </VBox>
+               </content>
+            </Tab>
+            <Tab closable="false" text="Venerdì">
+               <content>
+                  <VBox spacing="10">
+                     <children>
+                        <HBox alignment="CENTER_LEFT" spacing="10" />
+                        <TableView VBox.vgrow="ALWAYS">
+                           <columns>
+                              <TableColumn fx:id="nomeEsercizioColumn4" text="Esercizio" />
+                              <TableColumn fx:id="serieColumn4" text="Serie" />
+                              <TableColumn fx:id="ripetizioniColumn4" text="Ripetizioni" />
+                              <TableColumn fx:id="recuperoColumn4" text="Recupero" />
+                              <TableColumn fx:id="noteColumn4" text="Note" />
+                              <TableColumn fx:id="azioniColumn4" text="Azioni" />
+                           </columns>
+                        </TableView>
+                     </children>
+                  </VBox>
+               </content>
+            </Tab>
+            <Tab closable="false" text="Sabato">
+               <content>
+                  <VBox spacing="10">
+                     <children>
+                        <HBox alignment="CENTER_LEFT" spacing="10" />
+                        <TableView VBox.vgrow="ALWAYS">
+                           <columns>
+                              <TableColumn fx:id="nomeEsercizioColumn5" text="Esercizio" />
+                              <TableColumn fx:id="serieColumn5" text="Serie" />
+                              <TableColumn fx:id="ripetizioniColumn5" text="Ripetizioni" />
+                              <TableColumn fx:id="recuperoColumn5" text="Recupero" />
+                              <TableColumn fx:id="noteColumn5" text="Note" />
+                              <TableColumn fx:id="azioniColumn5" text="Azioni" />
+                           </columns>
+                        </TableView>
+                     </children>
+                  </VBox>
+               </content>
+            </Tab>
+            <Tab closable="false" text="Domenica">
+               <content>
+                  <VBox spacing="10">
+                     <children>
+                        <HBox alignment="CENTER_LEFT" spacing="10" />
+                        <TableView VBox.vgrow="ALWAYS">
+                           <columns>
+                              <TableColumn fx:id="nomeEsercizioColumn6" text="Esercizio" />
+                              <TableColumn fx:id="serieColumn6" text="Serie" />
+                              <TableColumn fx:id="ripetizioniColumn6" text="Ripetizioni" />
+                              <TableColumn fx:id="recuperoColumn6" text="Recupero" />
+                              <TableColumn fx:id="noteColumn6" text="Note" />
+                              <TableColumn fx:id="azioniColumn6" text="Azioni" />
+                           </columns>
+                        </TableView>
+                     </children>
+                  </VBox>
+               </content>
+            </Tab>
             </TabPane>
         </VBox>
     </center>
 
     <right>
-        <VBox spacing="15" styleClass="right-sidebar" maxWidth="300">
-            <padding>
-                <Insets top="20" right="20" bottom="20" left="20"/>
-            </padding>
+        <!-- Stack Pane per gestire la visualizzazione dei due pannelli -->
+        <StackPane>
+            <!-- Pannello principale con obiettivi e note -->
+            <VBox fx:id="schedaInfoPanel" maxWidth="300" spacing="15" styleClass="right-sidebar">
+                <padding>
+                    <Insets bottom="20" left="20" right="20" top="20" />
+                </padding>
 
-            <VBox spacing="10">
-                <Label text="Obiettivi" styleClass="section-header">
-                    <graphic>
-                        <FontIcon iconLiteral="fas-bullseye"/>
-                    </graphic>
-                </Label>
-                <TextArea fx:id="obiettiviTextArea" prefRowCount="4"/>
+                <VBox spacing="10">
+                    <Label styleClass="section-header" text="Obiettivi">
+                        <graphic>
+                            <FontIcon iconLiteral="fas-bullseye" />
+                        </graphic>
+                    </Label>
+                    <TextArea fx:id="obiettiviTextArea" prefRowCount="4" />
+                </VBox>
+
+                <VBox spacing="10">
+                    <Label styleClass="section-header" text="Note Generali">
+                        <graphic>
+                            <FontIcon iconLiteral="fas-sticky-note" />
+                        </graphic>
+                    </Label>
+                    <TextArea fx:id="noteGeneraliTextArea" prefRowCount="4" />
+                </VBox>
+
+                <VBox spacing="10">
+                    <Label styleClass="section-header" text="Suggerimenti Alimentari">
+                        <graphic>
+                            <FontIcon iconLiteral="fas-apple-alt" />
+                        </graphic>
+                    </Label>
+                    <TextArea fx:id="suggerimentiAlimentariTextArea" prefRowCount="4" />
+                </VBox>
+
+                <HBox alignment="CENTER" spacing="10">
+                    <Button onAction="#salvaScheda" styleClass="primary-button" text="Salva Scheda">
+                        <graphic>
+                            <FontIcon iconLiteral="fas-save" />
+                        </graphic>
+                    </Button>
+                    <Button onAction="#anteprimaPDF" styleClass="secondary-button" text="Anteprima PDF">
+                        <graphic>
+                            <FontIcon iconLiteral="fas-file-pdf" />
+                        </graphic>
+                    </Button>
+                </HBox>
             </VBox>
 
-            <VBox spacing="10">
-                <Label text="Note Generali" styleClass="section-header">
+            <!-- Pannello per l'aggiunta di esercizi -->
+            <VBox fx:id="aggiungiEsercizioPanel" maxWidth="300" spacing="15" styleClass="right-sidebar" visible="false">
+                <padding>
+                    <Insets bottom="20" left="20" right="20" top="20" />
+                </padding>
+
+                <Label styleClass="section-header" text="Aggiungi Esercizio">
                     <graphic>
-                        <FontIcon iconLiteral="fas-sticky-note"/>
+                        <FontIcon iconLiteral="fas-dumbbell" />
                     </graphic>
                 </Label>
-                <TextArea fx:id="noteGeneraliTextArea" prefRowCount="4"/>
-            </VBox>
 
-            <VBox spacing="10">
-                <Label text="Suggerimenti Alimentari" styleClass="section-header">
-                    <graphic>
-                        <FontIcon iconLiteral="fas-apple-alt"/>
-                    </graphic>
-                </Label>
-                <TextArea fx:id="suggerimentiAlimentariTextArea" prefRowCount="4"/>
-            </VBox>
+                <VBox spacing="10">
+                    <Label styleClass="form-label" text="Nome Esercizio:" />
+                    <ComboBox fx:id="esercizioComboBox" editable="true" maxWidth="Infinity" />
+                </VBox>
 
-            <HBox spacing="10" alignment="CENTER">
-                <Button text="Salva Scheda" styleClass="primary-button">
-                    <graphic>
-                        <FontIcon iconLiteral="fas-save"/>
-                    </graphic>
-                </Button>
-                <Button text="Anteprima PDF" styleClass="secondary-button">
-                    <graphic>
-                        <FontIcon iconLiteral="fas-file-pdf"/>
-                    </graphic>
-                </Button>
-            </HBox>
-        </VBox>
+                <VBox spacing="10">
+                    <Label styleClass="form-label" text="Serie:" />
+                    <Spinner fx:id="serieSpinner" maxWidth="Infinity">
+                    </Spinner>
+                </VBox>
+
+                <VBox spacing="10">
+                    <Label styleClass="form-label" text="Ripetizioni:" />
+                    <Spinner fx:id="ripetizioniSpinner" maxWidth="Infinity">
+
+                    </Spinner>
+                </VBox>
+
+                <VBox spacing="10">
+                    <Label styleClass="form-label" text="Recupero (sec):" />
+                    <Spinner fx:id="recuperoSpinner" maxWidth="Infinity">
+
+                    </Spinner>
+                </VBox>
+
+                <VBox spacing="5">
+                    <Label styleClass="form-label" text="Note:" />
+                    <TextArea fx:id="noteEsercizioTextArea" prefRowCount="3" wrapText="true" />
+                </VBox>
+
+                <HBox alignment="CENTER" spacing="10">
+                    <Button onAction="#aggiungiEsercizio" styleClass="primary-button" text="Aggiungi">
+                        <graphic>
+                            <FontIcon iconLiteral="fas-plus" />
+                        </graphic>
+                    </Button>
+                    <Button onAction="#annullaAggiuntaEsercizio" styleClass="secondary-button" text="Annulla">
+                        <graphic>
+                            <FontIcon iconLiteral="fas-times" />
+                        </graphic>
+                    </Button>
+                </HBox>
+            </VBox>
+        </StackPane>
     </right>
 
 

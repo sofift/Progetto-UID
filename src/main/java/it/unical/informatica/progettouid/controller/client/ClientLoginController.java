@@ -1,6 +1,7 @@
 package it.unical.informatica.progettouid.controller.client;
 
 import it.unical.informatica.progettouid.model.Client;
+import it.unical.informatica.progettouid.model.ClientData;
 import it.unical.informatica.progettouid.model.DBConnection;
 import it.unical.informatica.progettouid.model.SessionManager;
 import it.unical.informatica.progettouid.view.SceneHandlerPrimaPagina;
@@ -17,19 +18,14 @@ import javafx.scene.control.Hyperlink;
 
 
 public class ClientLoginController {
-
     @FXML
     private TextField emailField;
-
     @FXML
     private PasswordField passwordField;
-
     @FXML
     private Button loginButton;
-
     @FXML
     private Button backButton;
-
     @FXML
     private Hyperlink registerLink;
 
@@ -52,9 +48,9 @@ public class ClientLoginController {
 
         // TODO: Implementare la logica di autenticazione
 
-        Task<Client> task = DBConnection.getInstance().authenticateUser(email, password);
+        Task<ClientData> task = DBConnection.getInstance().authenticateUser(email, password);
         task.setOnSucceeded(event -> {
-            Client client = task.getValue();
+            ClientData client = task.getValue();
             if (client != null) {
                 try {
                     SessionManager.getInstance().setLoggedClient(client);

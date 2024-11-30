@@ -31,7 +31,7 @@ public class SceneHandlerClient {
 
     public void init(Stage primaryStage) throws Exception {
         this.stage = primaryStage;
-        loadView("/fxml/client/abbonamentoClient.fxml", true);
+        loadView("/fxml/client/dashboardClient.fxml", true);
         this.stage.setWidth(1000);
         this.stage.setHeight(600);
         this.stage.show();

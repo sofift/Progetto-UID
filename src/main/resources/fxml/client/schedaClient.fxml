@@ -1,18 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import org.kordamp.ikonli.javafx.FontIcon?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
 
-<BorderPane  xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="it.unical.informatica.progettouid.controller.client.SchedaClientController"
-            prefHeight="400.0" prefWidth="600.0">
+<BorderPane prefHeight="400.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/22" fx:controller="it.unical.informatica.progettouid.controller.client.SchedaClientController">
     <top>
         <VBox>
             <children>
@@ -140,54 +145,68 @@
             <content>
                 <VBox spacing="20">
                     <padding>
-                        <Insets top="20" right="20" bottom="20" left="20"/>
+                        <Insets bottom="20" left="20" right="20" top="20" />
                     </padding>
 
                     <VBox spacing="10" styleClass="info-section">
-                        <Label text="Informazioni Generali" styleClass="section-header">
+                        <Label styleClass="section-header" text="Informazioni Generali">
                             <graphic>
-                                <FontIcon iconLiteral="fas-info-circle"/>
+                                <FontIcon iconLiteral="fas-info-circle" />
                             </graphic>
                         </Label>
-                        <GridPane fx:id="infoGrid" vgap="10" hgap="20">
-                            <Label text="Data Inizio:" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
-                            <Label text="Data Fine:" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
-                            <Label text="Obiettivo:" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
-                            <Label text="Livello:" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+                        <GridPane fx:id="infoGrid" hgap="20" vgap="10">
+                            <Label text="Data Inizio:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                            <Label text="Data Fine:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                            <Label text="Obiettivo:" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+                            <Label text="Livello:" GridPane.columnIndex="0" GridPane.rowIndex="3" />
+                     <columnConstraints>
+                        <ColumnConstraints />
+                     </columnConstraints>
+                     <rowConstraints>
+                        <RowConstraints />
+                        <RowConstraints />
+                        <RowConstraints />
+                        <RowConstraints />
+                     </rowConstraints>
                         </GridPane>
                     </VBox>
 
                     <TabPane fx:id="weekdayTabs" styleClass="workout-tabs">
-                        <Tab text="Lunedì" closable="false">
-                            <VBox fx:id="mondayExercises" spacing="10"/>
+                        <Tab closable="false" text="Lunedì">
+                            <VBox fx:id="lunedì" spacing="10" />
                         </Tab>
-                        <Tab text="Martedì" closable="false">
-                            <VBox fx:id="tuesdayExercises" spacing="10"/>
+                        <Tab closable="false" text="Martedì">
+                            <VBox fx:id="martedì" spacing="10" />
                         </Tab>
-                        <Tab text="Mercoledì" closable="false">
-                            <VBox fx:id="wednesdayExercises" spacing="10"/>
+                        <Tab closable="false" text="Mercoledì">
+                            <VBox fx:id="mercoledì" spacing="10" />
                         </Tab>
-                        <Tab text="Giovedì" closable="false">
-                            <VBox fx:id="thursdayExercises" spacing="10"/>
+                        <Tab closable="false" text="Giovedì">
+                            <VBox fx:id="giovedì" spacing="10" />
                         </Tab>
-                        <Tab text="Venerdì" closable="false">
-                            <VBox fx:id="fridayExercises" spacing="10"/>
+                        <Tab closable="false" text="Venerdì">
+                            <VBox fx:id="venerdì" spacing="10" />
                         </Tab>
-                        <Tab text="Sabato" closable="false">
-                            <VBox fx:id="saturdayExercises" spacing="10"/>
+                        <Tab closable="false" text="Sabato">
+                            <VBox fx:id="sabato" spacing="10" />
                         </Tab>
-                        <Tab text="Domenica" closable="false">
-                            <VBox fx:id="sundayExercises" spacing="10"/>
+                        <Tab closable="false" text="Domenica">
+                            <VBox fx:id="domenica" spacing="10" />
                         </Tab>
                     </TabPane>
 
                     <VBox spacing="10" styleClass="notes-section">
-                        <Label text="Note e Raccomandazioni" styleClass="section-header">
-                            <graphic>
-                                <FontIcon iconLiteral="fas-sticky-note"/>
-                            </graphic>
-                        </Label>
-                        <TextArea fx:id="notesArea" editable="false" wrapText="true" prefRowCount="4"/>
+                  <Label styleClass="section-header" text="Note e Raccomandazioni">
+                     <graphic>
+                        <FontIcon iconLiteral="fas-sticky-note" />
+                     </graphic>
+                  </Label>
+                  <HBox prefHeight="100.0" prefWidth="200.0" spacing="15.0">
+                     <children>
+                        <TextArea fx:id="notesArea" editable="false" prefRowCount="4" wrapText="true" />
+                        <TextArea fx:id="sugAlimentari" editable="false" prefRowCount="4" wrapText="true" />
+                     </children>
+                  </HBox>
                     </VBox>
                 </VBox>
             </content>
@@ -195,52 +214,52 @@
     </center>
 
     <right>
-        <VBox spacing="20" maxWidth="250.0" minWidth="200.0">
+        <VBox maxWidth="250.0" minWidth="200.0" spacing="20">
             <padding>
-                <Insets top="20" right="20" bottom="20" left="20"/>
+                <Insets bottom="20" left="20" right="20" top="20" />
             </padding>
 
             <!-- Informazioni Personal Trainer -->
             <VBox spacing="10" styleClass="pt-info-section">
-                <Label text="Il tuo Personal Trainer" styleClass="section-header">
+                <Label styleClass="section-header" text="Il tuo Personal Trainer">
                     <graphic>
-                        <FontIcon iconLiteral="fas-user-tie"/>
+                        <FontIcon iconLiteral="fas-user-tie" />
                     </graphic>
                 </Label>
-                <VBox fx:id="ptInfoContainer" spacing="5"></VBox>
+                <VBox fx:id="ptInfoContainer" spacing="5" />
             </VBox>
 
             <VBox spacing="10" styleClass="actions-section">
                 <Button maxWidth="Infinity" styleClass="action-button">
                     <graphic>
-                        <HBox spacing="10" alignment="CENTER">
-                            <FontIcon iconLiteral="fas-download"/>
-                            <Label text="Scarica PDF"/>
+                        <HBox alignment="CENTER" spacing="10">
+                            <FontIcon iconLiteral="fas-download" />
+                            <Label text="Scarica PDF" />
                         </HBox>
                     </graphic>
                 </Button>
                 <Button maxWidth="Infinity" styleClass="action-button">
                     <graphic>
-                        <HBox spacing="10" alignment="CENTER">
-                            <FontIcon iconLiteral="fas-print"/>
-                            <Label text="Stampa Scheda"/>
+                        <HBox alignment="CENTER" spacing="10">
+                            <FontIcon iconLiteral="fas-print" />
+                            <Label text="Stampa Scheda" />
                         </HBox>
                     </graphic>
                 </Button>
                 <Button maxWidth="Infinity" styleClass="action-button">
                     <graphic>
-                        <HBox spacing="10" alignment="CENTER">
-                            <FontIcon iconLiteral="fas-share-alt"/>
-                            <Label text="Condividi"/>
+                        <HBox alignment="CENTER" spacing="10">
+                            <FontIcon iconLiteral="fas-share-alt" />
+                            <Label text="Condividi" />
                         </HBox>
                     </graphic>
                 </Button>
             </VBox>
 
             <VBox spacing="10" styleClass="stats-section">
-                <Label text="Statistiche" styleClass="section-header">
+                <Label styleClass="section-header" text="Statistiche">
                     <graphic>
-                        <FontIcon iconLiteral="fas-chart-line"/>
+                        <FontIcon iconLiteral="fas-chart-line" />
                     </graphic>
                 </Label>
                 <VBox fx:id="statsContainer" spacing="5">

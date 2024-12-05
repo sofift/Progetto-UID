@@ -12,7 +12,7 @@
 <?import javafx.scene.text.Text?>
 <?import org.kordamp.ikonli.javafx.FontIcon?>
 
-<BorderPane prefHeight="400.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/22" fx:controller="it.unical.informatica.progettouid.controller.client.AbbonamentoClientController">
+<BorderPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unical.informatica.progettouid.controller.client.AbbonamentoClientController">
 
     <top>
         <VBox>
@@ -146,7 +146,7 @@
 
             <VBox spacing="10.0" style="-fx-background-color: #f8f9fa; -fx-background-radius: 5; -fx-padding: 15;">
                 <HBox spacing="10.0">
-                    <FontIcon iconLiteral="fas-crown" iconSize="24" />
+                    <FontIcon fx:id="tipoAbbonamentoIcon" iconLiteral="fas-crown" iconSize="24" />
                     <Label fx:id="tipoAbbonamentoLabel" style="-fx-font-size: 18; -fx-font-weight: bold;" text="Premium" />
                 </HBox>
 
@@ -168,9 +168,7 @@
 
             <VBox spacing="5.0">
                 <Label style="-fx-font-weight: bold;" text="Vantaggi del tuo abbonamento:" />
-                <Label text="✓ Accesso illimitato alla sala pesi" wrapText="true" />
-                <Label text="✓ Accesso a tutti i corsi" wrapText="true" />
-                <Label text="✓ 2 sessioni con personal trainer" wrapText="true" />
+                <Label fx:id="descrizioneLabel" wrapText="true" />
             </VBox>
         </VBox>
     </center>

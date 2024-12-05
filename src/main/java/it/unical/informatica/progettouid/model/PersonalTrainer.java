@@ -1,6 +1,6 @@
 package it.unical.informatica.progettouid.model;
 
-public record PersonalTrainer(int id, String name, String surname, String dateborn, String specializzazione) {
+public record PersonalTrainer(int id, String name, String surname, String dateborn, String specializzazione, String email, String telefono) {
     @Override
     public int id() {
         return id;

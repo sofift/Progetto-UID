@@ -16,7 +16,7 @@ public class CreaSchedaController {
     @FXML private ComboBox<Client> clienteComboBox;
     @FXML private DatePicker dataInizioPicker;
     @FXML private TextField durataField;
-    @FXML private TableView<Esercizio> eserciziTable;
+    //@FXML private TableView<Esercizio> eserciziTable;
     @FXML private VBox schedaInfoPanel;
     @FXML private VBox aggiungiEsercizioPanel;
     @FXML private ComboBox<String> esercizioComboBox;
@@ -67,7 +67,8 @@ public class CreaSchedaController {
             return;
         }
 
-        Esercizio nuovoEsercizio = new Esercizio(
+        /*Esercizio nuovoEsercizio = new Esercizio(
+
                 nomeEsercizio,
                 serieSpinner.getValue(),
                 ripetizioniSpinner.getValue(),
@@ -77,7 +78,7 @@ public class CreaSchedaController {
 
         eserciziTable.getItems().add(nuovoEsercizio);
         pulisciFormEsercizio();
-        mostraPannelloPrincipale();
+        mostraPannelloPrincipale();*/
     }
 
     @FXML

@@ -1,6 +1,8 @@
 package it.unical.informatica.progettouid.controller.client;
 
+import it.unical.informatica.progettouid.model.*;
 import it.unical.informatica.progettouid.view.SceneHandlerClient;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -9,10 +11,11 @@ import javafx.scene.layout.*;
 import javafx.geometry.Pos;
 
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class SchedaClientController implements Initializable {
-
+    @FXML public TextArea sugAlimentari;
     @FXML private GridPane infoGrid;
     @FXML private TabPane weekdayTabs;
     @FXML private TextArea notesArea;
@@ -20,104 +23,178 @@ public class SchedaClientController implements Initializable {
     @FXML private VBox statsContainer;
 
     // VBox per ogni giorno della settimana
-    @FXML private VBox mondayExercises;
-    @FXML private VBox tuesdayExercises;
-    @FXML private VBox wednesdayExercises;
-    @FXML private VBox thursdayExercises;
-    @FXML private VBox fridayExercises;
-    @FXML private VBox saturdayExercises;
-    @FXML private VBox sundayExercises;
+    @FXML private VBox lunedì;
+    @FXML private VBox martedì;
+    @FXML private VBox mercoledì;
+    @FXML private VBox giovedì;
+    @FXML private VBox venerdì;
+    @FXML private VBox sabato;
+    @FXML private VBox domenica;
+
+    private int idScheda;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         loadSchedaInfo();
+
+        // gestire id PT
         loadPTInfo();
-        loadExercises();
-        loadStats();
+        weekdayTabs.getSelectionModel().selectedItemProperty().addListener((observable, oldTab, newTab) -> {
+            if (newTab != null) {
+                String giornoSelezionato = newTab.getText();
+                System.out.println("Tab selezionata: " + giornoSelezionato);
+
+
+                loadExercises(giornoSelezionato);
+            }
+        });
+
         setupStyles();
     }
 
     private void loadSchedaInfo() {
+        Task<SchedaAllenamento> task = DBConnection.getInstance().getInfoSchedaClient();
+
+        task.setOnSucceeded(event -> {
+            SchedaAllenamento info = task.getValue();
+            idScheda = info.idScheda();
+            displaySchedaInfo(info);
+
+        });
+
+        task.setOnFailed(event -> {
+            System.out.println("Errore durante il caricamento delle informazioni: " + task.getException().getMessage());
+        });
+
+        new Thread(task).start();
+
+
+
+        // TO DO: info utili per esempio di scheda
         // Esempio di caricamento informazioni
-        Label dataInizio = new Label("01/03/2024");
+        /* Label dataInizio = new Label("01/03/2024");
         Label dataFine = new Label("01/06/2024");
         Label obiettivo = new Label("Ipertrofia e Forza");
         Label livello = new Label("Intermedio");
 
-        infoGrid.add(dataInizio, 1, 0);
-        infoGrid.add(dataFine, 1, 1);
-        infoGrid.add(obiettivo, 1, 2);
-        infoGrid.add(livello, 1, 3);
+
 
         notesArea.setText("- Eseguire gli esercizi con la corretta forma\n" +
                 "- Rispettare i tempi di recupero indicati\n" +
                 "- Bere molta acqua durante l'allenamento\n" +
-                "- Fare sempre un adeguato riscaldamento");
+                "- Fare sempre un adeguato riscaldamento");*/
+    }
+
+    private void displaySchedaInfo(SchedaAllenamento info) {
+        Label dataInizio = new Label(info.dataInizio());
+        Label dataFine = new Label(info.dataFine());
+        Label obiettivo = new Label(info.obiettivi());
+        Label stato = new Label(info.statoScheda());
+
+
+        infoGrid.add(dataInizio, 1, 0);
+        infoGrid.add(dataFine, 1, 1);
+        infoGrid.add(obiettivo, 1, 2);
+        infoGrid.add(stato, 1, 3);
+        notesArea.setText(info.notes());
+        sugAlimentari.setText(info.suggerimentiAlimentari());
     }
 
     private void loadPTInfo() {
+        Task<PersonalTrainer> task = DBConnection.getInstance().getInfoPT();
+
+        task.setOnSucceeded(event -> {
+            PersonalTrainer info = task.getValue();
+
+            displayPTInfo(info);
+
+        });
+
+        task.setOnFailed(event -> {
+            System.out.println("Errore durante il caricamento delle informazioni: " + task.getException().getMessage());
+        });
+
+        new Thread(task).start();
+
+
+    }
+
+    private void displayPTInfo(PersonalTrainer info) {
         VBox ptCard = new VBox(10);
-        ptCard.getStyleClass().add("pt-card");
+        //ptCard.getStyleClass().add("pt-card");
 
-        Label nameLabel = new Label("Mario Rossi");
-        nameLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 14px;");
+        Label nameLabel = new Label(info.name());
+        //nameLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 14px;");
 
-        Label certLabel = new Label("Certificazione ISSA");
-        Label emailLabel = new Label("mario.rossi@gym.com");
-        Label phoneLabel = new Label("+39 123 456 7890");
+        Label specializzazioneLabel = new Label(info.specializzazione());
+        Label emailLabel = new Label(info.email());
+        Label phoneLabel = new Label(info.telefono());
 
         Button contactButton = new Button("Contatta PT");
         contactButton.setMaxWidth(Double.MAX_VALUE);
         contactButton.setOnAction(e -> contactPT());
 
-        ptCard.getChildren().addAll(nameLabel, certLabel, emailLabel, phoneLabel, contactButton);
+        ptCard.getChildren().addAll(nameLabel, specializzazioneLabel, emailLabel, phoneLabel, contactButton);
         ptInfoContainer.getChildren().add(ptCard);
     }
 
-    private void loadExercises() {
-        // Esempio per Lunedì
-        VBox mondayWorkout = createDayWorkout(new String[][]{
-                {"Squat", "4x10", "2 min recupero"},
-                {"Panca Piana", "4x8", "2 min recupero"},
-                {"Stacchi", "3x12", "2 min recupero"},
-                {"Lat Machine", "3x12", "1.5 min recupero"}
+
+    private void loadExercises(String giornoSelezionato) {
+        // TODO: dipende dalla tab in cui mi trovo, iniviare gli esercizi e il giorno della settunana
+        Task<List<EsercizioScheda>> task = DBConnection.getInstance().getEserciziGiorno(idScheda, giornoSelezionato);
+
+        task.setOnSucceeded(event -> {
+            List<EsercizioScheda> info = task.getValue();
+
+            displayEsercizi(info, giornoSelezionato);
+
         });
-        mondayExercises.getChildren().add(mondayWorkout);
+
+        task.setOnFailed(event -> {
+            System.out.println("Errore durante il caricamento delle informazioni: " + task.getException().getMessage());
+        });
+
+        new Thread(task).start();
+
+        // Esempio per Lunedì
+
+
 
         // Ripeti per altri giorni...
     }
 
-    private VBox createDayWorkout(String[][] exercises) {
-        VBox workout = new VBox(10);
+    // TODO: fare la logica epr mostrare gli esrvizi giorno epr giorno
+    private void displayEsercizi(List<EsercizioScheda> info, String giornoSelezionato) {
+        VBox giornoContainer = switch (giornoSelezionato.toLowerCase()) {
+            case "lunedì" -> lunedì;
+            case "martedì" -> martedì;
+            case "mercoledì" -> mercoledì;
+            case "giovedì" -> giovedì;
+            case "venerdì" -> venerdì;
+            case "sabato" -> sabato;
+            case "domenica" -> domenica;
+            default -> throw new IllegalArgumentException("Giorno non valido: " + giornoSelezionato);
+        };
 
-        for (String[] exercise : exercises) {
+        giornoContainer.getChildren().clear(); // Pulisci eventuali esercizi precedenti
+
+        for (EsercizioScheda esercizio : info) {
             HBox exerciseRow = new HBox(15);
             exerciseRow.setAlignment(Pos.CENTER_LEFT);
             exerciseRow.getStyleClass().add("exercise-row");
 
-            Label nameLabel = new Label(exercise[0]);
-            nameLabel.setStyle("-fx-font-weight: bold;");
-            Label setsRepsLabel = new Label(exercise[1]);
-            Label restLabel = new Label(exercise[2]);
+            Label nomeLabel = new Label(esercizio.nomeEserc());
+            nomeLabel.setStyle("-fx-font-weight: bold;");
+            Label serieRipLabel = new Label(esercizio.nSerie() + "x" + esercizio.nRipetizioni());
+            Label recuperoLabel = new Label(esercizio.tmpRecupero() + " sec recupero");
+            Label noteLabel = new Label(esercizio.notes());
 
-            exerciseRow.getChildren().addAll(nameLabel, setsRepsLabel, restLabel);
-            workout.getChildren().add(exerciseRow);
+            exerciseRow.getChildren().addAll(nomeLabel, serieRipLabel, recuperoLabel, noteLabel);
+            giornoContainer.getChildren().add(exerciseRow);
         }
-
-        return workout;
     }
 
-    private void loadStats() {
-        // Esempio di statistiche
-        VBox stats = new VBox(5);
-        stats.getChildren().addAll(
-                new Label("Settimana 4/12"),
-                new Label("Completamento: 75%"),
-                new Label("Esercizi totali: 24"),
-                new Label("Peso totale: 2500kg")
-        );
-        statsContainer.getChildren().add(stats);
-    }
+
 
     private void setupStyles() {
         // Aggiunta stili CSS

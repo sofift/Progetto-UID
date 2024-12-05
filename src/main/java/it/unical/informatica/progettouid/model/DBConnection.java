@@ -119,12 +119,45 @@ public class DBConnection {
                 PreparedStatement stmt = con.prepareStatement(query);
                 ResultSet rs = stmt.executeQuery();
                 while (rs.next()) {
-                    trainers.add(new PersonalTrainer(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5)));
-
+                    trainers.add(new PersonalTrainer(
+                            rs.getInt("id"),
+                            rs.getString("Nome"),
+                            rs.getString("Cognome"),
+                            rs.getString("DataNascita"),
+                            rs.getString("Specializzazione"),
+                            rs.getString("Email"),
+                            rs.getString("Telefono")));
                 }
                 stmt.close();
             }
             return trainers;
+        });
+    }
+
+    public Task<PersonalTrainer> getInfoPT() {
+        return asyncCall(() -> {
+            if (isConnected()) {
+                int idClient = SessionManager.getInstance().getLoggedClient().id();
+                String query = "SELECT pt.nome, pt.cognome, pt.DataNascita, pt.specializzazione, pt.email, pt.telefono" +
+                        " FROM PersonalTrainer pt, Schede s " +
+                        "WHERE s.ClienteID = ?;";
+                PreparedStatement stmt = con.prepareStatement(query);
+                stmt.setInt(1, idClient);
+                ResultSet rs = stmt.executeQuery();
+                if (rs.next()) {
+                    return new PersonalTrainer(
+                            rs.getInt("id"),
+                            rs.getString("Nome"),
+                            rs.getString("Cognome"),
+                            rs.getString("DataNascita"),
+                            rs.getString("Specializzazione"),
+                            rs.getString("Email"),
+                            rs.getString("Telefono"));
+
+                }
+                stmt.close();
+            }
+            return null;
         });
     }
 
@@ -166,9 +199,10 @@ public class DBConnection {
         });
     }
 
-    public Task<Abbonamento> getAccessiRimanenti(int idClient){
+    public Task<InfoAccessiAbbonamento> getAccessiRimanenti(){
         return asyncCall(() -> {
             if (isConnected()) {
+                int idClient = SessionManager.getInstance().getLoggedClient().id();
                 String query = "SELECT a.AccessiRimanenti, ta.NumeroAccessiTotali, a.DataScadenza, ta.Nome as TipoAbbonamento " +
                         "FROM Abbonamenti a " +
                         "JOIN TipiAbbonamento ta ON a.TipoAbbonamentoID = ta.ID " +
@@ -181,11 +215,38 @@ public class DBConnection {
                 stmt.setInt(1, idClient);
                 try (ResultSet rs = stmt.executeQuery()) {
                     if (rs.next()) {
-                        return new Abbonamento(
+                        return new InfoAccessiAbbonamento(
                                 rs.getInt(1),
                                 rs.getInt(2),
                                 rs.getString(3),
                                 rs.getString(4)
+                        );
+                    }
+                }
+                stmt.close();
+            }
+            return null;
+        });
+    }
+
+    public Task<InfoBaseAbbonamento> getInfoAbbonamento(){
+        return asyncCall(() -> {
+            if (isConnected()) {
+                int idClient = SessionManager.getInstance().getLoggedClient().id();
+                String query = "SELECT ta.tipoAbbonamento, a.dataInizio, a.dataScadenza, a.stato, ta.descrizione" +
+                        "FROM Abbonamenti a " +
+                        "JOIN TipiAbbonamento ta ON a.TipoAbbonamentoID = ta.ID " +
+                        "WHERE a.ClienteID = ? ";
+                PreparedStatement stmt = con.prepareStatement(query);
+                stmt.setInt(1, idClient);
+                try (ResultSet rs = stmt.executeQuery()) {
+                    if (rs.next()) {
+                        return new InfoBaseAbbonamento(
+                                rs.getString(1),
+                                rs.getString(2),
+                                rs.getString(3),
+                                rs.getString(4),
+                                rs.getString(5)
                         );
                     }
                 }
@@ -284,6 +345,64 @@ public class DBConnection {
         });
     }
 
+    public Task<SchedaAllenamento> getInfoSchedaClient() {
+        return asyncCall(() -> {
+            if (isConnected()) {
+                int idClient = SessionManager.getInstance().getLoggedClient().id();
+                String query = "SELECT s.*, pt.Nome, pt.Cognome" +
+                        "                FROM Schede s" +
+                        "                JOIN PersonalTrainer pt ON s.PersonalTrainerID = pt.ID" +
+                        "                WHERE s.ClienteID = ?" +
+                        "                AND s.Stato = 'attiva'" +
+                        "                AND s.DataFine >= date('now')" +
+                        "                LIMIT 1";
+                PreparedStatement stmt = con.prepareStatement(query);
+                ResultSet rs = stmt.executeQuery();
+                if (rs.next()) {
+                    return new SchedaAllenamento(
+                            rs.getInt("id"),
+                            rs.getString("Nome"),
+                            rs.getString("Cognome"),
+                            rs.getString("DataInizio"),
+                            rs.getString("DataFine"),
+                            rs.getString("Obiettivi"),
+                            rs.getString("NoteGenerali"),
+                            rs.getString("SuggerimentiAlimentari"),
+                            rs.getString("Stato"));
+                }
+                stmt.close();
+            }
+            return null;
+        });
+    }
+
+    public Task<List<EsercizioScheda>> getEserciziGiorno(int schedaId, String giorno) {
+        return asyncCall(() -> {
+            if (isConnected()) {
+                List<EsercizioScheda> esericizi = FXCollections.observableArrayList();
+                String query = " SELECT es.*, e.Nome, e.Descrizione, e.GruppoMuscolare, e.LivelloDifficolta " +
+                        "FROM EserciziScheda es " +
+                        "JOIN Esercizi e ON es.EsercizioID = e.ID " +
+                        "WHERE es.SchedaID = ?AND es.GiornoSettimana = ?" +
+                        "ORDER BY es.OrdineEsecuzione ";
+                PreparedStatement stmt = con.prepareStatement(query);
+                ResultSet rs = stmt.executeQuery();
+                while(rs.next()) {
+                     esericizi.add( new EsercizioScheda(
+                            rs.getInt("NumeroSerie"),
+                            rs.getInt("NumeroRipetizioni"),
+                            rs.getInt("TempoRecupero"),
+                            rs.getString("Note"),
+                            rs.getString("Nome"),
+                            rs.getString("Descrizione"),
+                            rs.getString("GruppoMuscolare"),
+                            rs.getString("LivelloDifficolta")));
+                }
+                stmt.close();
+            }
+            return null;
+        });
+    }
 
     public Task<Trainer> authenticateTrainer(String email, String password) {
         return asyncCall(() -> {
@@ -326,32 +445,34 @@ public class DBConnection {
     public Task<ClientData> authenticateUser(String email, String password) {
         return asyncCall(() -> {
             if (isConnected()) {
-                String query = "SELECT u.ID as UserID, u.Email, u.Password,\n" +
-                        "                       c.ID as ClientID, c.Nome, c.Cognome, \n" +
-                        "                       c.Abbonamento, c.DataNascita\n" +
-                        "                FROM Users u\n" +
-                        "                JOIN Clienti c ON u.ID = c.UserID\n" +
-                        "                WHERE u.Email = ?;";
+                String query = "SELECT u.ID as UserID, u.Email, u.Password, " +
+                        "c.ID as ClientID, c.Nome, c.Cognome, " +
+                        "c.Abbonamento, c.DataNascita " +
+                        "FROM Users u " +
+                        "JOIN Clienti c ON u.ID = c.UserID " +
+                        "WHERE u.Email = ?;";
                 try (PreparedStatement stmt = con.prepareStatement(query)) {
                     stmt.setString(1, email);
                     try (ResultSet rs = stmt.executeQuery()) {
-                        String storedHash = rs.getString("Password");
-                        if (rs.next() && BCrypt.checkpw(password, storedHash)) {
-                            Users user = new Users(
-                                    rs.getInt(1),
-                                    rs.getString(2),
-                                    storedHash
-                            );
+                        if (rs.next()) {
+                            String storedHash = rs.getString("Password");
+                            if (BCrypt.checkpw(password, storedHash)) {
+                                Users user = new Users(
+                                        rs.getInt("UserID"),
+                                        rs.getString("Email"),
+                                        storedHash
+                                );
 
-                            Client client = new Client(
-                                    rs.getInt(1),
-                                    rs.getString(2),
-                                    rs.getString(3),
-                                    rs.getString(4),
-                                    rs.getString(5),
-                                    rs.getInt(6)
-                            );
-                            return ClientData.fromUsersAndClient(user, client);
+                                Client client = new Client(
+                                        rs.getInt("ClientID"),
+                                        rs.getString("Nome"),
+                                        rs.getString("Cognome"),
+                                        rs.getString("Abbonamento"),
+                                        rs.getString("DataNascita"),
+                                        rs.getInt("UserID")
+                                );
+                                return ClientData.fromUsersAndClient(user, client);
+                            }
                         }
                     }
                 }

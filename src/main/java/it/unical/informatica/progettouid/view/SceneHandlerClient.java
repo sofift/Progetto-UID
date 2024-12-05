@@ -16,7 +16,8 @@ import java.net.URL;
 public class SceneHandlerClient {
     private static SceneHandlerClient instance = null;
     private Scene scene;
-    private Stage stage;
+    private Stage mainStage;
+    private Stage loginStage;
     private BorderPane mainPane;
 
 
@@ -29,17 +30,31 @@ public class SceneHandlerClient {
         return instance;
     }
 
-    public void init(Stage primaryStage) throws Exception {
-        this.stage = primaryStage;
-        loadView("/fxml/client/dashboardClient.fxml", true);
-        this.stage.setWidth(1000);
-        this.stage.setHeight(600);
-        this.stage.show();
+    public void init(Stage loginStage) throws Exception {
+        this.loginStage = loginStage;
+        loadLoginView();
+        this.loginStage.setWidth(600);
+        this.loginStage.setHeight(400);
+        this.loginStage.show();
     }
 
-    private void loadView(String fxmlPath, boolean isInitialLoad) throws Exception {
+    private void loadLoginView() throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/client/clientLogin.fxml"));
+        Scene loginScene = new Scene(loader.load());
+        loginStage.setScene(loginScene);
+    }
+
+    private void loadView(String fxmlPath) throws Exception {
         FXMLLoader loader = new FXMLLoader(FlexFit.class.getResource(fxmlPath));
-        Node view = loader.load();
+        BorderPane newContent = loader.load();
+
+        // Aggiorna solo le sezioni necessarie
+        if (newContent.getTop() != null) mainPane.setTop(newContent.getTop());
+        if (newContent.getCenter() != null) mainPane.setCenter(newContent.getCenter());
+        if (newContent.getRight() != null) mainPane.setRight(newContent.getRight());
+
+
+        /*Parent view = loader.load();
         if (isInitialLoad) {
             // Prima inizializzazione
             this.mainPane = (BorderPane) view;
@@ -57,23 +72,38 @@ public class SceneHandlerClient {
                 mainPane.setCenter(view);
                 mainPane.setRight(null);
             }
-        }
+        }*/
     }
 
-    public void setDashboardView() throws Exception {
-        loadView("/fxml/client/dashboardClient.fxml", false);
+    public void setDashboardView() throws IOException {
+        mainStage = new Stage();
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/client/dashboardClient.fxml"));
+        mainPane = loader.load();
+        this.scene = new Scene(mainPane);
+        scene.getStylesheets().add(getClass().getResource("/styles/home.css").toExternalForm());
+
+        mainStage.setScene(scene);
+        mainStage.setWidth(1000);
+        mainStage.setHeight(600);
+
+        loginStage.close();
+        mainStage.show();
     }
+
+    /*public void setDashboardView() throws Exception {
+        loadView("/fxml/client/dashboardClient.fxml", false);
+    }*/
 
     public void setAttivitaView() throws Exception {
-        loadView("/fxml/client/attivitaClient.fxml", false);
+        loadView("/fxml/client/attivitaClient.fxml");
     }
 
     public void setPrenotazioniView() throws Exception {
-        loadView("/fxml/client/prenotazionePT.fxml", false);
+        loadView("/fxml/client/prenotazionePT.fxml");
     }
 
     public void setSchedaView() throws Exception {
-        loadView("/fxml/client/schedaClient.fxml", false);
+        loadView("/fxml/client/schedaClient.fxml");
     }
 
     // Metodo per gestire il logout
@@ -85,6 +115,6 @@ public class SceneHandlerClient {
     }
 
     public void setAbbonamentoView() throws Exception {
-        loadView("/fxml/client/abbonamentoClient.fxml", false);
+        loadView("/fxml/client/abbonamentoClient.fxml");
     }
 }

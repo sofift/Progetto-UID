@@ -15,9 +15,14 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Hyperlink;
+import org.springframework.security.core.userdetails.User;
+
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 
 public class ClientLoginController {
+    private final ExecutorService executorService = Executors.newSingleThreadExecutor();
     @FXML
     private TextField emailField;
     @FXML
@@ -31,24 +36,22 @@ public class ClientLoginController {
 
     @FXML
     public void handleLogin() {
-        String email = emailField.getText().trim();
-        String password = passwordField.getText().trim();
+        String email = emailField.getText();
+        String password = passwordField.getText();
 
         if (email.isEmpty() || password.isEmpty()) {
-            showAlert(AlertType.ERROR,
-                    "Errore di Login",
-                    "Campi mancanti",
-                    "Per favore compila tutti i campi.");
-            return;
+            //controlloLabel.setVisible(true);
 
-            // TODO: aggiungere una label nei file fxml per ricordare all0utente in caso non abbia completato i campi
-            /* verifierText.setVisible(true);
-            verifierText.setText("Si prega di completare i campi obbligatori (*).");*/
+            //controlloLabel.setText("Inserisci sia username che password.");
+            return;
         }
 
-        // TODO: Implementare la logica di autenticazione
-
         Task<ClientData> task = DBConnection.getInstance().authenticateUser(email, password);
+
+        Thread thread = new Thread(task);
+        thread.setDaemon(true);
+        thread.start();
+
         task.setOnSucceeded(event -> {
             ClientData client = task.getValue();
             if (client != null) {
@@ -76,7 +79,10 @@ public class ClientLoginController {
                 //controlloLabel.setText("Errore durante la verifica delle credenziali.");
             });
         });
-        //executorService.submit(task);
+
+
+
+        executorService.submit(task);
     }
 
     @FXML

@@ -2,6 +2,7 @@ package it.unical.informatica.progettouid.controller.client;
 
 import it.unical.informatica.progettouid.model.Corsi;
 import it.unical.informatica.progettouid.model.DBConnection;
+import it.unical.informatica.progettouid.model.InfoBaseAbbonamento;
 import it.unical.informatica.progettouid.model.TipiAbbonamento;
 import it.unical.informatica.progettouid.view.SceneHandlerClient;
 import javafx.concurrent.Task;
@@ -16,41 +17,42 @@ import java.util.List;
 
 public class AbbonamentoClientController {
 
-    public Label tipoAbbonamentoLabel;
-    public Label dataInizioLabel;
-    public Label dataScadenzaLabel;
-    public Label statoAbbonamentoLabel;
-    public VBox vBoxPianiOfferti;
+    @FXML public Label tipoAbbonamentoLabel;
+    @FXML public Label dataInizioLabel;
+    @FXML public Label dataScadenzaLabel;
+    @FXML public Label statoAbbonamentoLabel;
+    @FXML public VBox vBoxPianiOfferti;
+    @FXML public Label descrizioneLabel;
 
-    @FXML
-    public void onNavigationButtonClick(ActionEvent event) {
-        Button button = (Button) event.getSource();
-        try {
-            switch (button.getId()) {
-                case "dashboardClient":
-                    SceneHandlerClient.getInstance().setDashboardView();
-                    break;
-                case "attivitaClient":
-                    SceneHandlerClient.getInstance().setAttivitaView();
-                    break;
-                case "prenotazionePT":
-                    SceneHandlerClient.getInstance().setPrenotazioniView();
-                    break;
-                case "schedaClient":
-                    SceneHandlerClient.getInstance().setSchedaView();
-                    break;
-                case "abbonamentoClient":
-                    SceneHandlerClient.getInstance().setAbbonamentoView();
-                    break;
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
 
     @FXML
     public void initialize() {
+        loadInformazioniCliente();
         loadPianiOfferti();
+    }
+
+    private void loadInformazioniCliente() {
+        Task<InfoBaseAbbonamento> task = DBConnection.getInstance().getInfoAbbonamento();
+
+        task.setOnSucceeded(event -> {
+            InfoBaseAbbonamento info = task.getValue();
+
+            displayInfoAbbonamento(info);
+
+        });
+
+        task.setOnFailed(event -> {
+            System.out.println("Errore durante il caricamento delle informazioni: " + task.getException().getMessage());
+        });
+
+        new Thread(task).start();
+    }
+
+    private void displayInfoAbbonamento(InfoBaseAbbonamento info) {
+        tipoAbbonamentoLabel.setText(info.nomeAbbonamento());
+        dataInizioLabel.setText(info.dataInizio());
+        dataScadenzaLabel.setText(info.dataScadenza());
+        statoAbbonamentoLabel.setText(info.stato());
     }
 
     private void loadPianiOfferti() {
@@ -88,5 +90,31 @@ public class AbbonamentoClientController {
             vbox.getChildren().addAll(nome, destinatoA, prezzo, descrizione, seleziona);
         }
 
+    }
+
+    @FXML
+    public void onNavigationButtonClick(ActionEvent event) {
+        Button button = (Button) event.getSource();
+        try {
+            switch (button.getId()) {
+                case "dashboardClient":
+                    SceneHandlerClient.getInstance().setDashboardView();
+                    break;
+                case "attivitaClient":
+                    SceneHandlerClient.getInstance().setAttivitaView();
+                    break;
+                case "prenotazionePT":
+                    SceneHandlerClient.getInstance().setPrenotazioniView();
+                    break;
+                case "schedaClient":
+                    SceneHandlerClient.getInstance().setSchedaView();
+                    break;
+                case "abbonamentoClient":
+                    SceneHandlerClient.getInstance().setAbbonamentoView();
+                    break;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

@@ -7,6 +7,7 @@ module it.unical.informatica.progettouid {
     requires java.sql;
     requires spring.security.crypto;
     requires java.desktop;
+    requires spring.security.core;
 
     opens it.unical.informatica.progettouid.controller to javafx.fxml;
     opens it.unical.informatica.progettouid to javafx.fxml;

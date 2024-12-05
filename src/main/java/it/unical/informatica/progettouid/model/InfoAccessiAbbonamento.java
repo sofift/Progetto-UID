@@ -1,6 +1,6 @@
 package it.unical.informatica.progettouid.model;
 
-public record Abbonamento(int accessiRimanenti, int accessiTotali, String dataScadenza, String tipoAbbonamento) {
+public record InfoAccessiAbbonamento(int accessiRimanenti, int accessiTotali, String dataScadenza, String tipoAbbonamento) {
     @Override
     public int accessiRimanenti() {
         return accessiRimanenti;
@@ -12,12 +12,12 @@ public record Abbonamento(int accessiRimanenti, int accessiTotali, String dataSc
     }
 
     @Override
-    public String dataScadenza() {
-        return dataScadenza;
+    public String tipoAbbonamento() {
+        return tipoAbbonamento;
     }
 
     @Override
-    public String tipoAbbonamento() {
-        return tipoAbbonamento;
+    public String dataScadenza() {
+        return dataScadenza;
     }
 }

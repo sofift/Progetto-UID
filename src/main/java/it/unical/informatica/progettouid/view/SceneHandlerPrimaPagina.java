@@ -101,6 +101,19 @@ public class SceneHandlerPrimaPagina {
         }
     }
 
+    public void switchToAdminView() throws Exception {
+        SceneHandlerAdmin.getInstance().init(stage);
+    }
+
+    public void switchToClientView() throws Exception {
+        SceneHandlerClient.getInstance().init(stage);
+    }
+
+    public void switchToTrainerView() throws Exception {
+        // Assumi che esista un SceneHandlerTrainer
+        SceneHandlerPT.getInstance().init(stage);
+    }
+
     private String getUserTypeTitle(UserType userType) {
         return switch (userType) {
             case CLIENT -> "Cliente";

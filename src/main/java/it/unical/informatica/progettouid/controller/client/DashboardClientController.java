@@ -38,33 +38,31 @@ public class DashboardClientController {
         loadCorsiOggi();
     }
 
-//    private void mostraStatoAbbonamento() {
-//        Task<Abbonamento> task = DBConnection.getInstance().getAccessiRimanenti(currentClient.getId());
-//
-//        task.setOnSucceeded(event -> {
-//            Abbonamento abbonamento= task.getValue();
-//
-//            accessiRimanentiText.setText("" + abbonamento.getAccessiRimanenti());
-//            accessiTotaliText.setText("" + abbonamento.getAccessiTotali());
-//            scadenzaAbbText.setText(abbonamento.getDataScadenza());
-//        });
-//
-//        task.setOnFailed(event -> {
-//            System.out.println("Errore durante il caricamento dei dati del client: " + task.getException().getMessage());
-//        });
-//
-//        new Thread(task).start();
-//
-//    }
+    private void mostraStatoAbbonamento() {
+        Task<InfoAccessiAbbonamento> task = DBConnection.getInstance().getAccessiRimanenti();
+
+        task.setOnSucceeded(event -> {
+            InfoAccessiAbbonamento abbonamento= task.getValue();
+
+            accessiRimanentiText.setText("" + abbonamento.accessiRimanenti());
+            accessiTotaliText.setText("" + abbonamento.accessiTotali());
+            scadenzaAbbText.setText(abbonamento.dataScadenza());
+        });
+
+        task.setOnFailed(event -> {
+            System.out.println("Errore durante il caricamento dei dati del client: " + task.getException().getMessage());
+        });
+
+        new Thread(task).start();
+
+    }
 
     private void loadCorsiOggi() {
         Task<List<Corsi>> task = DBConnection.getInstance().getCorsiDiOggi();
 
         task.setOnSucceeded(event -> {
             List<Corsi> corsi = task.getValue();
-            for (Corsi c : corsi) {
-                System.out.println(c);
-            }
+
             displayCorsi(corsi);
 
         });
@@ -94,13 +92,13 @@ public class DashboardClientController {
             content.setAlignment(Pos.CENTER_LEFT);
 
             Label nomeCorso = new Label(c.nome());
-            nomeCorso.setPrefWidth(150); // Fissa larghezza per allineamento
+            //nomeCorso.setPrefWidth(150); // Fissa larghezza per allineamento
 
             Label orario = new Label(c.oraInizio());
-            orario.setPrefWidth(100);
+            //orario.setPrefWidth(100);
 
             Label trainer = new Label(c.PT());
-            trainer.setPrefWidth(150);
+            //trainer.setPrefWidth(150);
 
             Label posti = new Label(String.valueOf(c.maxPartecipanti()));
 

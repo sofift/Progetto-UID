@@ -57,8 +57,12 @@ public class SchedaClientController implements Initializable {
 
         task.setOnSucceeded(event -> {
             SchedaAllenamento info = task.getValue();
-            idScheda = info.idScheda();
-            displaySchedaInfo(info);
+            if (info != null) {
+                idScheda = info.idScheda();
+                displaySchedaInfo(info);
+            } else {
+                displayRichiestaScheda();
+            }
 
         });
 
@@ -68,21 +72,10 @@ public class SchedaClientController implements Initializable {
 
         new Thread(task).start();
 
+    }
 
+    private void displayRichiestaScheda() {
 
-        // TO DO: info utili per esempio di scheda
-        // Esempio di caricamento informazioni
-        /* Label dataInizio = new Label("01/03/2024");
-        Label dataFine = new Label("01/06/2024");
-        Label obiettivo = new Label("Ipertrofia e Forza");
-        Label livello = new Label("Intermedio");
-
-
-
-        notesArea.setText("- Eseguire gli esercizi con la corretta forma\n" +
-                "- Rispettare i tempi di recupero indicati\n" +
-                "- Bere molta acqua durante l'allenamento\n" +
-                "- Fare sempre un adeguato riscaldamento");*/
     }
 
     private void displaySchedaInfo(SchedaAllenamento info) {
@@ -123,12 +116,12 @@ public class SchedaClientController implements Initializable {
         VBox ptCard = new VBox(10);
         //ptCard.getStyleClass().add("pt-card");
 
-        Label nameLabel = new Label(info.name());
+        Label nameLabel = new Label(info.getNome());
         //nameLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 14px;");
 
-        Label specializzazioneLabel = new Label(info.specializzazione());
-        Label emailLabel = new Label(info.email());
-        Label phoneLabel = new Label(info.telefono());
+        Label specializzazioneLabel = new Label(info.getSpecializzazione());
+        Label emailLabel = new Label(info.getEmail());
+        Label phoneLabel = new Label(info.getTelefono());
 
         Button contactButton = new Button("Contatta PT");
         contactButton.setMaxWidth(Double.MAX_VALUE);

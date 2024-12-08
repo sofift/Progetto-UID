@@ -2,7 +2,6 @@ package it.unical.informatica.progettouid.controller.client;
 
 import it.unical.informatica.progettouid.model.DBConnection;
 import it.unical.informatica.progettouid.model.PersonalTrainer;
-import it.unical.informatica.progettouid.model.SessionManager;
 import it.unical.informatica.progettouid.view.SceneHandlerClient;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
@@ -62,10 +61,10 @@ public class PrenotazionePTController{
 //        card.setPadding(new Insets(15));
 //        card.setSpacing(5);
 
-        Label nameLabel = new Label(STR."\{trainer.name()} \{trainer.name()}");
+        Label nameLabel = new Label(STR."\{trainer.getNome()} \{trainer.getNome()}");
 //        nameLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 14px;");
 
-        Text specLabel = new Text(trainer.specializzazione());
+        Text specLabel = new Text(trainer.getSpecializzazione());
 
         Button bookButton = new Button("Prenota sessione");
 //        bookButton.setStyle("-fx-background-color: #4CAF50; -fx-text-fill: white;");
@@ -80,7 +79,7 @@ public class PrenotazionePTController{
     private void showBookingForm(PersonalTrainer trainer) {
         bookingFormContainer.getChildren().clear();         // pulisce la aprte destra del border pane ogni votla che si preme sul button prenotazione
 
-        Label title = new Label("Prenota sessione con " + trainer.name());
+        Label title = new Label("Prenota sessione con " + trainer.getNome());
         title.setStyle("-fx-font-size: 16px; -fx-font-weight: bold;");
 
         DatePicker datePicker = new DatePicker(LocalDate.now());
@@ -100,7 +99,7 @@ public class PrenotazionePTController{
         Button confirmButton = new Button("Conferma Prenotazione");
         confirmButton.setMaxWidth(Double.MAX_VALUE);
 //        confirmButton.setStyle("-fx-background-color: #4CAF50; -fx-text-fill: white;");
-        confirmButton.setOnAction(e -> handleBooking(trainer.id(), datePicker.getValue(),
+        confirmButton.setOnAction(e -> handleBooking(trainer.getId(), datePicker.getValue(),
                 timeComboBox.getValue(), notes.getText()));
 
         bookingFormContainer.getChildren().addAll(
@@ -121,8 +120,14 @@ public class PrenotazionePTController{
             return;
         }
 
-        // aggiungi prenotazione al database
-        Task<Void> task = DBConnection.getInstance().insertPrenotazionePT(trainerID, date.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")), time, notes);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd");
+        String dateString = date.format(formatter);
+
+        Task<Boolean> task = DBConnection.getInstance().insertPrenotazionePT(trainerID, dateString, time, notes);
+
+        Thread thread = new Thread(task);
+        thread.setDaemon(true);
+        thread.start();
 
         task.setOnSucceeded(event -> {
             showAlertSucc("Conferma", String.format("Prenotazione confermata!\n\nPersonal Trainer: %s\nData: %s\nOra: %s",
@@ -130,12 +135,11 @@ public class PrenotazionePTController{
         });
 
         task.setOnFailed(event -> {
-            showError("Errore prenotazione",
-                    "Si è verificato un errore durante la prenotazione.");
-        });
-        // Avvia il task in un nuovo thread
-        new Thread(task).start();
+            Throwable ex = task.getException();
+            ex.printStackTrace();  // Stampa l'errore completo in console
+            showError("Errore prenotazione", "Si è verificato un errore durante la prenotazione: " + ex.getMessage());
 
+        });
 
     }
 

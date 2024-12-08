@@ -2,7 +2,6 @@ package it.unical.informatica.progettouid.model;
 
 
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 
@@ -77,19 +76,48 @@ public class DBConnection {
     }
 
 
-    public Task<Void> insertClient(String username, String cognome, String abbonamento, String datadinascita) {
+    public Task<Boolean> insertClient(String nome, String cognome, String datadinascita, String email, String password) {
         return asyncCall(() -> {
             if (isConnected()) {
-                String query = "INSERT INTO Clienti (Username, Cognome, Abbonamento, DataNascita) VALUES(?, ?, ?, ?);";
+                System.out.println("Connessione al database avvenuta con successo.");
+                System.out.println("Inserimento Client: " + nome + " " + cognome + " " + email);
+                String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt());
+                String query = "INSERT INTO Clienti (Nome, Cognome, DataNascita, Abbonamento, email, password) VALUES(?, ?, ?, ?, ?, ?);";
                 try (PreparedStatement stmt = con.prepareStatement(query)) {
-                    stmt.setString(1, username);
+                    stmt.setString(1, nome);
                     stmt.setString(2, cognome);
-                    stmt.setString(3, abbonamento);
-                    stmt.setString(4, datadinascita);
-                    stmt.executeUpdate();
+                    stmt.setString(3, datadinascita);
+                    stmt.setString(4, null);
+                    stmt.setString(5, email);
+                    stmt.setString(6, hashedPassword);
+                    stmt.execute();
+                    return true;
                 }
             }
-            return null;
+            return false;
+        });
+    }
+
+    public Task<Boolean> insertTrainer(String nome, String cognome, String datadinascita, String specializzazione, String email, String password, String telefono) {
+        return asyncCall(() -> {
+            if (isConnected()) {
+                System.out.println("Connessione al database avvenuta con successo.");
+                System.out.println("Inserimento Client: " + nome + " " + cognome + " " + email);
+                String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt());
+                String query = "INSERT INTO PersonalTrainer (Nome, Cognome, DataNascita, Specializzazione, Email, Password, Telefono) VALUES(?, ?, ?, ?, ?, ?, ?);";
+                try (PreparedStatement stmt = con.prepareStatement(query)) {
+                    stmt.setString(1, nome);
+                    stmt.setString(2, cognome);
+                    stmt.setString(3, datadinascita);
+                    stmt.setString(4, specializzazione);
+                    stmt.setString(5, email);
+                    stmt.setString(6, hashedPassword);
+                    stmt.setString(7, telefono);
+                    stmt.execute();
+                    return true;
+                }
+            }
+            return false;
         });
     }
 
@@ -101,7 +129,14 @@ public class DBConnection {
                 PreparedStatement stmt = con.prepareStatement(query);
                 ResultSet rs = stmt.executeQuery();
                 while (rs.next()) {
-                    clients.add(new Client(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5), rs.getInt(6)));
+                    clients.add(new Client(
+                            rs.getInt("Id"),
+                            rs.getString("Nome"),
+                            rs.getString("Cognome"),
+                            rs.getString("Abbonamento"),
+                            rs.getString("DataNascita"),
+                            rs.getString("Email")
+                    ));
 
                 }
                 stmt.close();
@@ -137,7 +172,7 @@ public class DBConnection {
     public Task<PersonalTrainer> getInfoPT() {
         return asyncCall(() -> {
             if (isConnected()) {
-                int idClient = SessionManager.getInstance().getLoggedClient().id();
+                int idClient = ClientSession.getInstance().getCurrentClient().getId();
                 String query = "SELECT pt.nome, pt.cognome, pt.DataNascita, pt.specializzazione, pt.email, pt.telefono" +
                         " FROM PersonalTrainer pt, Schede s " +
                         "WHERE s.ClienteID = ?;";
@@ -202,7 +237,7 @@ public class DBConnection {
     public Task<InfoAccessiAbbonamento> getAccessiRimanenti(){
         return asyncCall(() -> {
             if (isConnected()) {
-                int idClient = SessionManager.getInstance().getLoggedClient().id();
+                int idClient = ClientSession.getInstance().getCurrentClient().getId();
                 String query = "SELECT a.AccessiRimanenti, ta.NumeroAccessiTotali, a.DataScadenza, ta.Nome as TipoAbbonamento " +
                         "FROM Abbonamenti a " +
                         "JOIN TipiAbbonamento ta ON a.TipoAbbonamentoID = ta.ID " +
@@ -232,7 +267,7 @@ public class DBConnection {
     public Task<InfoBaseAbbonamento> getInfoAbbonamento(){
         return asyncCall(() -> {
             if (isConnected()) {
-                int idClient = SessionManager.getInstance().getLoggedClient().id();
+                int idClient = ClientSession.getInstance().getCurrentClient().getId();
                 String query = "SELECT ta.tipoAbbonamento, a.dataInizio, a.dataScadenza, a.stato, ta.descrizione" +
                         "FROM Abbonamenti a " +
                         "JOIN TipiAbbonamento ta ON a.TipoAbbonamentoID = ta.ID " +
@@ -348,7 +383,7 @@ public class DBConnection {
     public Task<SchedaAllenamento> getInfoSchedaClient() {
         return asyncCall(() -> {
             if (isConnected()) {
-                int idClient = SessionManager.getInstance().getLoggedClient().id();
+                int idClient = ClientSession.getInstance().getCurrentClient().getId();
                 String query = "SELECT s.*, pt.Nome, pt.Cognome" +
                         "                FROM Schede s" +
                         "                JOIN PersonalTrainer pt ON s.PersonalTrainerID = pt.ID" +
@@ -404,7 +439,7 @@ public class DBConnection {
         });
     }
 
-    public Task<Trainer> authenticateTrainer(String email, String password) {
+    public Task<PersonalTrainer> authenticateTrainer(String email, String password) {
         return asyncCall(() -> {
             if (isConnected()) {
                 String query = "SELECT * FROM PersonalTrainer WHERE email = ?;";
@@ -414,7 +449,7 @@ public class DBConnection {
                         String storedHash = rs.getString("Password");
                         if (rs.next() && BCrypt.checkpw(password, storedHash)) {
 
-                            return new Trainer(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5), rs.getString(6), rs.getString(7));
+                            return new PersonalTrainer(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5), rs.getString(6), rs.getString(7));
                         }
                     }
                 }
@@ -442,36 +477,26 @@ public class DBConnection {
         });
     }
 
-    public Task<ClientData> authenticateUser(String email, String password) {
+    public Task<Client> authenticateUser(String email, String password) {
         return asyncCall(() -> {
             if (isConnected()) {
-                String query = "SELECT u.ID as UserID, u.Email, u.Password, " +
-                        "c.ID as ClientID, c.Nome, c.Cognome, " +
-                        "c.Abbonamento, c.DataNascita " +
-                        "FROM Users u " +
-                        "JOIN Clienti c ON u.ID = c.UserID " +
-                        "WHERE u.Email = ?;";
+                String query = "SELECT *" +
+                        "FROM Clienti " +
+                        "WHERE email = ?;";
                 try (PreparedStatement stmt = con.prepareStatement(query)) {
                     stmt.setString(1, email);
                     try (ResultSet rs = stmt.executeQuery()) {
                         if (rs.next()) {
                             String storedHash = rs.getString("Password");
                             if (BCrypt.checkpw(password, storedHash)) {
-                                Users user = new Users(
-                                        rs.getInt("UserID"),
-                                        rs.getString("Email"),
-                                        storedHash
-                                );
-
-                                Client client = new Client(
-                                        rs.getInt("ClientID"),
+                                return new Client(
+                                        rs.getInt("Id"),
                                         rs.getString("Nome"),
                                         rs.getString("Cognome"),
                                         rs.getString("Abbonamento"),
                                         rs.getString("DataNascita"),
-                                        rs.getInt("UserID")
+                                        rs.getString("Email")
                                 );
-                                return ClientData.fromUsersAndClient(user, client);
                             }
                         }
                     }
@@ -481,11 +506,11 @@ public class DBConnection {
         });
     }
 
-    public Task<Void> insertPrenotazionePT(int trainerId, String data, String oraPrenotazione, String notes) {
+    public Task<Boolean> insertPrenotazionePT(int trainerId, String data, String oraPrenotazione, String notes) {
         return asyncCall(() -> {
             if (isConnected()) {
-                int idClient = SessionManager.getInstance().getLoggedClient().id();
-                String query = "INSERT INTO PrenotazionePT (idPT, idClient, data, oraPrenotazione, notes) VALUES(?, ?, ?, ?, ?);";
+                int idClient = ClientSession.getInstance().getCurrentClient().getId();
+                String query = "INSERT INTO PrenotazioniPT (idPT, idClient, data, oraPrenotazione, notes) VALUES(?, ?, ?, ?, ?);";
                 try (PreparedStatement stmt = con.prepareStatement(query)) {
                     stmt.setInt(1, trainerId);
                     stmt.setInt(2, idClient);
@@ -493,12 +518,89 @@ public class DBConnection {
                     stmt.setString(4, oraPrenotazione);
                     stmt.setString(5, notes);
                     stmt.executeUpdate();
+                    return true;
                 }
+            }
+            return false;
+        });
+    }
+
+    public Task<Void> addEsercizioScheda(EsercizioScheda esercizioScheda) {
+        return asyncCall(() -> {
+            if (isConnected()) {
+                int idClient = ClientSession.getInstance().getCurrentClient().getId();
+                String queryIDScheda = "SELECT ID FROM Schede where ClienteID = ?";
+
+                int idScheda;
+
+                try (PreparedStatement stmt = con.prepareStatement(queryIDScheda)) {
+                    stmt.setInt(1, idClient);
+                    try (ResultSet rs = stmt.executeQuery()) {
+                        if (rs.next()) {
+                            throw new SQLException("scheda non trovato: " );
+                        }
+                        idScheda = rs.getInt("ID");
+                    }
+                }
+                String queryEsercizio = "SELECT ID FROM Esercizi WHERE Nome = ?;";
+                int esercizioId;
+
+                try (PreparedStatement stmtEsercizio = con.prepareStatement(queryEsercizio)) {
+                    stmtEsercizio.setString(1, esercizioScheda.nomeEserc());
+                    ResultSet rs = stmtEsercizio.executeQuery();
+                    if (!rs.next()) {
+                        throw new SQLException("Esercizio non trovato: " + esercizioScheda.nomeEserc());
+                    }
+                    esercizioId = rs.getInt("ID");
+                }
+
+                String query = "INSERT INTO EserciziScheda (SchedaID, EsercizioID, " +
+                        "NumeroSerie, NumeroRipetizioni, TempoRecupero, Note) " +
+                        "VALUES (?, ?, ?, ?, ?, ?);";
+
+                try (PreparedStatement stmt = con.prepareStatement(query)) {
+                    stmt.setInt(1, idScheda);
+                    stmt.setInt(2, esercizioId);
+                    stmt.setInt(3, esercizioScheda.nSerie());
+                    stmt.setInt(4, esercizioScheda.nRipetizioni());
+                    stmt.setInt(5, esercizioScheda.tmpRecupero());
+                    stmt.setString(6, esercizioScheda.notes());
+                    stmt.executeUpdate();
+                }
+
             }
             return null;
         });
     }
 
+
+    public Task<List<PrenotazionePT>> getPrenotazioneTrainer(){
+        return asyncCall(() -> {
+            if (isConnected()) {
+                List<PrenotazionePT> prenotazioni = new ArrayList<>();
+                int idPT = PTSession.getInstance().getCurrentTrainer().getId();
+                String query = "SELECT c.nome, c.cognome, p.data, p.oraPrenotazione, p.notes" +
+                        "FROM PrenotazioniPT p " +
+                        "JOIN Clienti c ON c.id = p.idClient" +
+                        "WHERE p.idPT = ?";
+                PreparedStatement stmt = con.prepareStatement(query);
+                stmt.setInt(1, idPT);
+                try (ResultSet rs = stmt.executeQuery()) {
+                    while (rs.next()) {
+                        prenotazioni.add( new PrenotazionePT(
+                                rs.getInt(idPT),
+                                rs.getString(2),
+                                rs.getString(3),
+                                rs.getString(4),
+                                rs.getString(5),
+                                rs.getString(6)));
+                    }
+                }
+                stmt.close();
+            }
+            return null;
+        });
+    }
 }
     // CREAZIONE DELLA PLAYLIST AGGIUNTA DALL'UTENTE
 /*

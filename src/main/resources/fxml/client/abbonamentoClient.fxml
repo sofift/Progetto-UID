@@ -6,7 +6,6 @@
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
@@ -137,110 +136,32 @@
     </left>
 
     <center>
-        <VBox spacing="15.0" style="-fx-background-color: white; -fx-background-radius: 10;">
+        <VBox fx:id="centerBox" spacing="15.0" style="-fx-background-color: white; -fx-background-radius: 10;">
             <padding>
                 <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
             </padding>
 
             <Label style="-fx-font-size: 24; -fx-font-weight: bold;" text="Il tuo abbonamento" />
 
-            <VBox spacing="10.0" style="-fx-background-color: #f8f9fa; -fx-background-radius: 5; -fx-padding: 15;">
-                <HBox spacing="10.0">
-                    <FontIcon fx:id="tipoAbbonamentoIcon" iconLiteral="fas-crown" iconSize="24" />
-                    <Label fx:id="tipoAbbonamentoLabel" style="-fx-font-size: 18; -fx-font-weight: bold;" text="Premium" />
-                </HBox>
-
-                <VBox spacing="5.0">
-                    <Label style="-fx-font-weight: bold;" text="Data inizio:" />
-                    <Label fx:id="dataInizioLabel" text="01/03/2024" />
-
-                    <Label style="-fx-font-weight: bold;" text="Data scadenza:" />
-                    <Label fx:id="dataScadenzaLabel" text="31/03/2024" />
-
-                    <Label style="-fx-font-weight: bold;" text="Stato:" />
-                    <Label fx:id="statoAbbonamentoLabel" style="-fx-text-fill: #28a745;" text="Attivo" />
-                </VBox>
-            </VBox>
-
-            <Button fx:id="rinnovaButton" maxWidth="Infinity" style="-fx-background-color: #007bff; -fx-text-fill: white; -fx-font-weight: bold;" text="Rinnova abbonamento" />
+            <VBox fx:id="datiAbbonamentoVBox" spacing="10.0" style="-fx-background-color: #f8f9fa; -fx-background-radius: 5; -fx-padding: 15;" />
 
             <Separator />
 
             <VBox spacing="5.0">
-                <Label style="-fx-font-weight: bold;" text="Vantaggi del tuo abbonamento:" />
                 <Label fx:id="descrizioneLabel" wrapText="true" />
             </VBox>
+         <BorderPane.margin>
+            <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+         </BorderPane.margin>
         </VBox>
     </center>
 
     <right>
-        <ScrollPane fitToWidth="true" prefWidth="400.0" style="-fx-background: transparent; -fx-background-color: transparent;">
-            <VBox spacing="20.0">
-                <padding>
-                    <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
-                </padding>
-
-                <Label style="-fx-font-size: 24; -fx-font-weight: bold;" text="Piani disponibili" />
-
-                <VBox fx:id="vBoxPianiOfferti" spacing="20">
-                    <VBox style="-fx-background-color: white; -fx-background-radius: 10; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 0);" styleClass="subscription-card">
-                        <padding>
-                            <Insets bottom="20" left="20" right="20" top="20" />
-                        </padding>
-
-<!--                        <Label style="-fx-font-size: 24; -fx-font-weight: bold;" text="Base" />-->
-<!--                        <Label style="-fx-text-fill: #6c757d;" text="Per chi inizia" />-->
-<!--                        <Label style="-fx-font-size: 28; -fx-font-weight: bold;" text="€29.99/mese" />-->
-
-<!--                        <VBox spacing="10" VBox.vgrow="ALWAYS">-->
-<!--                            <Label text="✓ Accesso sala pesi" wrapText="true" />-->
-<!--                            <Label text="✓ Accesso spogliatoi" wrapText="true" />-->
-<!--                            <Label text="✓ 1 sessione PT gratuita" wrapText="true" />-->
-<!--                        </VBox>-->
-
-<!--                        <Button maxWidth="Infinity" style="-fx-background-color: #007bff; -fx-text-fill: white;" text="Seleziona" />-->
-<!--                    </VBox>-->
-
-<!--                    <VBox style="-fx-background-color: white; -fx-background-radius: 10; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 0);" styleClass="subscription-card">-->
-<!--                        <padding>-->
-<!--                            <Insets bottom="20" left="20" right="20" top="20" />-->
-<!--                        </padding>-->
-
-<!--                        <Label style="-fx-font-size: 24; -fx-font-weight: bold;" text="Premium" />-->
-<!--                        <Label style="-fx-text-fill: #6c757d;" text="Il più popolare" />-->
-<!--                        <Label style="-fx-font-size: 28; -fx-font-weight: bold;" text="€49.99/mese" />-->
-
-<!--                        <VBox spacing="10" VBox.vgrow="ALWAYS">-->
-<!--                            <Label text="✓ Tutto del piano Base" wrapText="true" />-->
-<!--                            <Label text="✓ Accesso illimitato ai corsi" wrapText="true" />-->
-<!--                            <Label text="✓ 2 sessioni PT al mese" wrapText="true" />-->
-<!--                            <Label text="✓ Programma personalizzato" wrapText="true" />-->
-<!--                        </VBox>-->
-
-<!--                        <Button maxWidth="Infinity" style="-fx-background-color: #28a745; -fx-text-fill: white;" text="Seleziona" />-->
-<!--                    </VBox>-->
-
-<!--                    <VBox style="-fx-background-color: white; -fx-background-radius: 10; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 0);" styleClass="subscription-card">-->
-<!--                        <padding>-->
-<!--                            <Insets bottom="20" left="20" right="20" top="20" />-->
-<!--                        </padding>-->
-
-<!--                        <Label style="-fx-font-size: 24; -fx-font-weight: bold;" text="Elite" />-->
-<!--                        <Label style="-fx-text-fill: #6c757d;" text="Per i più esigenti" />-->
-<!--                        <Label style="-fx-font-size: 28; -fx-font-weight: bold;" text="€79.99/mese" />-->
-
-<!--                        <VBox spacing="10" VBox.vgrow="ALWAYS">-->
-<!--                            <Label text="✓ Tutto del piano Premium" wrapText="true" />-->
-<!--                            <Label text="✓ Personal trainer dedicato" wrapText="true" />-->
-<!--                            <Label text="✓ Accesso area spa/wellness" wrapText="true" />-->
-<!--                            <Label text="✓ Analisi composizione corporea" wrapText="true" />-->
-<!--                            <Label text="✓ Parcheggio riservato" wrapText="true" />-->
-<!--                        </VBox>-->
-
-<!--                        <Button maxWidth="Infinity" style="-fx-background-color: #17a2b8; -fx-text-fill: white;" text="Seleziona" />-->
-                    </VBox>
-                </VBox>
-            </VBox>
+        <ScrollPane fx:id="scrollPiani" fitToWidth="true" maxWidth="300.0" prefWidth="300.0" style="-fx-background: transparent; -fx-background-color: transparent;">
+            <VBox fx:id="vBoxPianiOfferti" spacing="20.0" />
+         <BorderPane.margin>
+            <Insets bottom="20.0" right="20.0" top="20.0" />
+         </BorderPane.margin>
         </ScrollPane>
     </right>
 

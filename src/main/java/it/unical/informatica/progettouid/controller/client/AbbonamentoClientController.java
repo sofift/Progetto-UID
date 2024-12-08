@@ -1,29 +1,28 @@
 package it.unical.informatica.progettouid.controller.client;
 
-import it.unical.informatica.progettouid.model.Corsi;
-import it.unical.informatica.progettouid.model.DBConnection;
-import it.unical.informatica.progettouid.model.InfoBaseAbbonamento;
-import it.unical.informatica.progettouid.model.TipiAbbonamento;
+import it.unical.informatica.progettouid.model.*;
 import it.unical.informatica.progettouid.view.SceneHandlerClient;
+import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
+import javafx.scene.control.*;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import org.kordamp.ikonli.javafx.FontIcon;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.List;
 
 public class AbbonamentoClientController {
-
-    @FXML public Label tipoAbbonamentoLabel;
-    @FXML public Label dataInizioLabel;
-    @FXML public Label dataScadenzaLabel;
-    @FXML public Label statoAbbonamentoLabel;
     @FXML public VBox vBoxPianiOfferti;
     @FXML public Label descrizioneLabel;
-
+    @FXML public VBox datiAbbonamentoVBox;
+    @FXML public VBox centerBox;
+    @FXML public ScrollPane scrollPiani;
 
     @FXML
     public void initialize() {
@@ -32,6 +31,13 @@ public class AbbonamentoClientController {
     }
 
     private void loadInformazioniCliente() {
+        if(ClientSession.getInstance().getCurrentClient() == null) {
+            //scrollPiani.setPrefWidth(500);
+            Label clientNonAbbonato = new Label("Ops, pare che tu non abbia ancora un abbonamento, scorri tra i nostri piani disponibili e scelgi quello più adatto a te");
+            datiAbbonamentoVBox.getChildren().add(clientNonAbbonato);
+            return;
+        }
+
         Task<InfoBaseAbbonamento> task = DBConnection.getInstance().getInfoAbbonamento();
 
         task.setOnSucceeded(event -> {
@@ -49,21 +55,37 @@ public class AbbonamentoClientController {
     }
 
     private void displayInfoAbbonamento(InfoBaseAbbonamento info) {
-        tipoAbbonamentoLabel.setText(info.nomeAbbonamento());
-        dataInizioLabel.setText(info.dataInizio());
-        dataScadenzaLabel.setText(info.dataScadenza());
-        statoAbbonamentoLabel.setText(info.stato());
+        HBox abbonamento = new HBox();
+        FontIcon tipoAbbonamentoIcon = new FontIcon();
+        Label tipoAbbonamentoLabel = new Label(info.nomeAbbonamento());
+        abbonamento.getChildren().addAll(tipoAbbonamentoIcon, tipoAbbonamentoLabel);
+
+        VBox infoAbbonamento = new VBox();
+        Label dateInit = new Label("Data inizio:");
+        Label dataInizioLabel = new Label(info.dataInizio());
+        Label dataScad = new Label("Data scadenza:");
+        Label dataScadenzaLabel = new Label(info.dataScadenza());
+        Label stato = new Label("Stato:");
+        Label statoAbbonamentoLabel = new Label(info.stato());
+
+        infoAbbonamento.getChildren().addAll(dataInizioLabel, dataScadenzaLabel, statoAbbonamentoLabel);
+
+        Button rinnovo = new Button("Rinnova il tuo piano");
+        datiAbbonamentoVBox.getChildren().addAll(abbonamento, infoAbbonamento, rinnovo);
     }
 
     private void loadPianiOfferti() {
         Task<List<TipiAbbonamento>> task = DBConnection.getInstance().getAllPianiAbbonamento();
+        Thread thread = new Thread(task);
+        thread.setDaemon(true);
+        thread.start();
 
         task.setOnSucceeded(event -> {
             List<TipiAbbonamento> piani = task.getValue();
-            for (TipiAbbonamento p : piani) {
-                System.out.println(p);
-            }
-            displayPiani(piani);
+            Platform.runLater(() -> {
+                displayPiani(piani);
+            });
+
 
         });
 
@@ -77,19 +99,94 @@ public class AbbonamentoClientController {
 
     private void displayPiani(List<TipiAbbonamento> piani) {
         vBoxPianiOfferti.getChildren().clear();
-
+        Label pianiDisp = new Label("Piani disponibili");
+        vBoxPianiOfferti.getChildren().addAll(pianiDisp);
         for(TipiAbbonamento p : piani) {
-            VBox vbox = new VBox();
+            VBox card = new VBox();
             Label nome = new Label(p.nome());
             Label destinatoA = new Label(p.dedicatoA());
             Label prezzo = new Label("" + p.prezzo());
 
             Text descrizione = new Text(p.descrizione());
             Button seleziona = new Button("Seleziona");
+            seleziona.setOnAction(e -> showFormAbbonamento(p));
 
-            vbox.getChildren().addAll(nome, destinatoA, prezzo, descrizione, seleziona);
+            card.getChildren().addAll(nome, destinatoA, prezzo, descrizione, seleziona);
+            vBoxPianiOfferti.getChildren().add(card);
         }
 
+
+    }
+
+    private void showFormAbbonamento(TipiAbbonamento abbonamento) {
+        //scrollPiani.setPrefWidth(300);
+        centerBox.getChildren().clear(); // Pulisce il centro del box prima di aggiungere nuovi elementi
+        VBox formBox = new VBox(10);
+
+        Label title = new Label("Acquisto abbonamento");
+        Client loggedClient = ClientSession.getInstance().getCurrentClient();
+
+        Label nomeLabel = new Label("Nome: " + loggedClient.getNome());
+        nomeLabel.setDisable(true);
+
+        Label cognomeLabel = new Label("Cognome: " + loggedClient.getCognome());
+        cognomeLabel.setDisable(true);
+
+        Label numeroCartaLabel = new Label("Numero Carta:");
+        TextField numeroCartaField = new TextField();
+        numeroCartaField.setPromptText("0000 0000 000000");
+
+        Label scadenzaLabel = new Label("Scadenza:");
+        TextField scadenzaField = new TextField();
+        scadenzaField.setPromptText("mm/aaaa");
+
+        Label cvvLabel = new Label("CVV:");
+        TextField cvvField = new TextField();
+        cvvField.setPromptText("123");
+
+        Separator separator = new Separator();
+
+        Label resoConto = new Label("Piano: ");
+        Label nome = new Label(abbonamento.nome());
+        Label prezzo = new Label(abbonamento.prezzo() + "€");
+
+        formBox.getChildren().addAll(title, nomeLabel, cognomeLabel, numeroCartaLabel, numeroCartaField, scadenzaLabel, scadenzaField, cvvLabel, cvvField);
+        formBox.getChildren().addAll(separator, resoConto, nome, prezzo);
+
+        HBox hboxButton = new HBox();
+        hboxButton.setSpacing(20);
+        Button confermaButton = new Button("Conferma pagamento");
+        Button annulla = new Button("Annulla");
+        hboxButton.getChildren().addAll(confermaButton, annulla);
+        confermaButton.setOnAction(e -> processaPagamento(numeroCartaField.getText(), scadenzaField.getText(), cvvField.getText()));
+
+        formBox.getChildren().add(hboxButton);
+
+
+        centerBox.getChildren().add(formBox);
+    }
+
+    private void processaPagamento(String numeroCarta, String scadenzaLabel, String cvv) {
+        if(!numeroCarta.matches("\\d{13,19}") || !cvv.matches("\\d{3}") || !isDateValid(scadenzaLabel)){
+            System.out.println("Pagamento non andato a buon fine, controlla che i dati siano corretti");
+        } else{
+            System.out.println("Pagamento in processazione per la carta: " + numeroCarta);
+        }
+    }
+
+    private static boolean isDateValid(String dataScadenza) {
+        // Definisce il formato della data di scadenza
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/yyyy");
+        try {
+            // Converte la stringa di scadenza in un oggetto LocalDate
+            LocalDate expirationDate = LocalDate.parse("01/" + dataScadenza, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+            // Ottiene la data attuale
+            LocalDate currentDate = LocalDate.now();
+            // Controlla se la data di scadenza è prima della data attuale
+            return !expirationDate.withDayOfMonth(expirationDate.lengthOfMonth()).isBefore(currentDate);
+        } catch (DateTimeParseException e) {
+            return false;  //errore nel parsing della data
+        }
     }
 
     @FXML

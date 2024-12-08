@@ -9,14 +9,14 @@ import javafx.stage.Stage;
 public class FlexFit extends Application {
     @Override
     public void start(Stage stage) throws Exception {
-        SceneHandlerClient.getInstance().init(stage);
+        SceneHandlerPrimaPagina.getInstance().init(stage);
     }
     /*public void start(Stage primaryStage) {
         try {
             SceneHandlerPrimaPagina sceneHandler = SceneHandlerPrimaPagina.getInstance();
             sceneHandler.init(primaryStage);
         } catch (Exception e) {
-            e.printStackTrace();
+            e.printStackTr
             System.exit(1);
         }
     }*/

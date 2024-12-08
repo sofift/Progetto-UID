@@ -1,33 +1,15 @@
 package it.unical.informatica.progettouid.model;
 
-public record Client(int id, String nome, String cognome, String abbonamento, String dataNascita, int idUser) {
-    @Override
-    public int id() {
-        return id;
+public class Client extends User{
+    private String abbonamento;
+
+    public Client(int id, String nome, String cognome, String dataNascita, String abbonamento, String email) {
+        super(id, nome, cognome, dataNascita, email);
+        this.abbonamento = abbonamento;
     }
 
-    @Override
-    public String nome() {
-        return nome;
-    }
-
-    @Override
-    public String cognome() {
-        return cognome;
-    }
-
-    @Override
-    public String abbonamento() {
+    public String getAbbonamento() {
         return abbonamento;
     }
 
-    @Override
-    public String dataNascita() {
-        return dataNascita;
-    }
-
-    @Override
-    public int idUser() {
-        return idUser;
-    }
 }

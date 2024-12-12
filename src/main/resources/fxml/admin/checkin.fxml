@@ -17,7 +17,7 @@
 <?import javafx.scene.text.Text?>
 <?import org.kordamp.ikonli.javafx.FontIcon?>
 
-<BorderPane stylesheets="@../../styles/home.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unical.informatica.progettouid.controller.Admin.CheckInController">
+<BorderPane stylesheets="@../../styles/home.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unical.informatica.progettouid.controller.Admin.CheckInController">
 
     <top>
         <VBox styleClass="top">
@@ -200,13 +200,13 @@
                                           <Button styleClass="keypad-button" text="7" GridPane.columnIndex="0" GridPane.rowIndex="2" />
                                           <Button styleClass="keypad-button" text="8" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                                           <Button styleClass="keypad-button" text="9" GridPane.columnIndex="2" GridPane.rowIndex="2" />
-                                          <Button fx:id="btnClear" styleClass="keypad-button" GridPane.columnIndex="0" GridPane.rowIndex="3">
+                                          <Button fx:id="btnClear" onAction="#onClear" styleClass="keypad-button" GridPane.columnIndex="0" GridPane.rowIndex="3">
                                              <graphic>
                                                 <FontIcon iconLiteral="fas-backspace" />
                                              </graphic>
                                           </Button>
                                           <Button styleClass="keypad-button" text="0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                                          <Button fx:id="btnEnter" styleClass="keypad-button" GridPane.columnIndex="2" GridPane.rowIndex="3">
+                                          <Button fx:id="btnEnter" onAction="#onEnter" styleClass="keypad-button" GridPane.columnIndex="2" GridPane.rowIndex="3">
                                              <graphic>
                                                 <FontIcon iconLiteral="fas-check" />
                                              </graphic>
@@ -224,7 +224,7 @@
                                           <RowConstraints />
                                        </rowConstraints>
                                     </GridPane>
-                                    <Button fx:id="btnCheckIn" styleClass="check-in-button" text="Check In">
+                                    <Button fx:id="btnCheckIn" onAction="#onSubmit" styleClass="check-in-button" text="Check In">
                                        <graphic>
                                           <FontIcon iconLiteral="fas-sign-in-alt" />
                                        </graphic>

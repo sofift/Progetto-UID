@@ -234,7 +234,7 @@ public class DBConnection {
         });
     }
 
-    public Task<InfoAccessiAbbonamento> getAccessiRimanenti(){
+    public Task<InfoAccessiAbbonamento> getAccessiRimanenti() {
         return asyncCall(() -> {
             if (isConnected()) {
                 int idClient = ClientSession.getInstance().getCurrentClient().getId();
@@ -264,7 +264,7 @@ public class DBConnection {
         });
     }
 
-    public Task<InfoBaseAbbonamento> getInfoAbbonamento(){
+    public Task<InfoBaseAbbonamento> getInfoAbbonamento() {
         return asyncCall(() -> {
             if (isConnected()) {
                 int idClient = ClientSession.getInstance().getCurrentClient().getId();
@@ -422,8 +422,8 @@ public class DBConnection {
                         "ORDER BY es.OrdineEsecuzione ";
                 PreparedStatement stmt = con.prepareStatement(query);
                 ResultSet rs = stmt.executeQuery();
-                while(rs.next()) {
-                     esericizi.add( new EsercizioScheda(
+                while (rs.next()) {
+                    esericizi.add(new EsercizioScheda(
                             rs.getInt("NumeroSerie"),
                             rs.getInt("NumeroRipetizioni"),
                             rs.getInt("TempoRecupero"),
@@ -537,7 +537,7 @@ public class DBConnection {
                     stmt.setInt(1, idClient);
                     try (ResultSet rs = stmt.executeQuery()) {
                         if (rs.next()) {
-                            throw new SQLException("scheda non trovato: " );
+                            throw new SQLException("scheda non trovato: ");
                         }
                         idScheda = rs.getInt("ID");
                     }
@@ -574,7 +574,7 @@ public class DBConnection {
     }
 
 
-    public Task<List<PrenotazionePT>> getPrenotazioneTrainer(){
+    public Task<List<PrenotazionePT>> getPrenotazioneTrainer() {
         return asyncCall(() -> {
             if (isConnected()) {
                 List<PrenotazionePT> prenotazioni = new ArrayList<>();
@@ -587,7 +587,7 @@ public class DBConnection {
                 stmt.setInt(1, idPT);
                 try (ResultSet rs = stmt.executeQuery()) {
                     while (rs.next()) {
-                        prenotazioni.add( new PrenotazionePT(
+                        prenotazioni.add(new PrenotazionePT(
                                 rs.getInt(idPT),
                                 rs.getString(2),
                                 rs.getString(3),
@@ -601,7 +601,35 @@ public class DBConnection {
             return null;
         });
     }
+    public Task<Boolean> checkIn(String code){
+        return asyncCall(() -> {
+            if (!isCustomerIdValid(code)) {
+                throw new IllegalArgumentException("Codice cliente non valido.");
+            }
+            registerCheckIn(code);
+            return true;
+        });
+    }
+
+    private boolean isCustomerIdValid(String code) throws SQLException {
+        String query = "SELECT 1 FROM Clienti WHERE id = ?";
+        try (PreparedStatement stmt = con.prepareStatement(query)){
+            stmt.setString(1, code);
+            try (ResultSet rs = stmt.executeQuery()){
+                return rs.next();
+            }
+        }
+    }
+
+    private void registerCheckIn(String code) throws SQLException{
+        String query = "INSERT INTO AccessiPalestra (ClienteID, DataOraIngresso) VALUES (?, datetime('now'))";
+        try (PreparedStatement stmt = con.prepareStatement(query)) {
+            stmt.setString(1, code);
+            stmt.executeQuery();
+        }
+    }
 }
+
     // CREAZIONE DELLA PLAYLIST AGGIUNTA DALL'UTENTE
 /*
     public Task<Void> insertPlaylistFotUser(String username, String nome) {

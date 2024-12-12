@@ -23,7 +23,7 @@
 <?import javafx.scene.text.Text?>
 <?import org.kordamp.ikonli.javafx.FontIcon?>
 
-<BorderPane stylesheets="@../../styles/home.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unical.informatica.progettouid.controller.Admin.AggiungiUtenteController">
+<BorderPane stylesheets="@../../styles/home.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unical.informatica.progettouid.controller.Admin.AggiungiUtenteController">
 
     <top>
         <VBox styleClass="top">
@@ -351,7 +351,7 @@
                     <GridPane hgap="15" vgap="10">
                         <Label text="Certificato Medico" GridPane.columnIndex="0" GridPane.rowIndex="0" />
                         <HBox spacing="10" GridPane.columnIndex="1" GridPane.rowIndex="0">
-                            <Button text="Carica Certificato">
+                            <Button fx:id="loadCertificate" text="Carica Certificato">
                                 <graphic>
                                     <FontIcon iconLiteral="fas-upload" />
                                 </graphic>
@@ -446,12 +446,12 @@
                             <FontIcon iconLiteral="fas-print" />
                         </graphic>
                     </Button>
-                    <Button styleClass="button-secondary" text="Annulla">
+                    <Button fx:id="cancelButton" styleClass="button-secondary" text="Annulla">
                         <graphic>
                             <FontIcon iconLiteral="fas-times" />
                         </graphic>
                     </Button>
-                    <Button styleClass="button-primary" text="Registra">
+                    <Button fx:id="registraNuovoUtente" styleClass="button-primary" text="Registra">
                         <graphic>
                             <FontIcon iconLiteral="fas-check" />
                         </graphic>

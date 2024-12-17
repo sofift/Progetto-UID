@@ -1,6 +1,11 @@
 package it.unical.informatica.progettouid.model;
 
-public record OrariCorsi(String nomeCorso, String giorno, String oraInizio, String oraFine) {
+public record OrariCorsi(int idCorso, String nomeCorso, String giorno, String oraInizio, String oraFine) {
+    @Override
+    public int idCorso() {
+        return idCorso;
+    }
+
     @Override
     public String nomeCorso() {
         return nomeCorso;

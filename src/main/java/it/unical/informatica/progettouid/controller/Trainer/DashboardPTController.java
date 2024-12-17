@@ -3,16 +3,12 @@ package it.unical.informatica.progettouid.controller.Trainer;
 import it.unical.informatica.progettouid.model.DBConnection;
 import it.unical.informatica.progettouid.model.Notifica;
 import it.unical.informatica.progettouid.model.PrenotazionePT;
-import it.unical.informatica.progettouid.view.SceneHandlerClient;
-import it.unical.informatica.progettouid.view.SceneHandlerPT;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
-
-import javax.management.Notification;
 import java.util.List;
 
 public class DashboardPTController {

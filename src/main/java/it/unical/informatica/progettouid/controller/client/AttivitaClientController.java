@@ -18,8 +18,6 @@ import java.util.List;
 import java.util.Optional;
 
 
-// DA MODIFICARE, SIA IL CSS E SIA LA GESTIONE DEL CALENDARIO
-
 public class AttivitaClientController {
     @FXML private FlowPane corsiFlowPane;
     @FXML private VBox orariCorsiVBox;
@@ -62,12 +60,7 @@ public class AttivitaClientController {
                 Text testoDesc = new Text(descrizione);
                 Button prenota = new Button("Prenota");
                 prenota.setOnAction(event -> {
-                    Alert confirmDialog = new Alert(Alert.AlertType.CONFIRMATION);
-                    confirmDialog.setTitle("Conferma prenotazione");
-                    confirmDialog.setHeaderText(null);
-                    confirmDialog.setContentText("Confermi la prenotazione per il corso " + c.nomeCorso() + "?");
-
-                    alert(confirmDialog);
+                    confermaPrenotazione(c);
                 });
                 orariCorsiVBox.getChildren().addAll(giorno, oraInizio, testoDesc, prenota);
             }
@@ -75,17 +68,31 @@ public class AttivitaClientController {
         });
     }
 
-    static void alert(Alert confirmDialog) {
+    private void confermaPrenotazione(OrariCorsi corso) {
+        Alert confirmDialog = new Alert(Alert.AlertType.CONFIRMATION);
+        confirmDialog.setTitle("Conferma prenotazione");
+        confirmDialog.setHeaderText(null);
+        confirmDialog.setContentText("Confermi la prenotazione per il corso " + corso.nomeCorso() + "?");
+
         Optional<ButtonType> result = confirmDialog.showAndWait();
         if (result.isPresent() && result.get() == ButtonType.OK) {
-            Alert successDialog = new Alert(Alert.AlertType.INFORMATION);
-            successDialog.setTitle("Successo");
-            successDialog.setHeaderText(null);
-            successDialog.setContentText("Prenotazione effettuata con successo!");
-            successDialog.showAndWait();
+            Task<Void> task = DBConnection.getInstance().insertPrenotazioneCorso(corso.idCorso(), corso.giorno());
+
+            task.setOnSucceeded(e->{
+                Alert successDialog = new Alert(Alert.AlertType.INFORMATION);
+                successDialog.setTitle("Successo");
+                successDialog.setHeaderText(null);
+                successDialog.setContentText("Prenotazione effettuata con successo!");
+                successDialog.showAndWait();
+            });
+
+            task.setOnFailed(e->{
+                task.getException().printStackTrace();
+            });
+
+
         }
     }
-
 
     @FXML
     public void onNavigationButtonClick(ActionEvent event) {

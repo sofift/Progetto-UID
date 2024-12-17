@@ -11,7 +11,7 @@
 <?import javafx.scene.text.Text?>
 <?import org.kordamp.ikonli.javafx.FontIcon?>
 
-<BorderPane fx:id="mainPane" stylesheets="@../../styles/home.css" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unical.informatica.progettouid.controller.client.DashboardClientController">
+<BorderPane fx:id="mainPane" stylesheets="@../../styles/home.css" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/21" fx:controller="it.unical.informatica.progettouid.controller.client.DashboardClientController">
 
    <top>
       <VBox styleClass="top">
@@ -32,7 +32,7 @@
    </top>
 
    <left>
-      <VBox maxWidth="95" minWidth="95" spacing="10" styleClass="sidebar">
+      <VBox maxWidth="95" minWidth="95" spacing="10" stylesheets="@../../styles/sidebar.css">
          <padding>
             <Insets bottom="20" top="20" />
          </padding>

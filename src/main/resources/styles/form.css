@@ -1,0 +1,30 @@
+.mainText {
+    -fx-text-fill: #1a3246;
+    -fx-font-weight: bold;
+}
+
+.normalText {
+    -fx-text-fill: #1a3246;
+}
+
+.label {
+    -fx-text-fill: #1a3246;
+}
+
+.text-field {
+    -fx-border-width: 0px 0px 2px 0px;
+    -fx-border-color: transparent transparent #1a3246 transparent;
+}
+
+
+.button {
+    -fx-background-color: #1a3246;
+    -fx-background-radius: 10px;
+}
+
+.button:hover{
+    -fx-background-color: white;
+    -fx-text-fill: #1a3246;
+    -fx-border-color: #1a3246;
+    -fx-border-radius: 10px;
+}

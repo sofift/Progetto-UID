@@ -1,41 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.layout.StackPane?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
-<StackPane xmlns="http://javafx.com/javafx"
-           xmlns:fx="http://javafx.com/fxml"
-           fx:controller="it.unical.informatica.progettouid.controller.PrimaPaginaController"
-           prefHeight="600.0" prefWidth="1000.0">
+<StackPane prefHeight="600.0" prefWidth="1000.0" stylesheets="@../styles/primaPagina.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unical.informatica.progettouid.controller.PrimaPaginaController">
 
-    <VBox alignment="CENTER" spacing="20.0">
+    <VBox alignment="CENTER" spacing="20.0" styleClass="background" stylesheets="@../styles/primaPagina.css">
         <padding>
-            <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
+            <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
         </padding>
 
-        <Text style="-fx-font-size: 24px;" text="Benvenuto in FlexFit Gym"/>
-        <Text style="-fx-font-size: 16px;" text="Seleziona il tipo di accesso"/>
+        <Text style="-fx-font-size: 24px;" styleClass="mainText" text="Benvenuto in FlexFit Gym" />
+        <Text style="-fx-font-size: 16px;" styleClass="normalText" text="Seleziona il tipo di accesso" />
 
-        <Button fx:id="btnClient"
-                text="Accesso Cliente"
-                onAction="#onClientLogin"
-                styleClass="login-button"
-                prefWidth="200.0"/>
+        <Button fx:id="btnClient" onAction="#onClientLogin" prefWidth="200.0" styleClass="login-button" text="Accesso Cliente" />
 
-        <Button fx:id="btnAdmin"
-                text="Accesso Amministratore"
-                onAction="#onAdminLogin"
-                styleClass="login-button"
-                prefWidth="200.0"/>
+        <Button fx:id="btnAdmin" onAction="#onAdminLogin" prefWidth="200.0" styleClass="login-button" text="Accesso Amministratore" />
 
-        <Button fx:id="btnTrainer"
-                text="Accesso Personal Trainer"
-                onAction="#onTrainerLogin"
-                styleClass="login-button"
-                prefWidth="200.0"/>
+        <Button fx:id="btnTrainer" onAction="#onTrainerLogin" prefWidth="200.0" styleClass="login-button" text="Accesso Personal Trainer" />
     </VBox>
 
 </StackPane>

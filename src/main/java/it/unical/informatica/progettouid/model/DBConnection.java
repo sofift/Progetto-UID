@@ -57,6 +57,21 @@ public class DBConnection {
         }
     }
 
+    public Connection getConnection() {
+        try {
+            if (con == null || con.isClosed()) {
+                // Modifica l'URL per il tuo database
+                String url = "jdbc:sqlite:your-database.db";
+                con = DriverManager.getConnection(url);
+                System.out.println("Connessione al database SQLite aperta.");
+            }
+        } catch (SQLException e) {
+            System.err.println("Errore durante l'apertura della connessione al database:");
+            e.printStackTrace();
+        }
+        return con;
+    }
+
     // Effettua una chiamata asincrona a un thread
     private <T> Task<T> asyncCall(Callable<T> callable) {
         return new Task<>() {
@@ -458,17 +473,43 @@ public class DBConnection {
         });
     }
 
+    public Task<Boolean> insertAdmin(String nome, String cognome, String username, String password) {
+        return asyncCall(() -> {
+            if (isConnected()) {
+                System.out.println("Inserimento Admin: " + nome + " " + cognome);
+                String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt());
+                String query = "INSERT INTO Admin (Nome, Cognome, Username, Password) VALUES(?, ?, ?, ?);";
+                try (PreparedStatement stmt = con.prepareStatement(query)) {
+                    stmt.setString(1, nome);
+                    stmt.setString(2, cognome);
+                    stmt.setString(3, username);
+                    stmt.setString(4, hashedPassword);
+                    stmt.execute();
+                    return true;
+                }
+            }
+            return false;
+        });
+    }
+
     public Task<Admin> authenticateAdmin(String email, String password) {
         return asyncCall(() -> {
             if (isConnected()) {
-                String query = "SELECT * FROM Admin WHERE email = ?;";
+                String query = "SELECT * FROM Admin WHERE Username = ?;";
                 try (PreparedStatement stmt = con.prepareStatement(query)) {
                     stmt.setString(1, email);
                     try (ResultSet rs = stmt.executeQuery()) {
-                        String storedHash = rs.getString("Password");
-                        if (rs.next() && BCrypt.checkpw(password, storedHash)) {
-
-                            return new Admin(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5));
+                        if (rs.next()) {  // First move to the row
+                            String storedHash = rs.getString("Password");
+                            if (BCrypt.checkpw(password, storedHash)) {
+                                return new Admin(
+                                        rs.getInt("ID"),
+                                        rs.getString("Nome"),
+                                        rs.getString("Cognome"),
+                                        rs.getString("Username"),
+                                        rs.getString("Password")
+                                );
+                            }
                         }
                     }
                 }
@@ -476,6 +517,8 @@ public class DBConnection {
             return null;
         });
     }
+
+
 
     public Task<Client> authenticateUser(String email, String password) {
         return asyncCall(() -> {

@@ -23,8 +23,8 @@ public class AdminLoginController {
 
     @FXML
     public void handleLogin() {
-        String email = emailField.getText().trim();
-        String password = passwordField.getText().trim();
+        String email = emailField.getText();
+        String password = passwordField.getText();
 
         if (email.isEmpty() || password.isEmpty()) {
             checkAccess.setVisible(true);
@@ -84,13 +84,11 @@ public class AdminLoginController {
         }
     }
 
-    private void showAlert(Alert.AlertType type, String title, String header, String content) {
-        Platform.runLater(() -> {
-            Alert alert = new Alert(type);
-            alert.setTitle(title);
-            alert.setHeaderText(header);
-            alert.setContentText(content);
-            alert.showAndWait();
-        });
+    private void showAlert(Alert.AlertType type, String title, String header, String content){
+        Alert alert = new Alert(type);
+        alert.setTitle(title);
+        alert.setHeaderText(header);
+        alert.setContentText(content);
+        alert.showAndWait();
     }
 }

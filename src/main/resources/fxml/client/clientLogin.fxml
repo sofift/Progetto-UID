@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
-<BorderPane prefHeight="400.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unical.informatica.progettouid.controller.client.ClientLoginController">
+<BorderPane prefHeight="400.0" prefWidth="500.0" stylesheets="@../../styles/loginStyle.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unical.informatica.progettouid.controller.client.ClientLoginController">
    <center>
       <VBox alignment="CENTER" spacing="20.0" styleClass="login-container" BorderPane.alignment="CENTER">
          <padding>

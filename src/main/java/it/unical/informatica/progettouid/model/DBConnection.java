@@ -2,12 +2,13 @@ package it.unical.informatica.progettouid.model;
 
 
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 
 import java.sql.*;
-import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.time.format.TextStyle;
 import java.util.*;
 import java.util.concurrent.Callable;
@@ -196,35 +197,21 @@ public class DBConnection {
         });
     }
 
-    public Task<List<Corsi>> getCorsiDiOggi() {
+    public Task<List<Corsi>> getCorsi() {
         return asyncCall(() -> {
-            String today = LocalDate.now().getDayOfWeek()
-                    .getDisplayName(TextStyle.FULL, Locale.ITALIAN)
-                    .toLowerCase();
             List<Corsi> corsi = FXCollections.observableArrayList();
             if (isConnected()) {
-                String query = "SELECT DISTINCT c.ID, c.Nome, c.Tipo, c.MaxPartecipanti, c.Durata, " +
-                        "p.Nome as PTNome, o.oraInizio, o.oraFine " +
-                        "FROM Corsi c " +
-                        "JOIN OrarioCorsi o ON c.ID = o.idCorso " +
-                        "JOIN PersonalTrainer p ON c.IdPersonal = p.ID " +
-                        "WHERE o.giorno = ? " +
-                        "GROUP BY c.ID, o.oraInizio " +  // Aggiunto GROUP BY
-                        "ORDER BY o.oraInizio;";
+                String query = "SELECT *" +
+                        "FROM Corsi c ";
                 PreparedStatement stmt = con.prepareStatement(query);
-                stmt.setString(1, today);
                 ResultSet rs = stmt.executeQuery();
-
                 while (rs.next()) {
                     corsi.add(new Corsi(
                             rs.getInt(1),
                             rs.getString(2),
                             rs.getString(3),
                             rs.getInt(4),
-                            rs.getInt(5),
-                            rs.getString(6),
-                            rs.getString(7),
-                            rs.getString(8)
+                            rs.getString(5)
                     ));
 
                 }
@@ -233,6 +220,60 @@ public class DBConnection {
             return corsi;
         });
     }
+
+    public Task<List<Corsi>> getCorsiDiOggi() {
+        return asyncCall(() -> {
+            String today = LocalDate.now().getDayOfWeek().getDisplayName(TextStyle.FULL, Locale.ITALIAN).toLowerCase();
+            List<Corsi> corsi = FXCollections.observableArrayList();
+            if (isConnected()) {
+                String query = "SELECT c.ID, c.Nome, c.Descrizione, c.idTrainer " +
+                        "FROM Corsi c JOIN OrarioCorsi oc ON c.ID = oc.idCorso " +
+                        "WHERE oc.giorno = ?";
+                PreparedStatement stmt = con.prepareStatement(query);
+                stmt.setString(1, today);
+                ResultSet rs = stmt.executeQuery();
+                while (rs.next()) {
+                    corsi.add(new Corsi(
+                            rs.getInt(1),
+                            rs.getString(2),
+                            rs.getString(3),
+                            rs.getInt(4),
+                            rs.getString(5)
+                    ));
+
+                }
+                stmt.close();
+            }
+            return corsi;
+        });
+    }
+
+    public Task<List<OrariCorsi>> getOrarioCorsi(int idCorso){
+        return asyncCall(() -> {
+            List<OrariCorsi> orari = FXCollections.observableArrayList();
+            if (isConnected()) {
+                String query = "SELECT c.nome, oc.giorno, oc.oraInizio, oc.oraFine " +
+                        "FROM Corsi c " +
+                        "JOIN OrarioCorsi oc ON oc.idCorso = c.ID " +
+                        "WHERE c.ID = ?";
+                PreparedStatement stmt = con.prepareStatement(query);
+                stmt.setInt(1, idCorso);
+                ResultSet rs = stmt.executeQuery();
+                while (rs.next()) {
+                    orari.add(new OrariCorsi(
+                            rs.getString(1),
+                            rs.getString(2),
+                            rs.getString(3),
+                            rs.getString(4)
+                    ));
+
+                }
+                stmt.close();
+            }
+            return orari;
+        });
+    }
+
 
     public Task<InfoAccessiAbbonamento> getAccessiRimanenti(){
         return asyncCall(() -> {
@@ -268,7 +309,7 @@ public class DBConnection {
         return asyncCall(() -> {
             if (isConnected()) {
                 int idClient = ClientSession.getInstance().getCurrentClient().getId();
-                String query = "SELECT ta.tipoAbbonamento, a.dataInizio, a.dataScadenza, a.stato, ta.descrizione" +
+                String query = "SELECT ta.Nome, a.dataInizio, a.dataScadenza, a.stato, ta.descrizione " +
                         "FROM Abbonamenti a " +
                         "JOIN TipiAbbonamento ta ON a.TipoAbbonamentoID = ta.ID " +
                         "WHERE a.ClienteID = ? ";
@@ -291,77 +332,6 @@ public class DBConnection {
         });
     }
 
-    public Task<Map<LocalDate, List<Corsi>>> getCorsiMensili(LocalDate inizio, LocalDate fine) {
-        return asyncCall(() -> {
-            Map<LocalDate, List<Corsi>> corsiPerGiorno = new HashMap<>();
-
-            if (isConnected()) {
-                String query = """
-                    SELECT c.ID, c.Nome, c.Tipo, c.MaxPartecipanti, c.Durata,
-                           p.Nome as PTNome, o.oraInizio, o.oraFine, o.giorno
-                    FROM Corsi c
-                    JOIN OrarioCorsi o ON c.ID = o.idCorso
-                    JOIN PersonalTrainer p ON c.IdPersonal = p.ID
-                    WHERE o.giorno IN ('lunedì', 'martedì', 'mercoledì', 'giovedì', 'venerdì', 'sabato', 'domenica')
-                    ORDER BY o.oraInizio
-                """;
-
-                try (PreparedStatement stmt = con.prepareStatement(query)) {
-                    try (ResultSet rs = stmt.executeQuery()) {
-                        while (rs.next()) {
-                            Corsi corso = new Corsi(
-                                    rs.getInt("ID"),
-                                    rs.getString("Nome"),
-                                    rs.getString("Tipo"),
-                                    rs.getInt("MaxPartecipanti"),
-                                    rs.getInt("Durata"),
-                                    rs.getString("PTNome"),
-                                    rs.getString("oraInizio"),
-                                    rs.getString("oraFine")
-                            );
-
-                            // Converti il giorno della settimana in date effettive del mese
-                            String giorno = rs.getString("giorno");
-                            List<LocalDate> date = getDatesForDayOfWeek(giorno, inizio, fine);
-
-                            for (LocalDate data : date) {
-                                corsiPerGiorno.computeIfAbsent(data, k -> new ArrayList<>()).add(corso);
-                            }
-                        }
-                    }
-                }
-            }
-            return corsiPerGiorno;
-        });
-    }
-
-    private List<LocalDate> getDatesForDayOfWeek(String giornoSettimana, LocalDate inizio, LocalDate fine) {
-        DayOfWeek dow = getDayOfWeek(giornoSettimana);
-        List<LocalDate> dates = new ArrayList<>();
-
-        LocalDate current = inizio;
-        while (!current.isAfter(fine)) {
-            if (current.getDayOfWeek() == dow) {
-                dates.add(current);
-            }
-            current = current.plusDays(1);
-        }
-
-        return dates;
-    }
-
-    private DayOfWeek getDayOfWeek(String giorno) {
-        return switch (giorno.toLowerCase()) {
-            case "lunedì" -> DayOfWeek.MONDAY;
-            case "martedì" -> DayOfWeek.TUESDAY;
-            case "mercoledì" -> DayOfWeek.WEDNESDAY;
-            case "giovedì" -> DayOfWeek.THURSDAY;
-            case "venerdì" -> DayOfWeek.FRIDAY;
-            case "sabato" -> DayOfWeek.SATURDAY;
-            case "domenica" -> DayOfWeek.SUNDAY;
-            default -> throw new IllegalArgumentException("Giorno non valido: " + giorno);
-        };
-    }
 
     public Task<List<TipiAbbonamento>> getAllPianiAbbonamento() {
         return asyncCall(() -> {
@@ -411,31 +381,36 @@ public class DBConnection {
         });
     }
 
-    public Task<List<EsercizioScheda>> getEserciziGiorno(int schedaId, String giorno) {
+    public Task<ObservableList<Esercizio>> getEserciziGiorno(int clientID, String giorno) {
         return asyncCall(() -> {
+            ObservableList<Esercizio> esercizi = FXCollections.observableArrayList();
             if (isConnected()) {
-                List<EsercizioScheda> esericizi = FXCollections.observableArrayList();
                 String query = " SELECT es.*, e.Nome, e.Descrizione, e.GruppoMuscolare, e.LivelloDifficolta " +
                         "FROM EserciziScheda es " +
                         "JOIN Esercizi e ON es.EsercizioID = e.ID " +
-                        "WHERE es.SchedaID = ?AND es.GiornoSettimana = ?" +
+                        "JOIN Schede s ON s.ID = es.SchedaID " +
+                        "WHERE s.clientID = ? AND es.GiornoSettimana = ? AND " +
                         "ORDER BY es.OrdineEsecuzione ";
-                PreparedStatement stmt = con.prepareStatement(query);
-                ResultSet rs = stmt.executeQuery();
-                while(rs.next()) {
-                     esericizi.add( new EsercizioScheda(
-                            rs.getInt("NumeroSerie"),
-                            rs.getInt("NumeroRipetizioni"),
-                            rs.getInt("TempoRecupero"),
-                            rs.getString("Note"),
-                            rs.getString("Nome"),
-                            rs.getString("Descrizione"),
-                            rs.getString("GruppoMuscolare"),
-                            rs.getString("LivelloDifficolta")));
+                try (PreparedStatement stmt = con.prepareStatement(query)) {
+                    stmt.setInt(1, clientID);
+                    stmt.setString(2, giorno);
+                    try (ResultSet rs = stmt.executeQuery()) {
+                        while(rs.next()) {
+                            esercizi.add( new Esercizio(
+                                    rs.getInt("NumeroSerie"),
+                                    rs.getInt("NumeroRipetizioni"),
+                                    rs.getInt("TempoRecupero"),
+                                    rs.getString("Note"),
+                                    rs.getString("Nome"),
+                                    rs.getString("Descrizione"),
+                                    rs.getString("GruppoMuscolare"),
+                                    rs.getString("LivelloDifficolta")));
+                        }
+                    }
                 }
-                stmt.close();
+
             }
-            return null;
+            return esercizi;
         });
     }
 
@@ -576,8 +551,8 @@ public class DBConnection {
 
     public Task<List<PrenotazionePT>> getPrenotazioneTrainer(){
         return asyncCall(() -> {
+            List<PrenotazionePT> prenotazioni = new ArrayList<>();
             if (isConnected()) {
-                List<PrenotazionePT> prenotazioni = new ArrayList<>();
                 int idPT = PTSession.getInstance().getCurrentTrainer().getId();
                 String query = "SELECT c.nome, c.cognome, p.data, p.oraPrenotazione, p.notes" +
                         "FROM PrenotazioniPT p " +
@@ -598,9 +573,138 @@ public class DBConnection {
                 }
                 stmt.close();
             }
+            return prenotazioni;
+        });
+    }
+
+    public Task<Void> insertNotifyTrainer(int trainerID, String message) {
+        return asyncCall(() -> {
+            if (isConnected()) {
+                String query = "INSERT INTO NotifichePT (trainerId, message, status) VALUES(?, ?, ?);";
+                try (PreparedStatement stmt = con.prepareStatement(query)) {
+                    stmt.setInt(1, trainerID);
+                    stmt.setString(2, message);
+                    stmt.setString(3, "non letta");
+                    stmt.executeUpdate();
+
+                }
+            }
             return null;
         });
     }
+
+    public Task<Void> insertNotifyClient(String message) {
+        return asyncCall(() -> {
+            if (isConnected()) {
+                String query = "INSERT INTO NotificheClient (message, status) VALUES(?, ?);";
+                try (PreparedStatement stmt = con.prepareStatement(query)) {
+                    stmt.setString(1, message);
+                    stmt.setString(2, "attiva");
+                    stmt.executeUpdate();
+
+                }
+            }
+            return null;
+        });
+    }
+
+    public Task<List<Notifica>> getNotificheNonLette() {
+        return asyncCall(() -> {
+            List<Notifica> notifiche = new ArrayList<>();
+            if (isConnected()) {
+                int trainerID = PTSession.getInstance().getCurrentTrainer().getId();
+                String query = "SELECT * FROM Notifiche WHERE trainerId = ? AND stato = 'non letta'";
+                PreparedStatement stmt = con.prepareStatement(query);
+                stmt.setInt(1, trainerID);
+                try (ResultSet rs = stmt.executeQuery()) {
+                    while (rs.next()) {
+                        notifiche.add( new Notifica(
+                                rs.getInt(1),
+                                rs.getInt(2),
+                                rs.getString(3),
+                                rs.getString(4)));
+                    }
+                }
+                stmt.close();
+            }
+            return notifiche;
+        });
+    }
+
+    public Task<List<Notifica>> getNotificheClient() {
+        return asyncCall(() -> {
+            List<Notifica> notifiche = new ArrayList<>();
+            if (isConnected()) {
+                String query = "SELECT * FROM NotificheClient ";
+                PreparedStatement stmt = con.prepareStatement(query);
+                try (ResultSet rs = stmt.executeQuery()) {
+                    while (rs.next()) {
+                        notifiche.add( new Notifica(
+                                rs.getInt(1),
+                                null,
+                                rs.getString(2),
+                                rs.getString(3)));
+                    }
+                }
+                stmt.close();
+            }
+            return notifiche;
+        });
+    }
+
+    public Task<Void> updateNotifyPT(int idNotify, String stato) {
+        return asyncCall(() -> {
+            if (isConnected()) {
+                String query = "UPDATE Notifiche SET stato = ? WHERE id = ?";
+                try (PreparedStatement stmt = con.prepareStatement(query)) {
+                    stmt.setString(1, stato);
+                    stmt.setInt(2, idNotify);
+                    stmt.executeUpdate();
+                }
+            }
+            return null;
+        });
+    }
+
+    public Task<Boolean> clientHaUnaScheda(int idClient) {
+        return asyncCall(() -> {
+            if (isConnected()) {
+
+                String query = "SELECT COUNT(*) FROM Schede WHERE ClienteID = ?";
+                PreparedStatement stmt = con.prepareStatement(query);
+                stmt.setInt(1, idClient);
+                ResultSet rs = stmt.executeQuery();
+                if (rs.next()) {
+                    return rs.getInt(1) > 0;
+                }
+                stmt.close();
+            }
+            return null;
+        });
+    }
+
+    public Task<Void> insertPagamento(int idAbbonamento, int importo, String stato) {
+        return asyncCall(() -> {
+            if (isConnected()) {
+                int idClient = ClientSession.getInstance().getCurrentClient().getId();
+                LocalDate today = LocalDate.now();
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM-dd-yyyy");
+                String formattedDate = today.format(formatter);
+                String query = "INSERT INTO Pagamenti (idClient, idAbbonamento, importo, data, stato) VALUES(?, ?, ?, ?, ?);";
+                try (PreparedStatement stmt = con.prepareStatement(query)) {
+                    stmt.setInt(1, idClient);
+                    stmt.setInt(2, idAbbonamento);
+                    stmt.setInt(3,  importo);
+                    stmt.setString(4, formattedDate);
+                    stmt.setString(5, stato);
+                    stmt.executeUpdate();
+
+                }
+            }
+            return null;
+        });
+    }
+
 }
     // CREAZIONE DELLA PLAYLIST AGGIUNTA DALL'UTENTE
 /*

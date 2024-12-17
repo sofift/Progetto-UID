@@ -11,7 +11,7 @@
 <?import javafx.scene.text.Text?>
 <?import org.kordamp.ikonli.javafx.FontIcon?>
 
-<BorderPane fx:id="mainPane" stylesheets="@../../styles/home.css" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unical.informatica.progettouid.controller.client.DashboardClientController">
+<BorderPane fx:id="mainPane" stylesheets="@../../styles/home.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unical.informatica.progettouid.controller.client.DashboardClientController">
 
    <top>
       <VBox styleClass="top">
@@ -136,23 +136,11 @@
    </left>
 
    <center>
-      <VBox id="centerVBox" spacing="20" styleClass="centerVBox">
+      <VBox id="centerVBox" fx:id="vboxCenter" spacing="20" styleClass="centerVBox">
          <padding>
             <Insets bottom="20" left="20" right="20" top="20" />
          </padding>
-
-         <VBox spacing="5">
-            <Label fx:id="bentornatoLabel" text="Bentornato user" />
-         </VBox>
-
-         <HBox spacing="20" VBox.vgrow="NEVER">
-            <Text fx:id="accessiRimanentiText" text="Accessi rimanenti: " />
-            <VBox spacing="5">
-               <Text fx:id="accessiTotaliText" text="Accessi totali:" />
-               <Text fx:id="abbonamentoClientText" text="Il tuo abbonamento" />
-               <Text fx:id="scadenzaAbbText" text="Scadenza abbonamento:" />
-            </VBox>
-         </HBox>
+         <Label fx:id="bentornatoLabel" />
 
          <HBox spacing="20" VBox.vgrow="ALWAYS">
             <VBox spacing="5" styleClass="whiteBox" HBox.hgrow="ALWAYS">
@@ -161,7 +149,7 @@
             </VBox>
             <VBox spacing="5" styleClass="whiteBox" HBox.hgrow="ALWAYS">
                <Label text="Altri contenuti:" />
-               <ListView VBox.vgrow="ALWAYS" />
+               <ListView fx:id="notificationListView" VBox.vgrow="ALWAYS" />
             </VBox>
          </HBox>
       </VBox>

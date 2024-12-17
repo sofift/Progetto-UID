@@ -1,6 +1,6 @@
 package it.unical.informatica.progettouid.model;
 
-public record Corsi(int id, String nome, String tipo, int maxPartecipanti, int durata, String PT, String oraInizio, String oraFine) {
+public record Corsi(int id, String nome, String descrizione, int durata, String PT) {
     @Override
     public int id() {
         return id;
@@ -12,13 +12,8 @@ public record Corsi(int id, String nome, String tipo, int maxPartecipanti, int d
     }
 
     @Override
-    public String tipo() {
-        return tipo;
-    }
-
-    @Override
-    public int maxPartecipanti() {
-        return maxPartecipanti;
+    public String descrizione() {
+        return descrizione;
     }
 
     @Override
@@ -31,13 +26,4 @@ public record Corsi(int id, String nome, String tipo, int maxPartecipanti, int d
         return PT;
     }
 
-    @Override
-    public String oraInizio() {
-        return oraInizio;
-    }
-
-    @Override
-    public String oraFine() {
-        return oraFine;
-    }
 }

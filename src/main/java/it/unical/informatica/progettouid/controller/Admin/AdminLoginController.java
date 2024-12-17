@@ -1,94 +1,80 @@
 package it.unical.informatica.progettouid.controller.Admin;
 
+import it.unical.informatica.progettouid.model.Admin;
+import it.unical.informatica.progettouid.model.AdminSession;
 import it.unical.informatica.progettouid.model.DBConnection;
+import it.unical.informatica.progettouid.view.SceneHandlerAdmin;
 import it.unical.informatica.progettouid.view.SceneHandlerPrimaPagina;
 import javafx.application.Platform;
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 public class AdminLoginController {
-    @FXML private TextField usernameField;
+    private final ExecutorService executorService = Executors.newSingleThreadExecutor();
+    @FXML private TextField emailField;
     @FXML private PasswordField passwordField;
-    @FXML private Button loginButton;
-    @FXML private Button backButton;
-    @FXML private VBox loginForm;
-    //@FXML private ProgressIndicator progressIndicator;
+    @FXML private Label checkAccess;
 
     @FXML
-    public void initialize() {
-        //progressIndicator.setVisible(false);
+    public void handleLogin() {
+        String email = emailField.getText().trim();
+        String password = passwordField.getText().trim();
 
-        // Abilita/disabilita il pulsante di login
-        loginButton.disableProperty().bind(
-                usernameField.textProperty().isEmpty()
-                        .or(passwordField.textProperty().isEmpty())
-        );
+        if (email.isEmpty() || password.isEmpty()) {
+            checkAccess.setVisible(true);
+            checkAccess.setText("Campi mancanti");
+            return;
+        }
 
-        // Aggiungi listener per il tasto Invio
-        passwordField.setOnKeyPressed(event -> {
-            if (event.getCode().toString().equals("ENTER") && !loginButton.isDisabled()) {
-                //handleLogin();
+        Task<Admin> task = DBConnection.getInstance().authenticateAdmin(email, password);
+
+        Thread thread = new Thread(task);
+        thread.setDaemon(true);
+        thread.start();
+
+        task.setOnSucceeded(event -> {
+            Admin admin = task.getValue();
+            if (admin != null){
+                try{
+                    AdminSession.getInstance().setCurrentAdmin(admin);
+                    SceneHandlerPrimaPagina.getInstance().switchToAdminView();
+                    SceneHandlerAdmin.getInstance().setDashboardView();
+                } catch (Exception e){
+                    e.printStackTrace();
+                    Platform.runLater(() -> {
+                        checkAccess.setVisible(true);
+                        checkAccess.setText("Errore nell'accesso alla home.");
+                    });
+                }
+            } else {
+                Platform.runLater(() -> {
+                    checkAccess.setVisible(true);
+                    checkAccess.setText("Credenziali non valide.");
+                });
             }
         });
+
+        task.setOnFailed(event -> {
+            Platform.runLater(() -> {
+                checkAccess.setVisible(true);
+                checkAccess.setText("Errore durante la verifica delle credenziali.");
+            });
+        });
+
+        executorService.submit(task);
+
     }
-
-//    private boolean validateCredentials(String username, String password) {
-//        try {
-//            // Qui inserire la logica di validazione con il database
-//            return DBConnection.getInstance().authenticateAdmin(username, password);
-//        } catch (Exception e) {
-//            System.err.println("Errore durante la validazione delle credenziali: " + e.getMessage());
-//            return false;
-//        }
-//    }
-
-    @FXML
-//    public void handleLogin() {
-//        String username = usernameField.getText().trim();
-//        String password = passwordField.getText().trim();
-//
-//        //progressIndicator.setVisible(true);
-//        loginForm.setDisable(true);
-//
-//        // Esegui la validazione in un thread separato
-//        new Thread(() -> {
-//            try {
-//                if (a(username, password)) {
-//                    Platform.runLater(() -> {
-//                        try {
-//                            SceneHandlerPrimaPagina.getInstance()
-//                                    .loadMainInterface(SceneHandlerPrimaPagina.UserType.ADMIN);
-//                        } catch (Exception e) {
-//                            showAlert(Alert.AlertType.ERROR,
-//                                    "Errore di Navigazione",
-//                                    "Impossibile caricare la dashboard",
-//                                    "Si è verificato un errore: " + e.getMessage());
-//                            e.printStackTrace();
-//                        }
-//                    });
-//                } else {
-//                    Platform.runLater(() -> {
-//                        showAlert(Alert.AlertType.ERROR,
-//                                "Errore di Login",
-//                                "Credenziali non valide",
-//                                "Username o password non corrette.");
-//                        passwordField.clear();
-//                    });
-//                }
-//            } finally {
-//                Platform.runLater(() -> {
-//                    //progressIndicator.setVisible(false);
-//                    loginForm.setDisable(false);
-//                });
-//            }
-//        }).start();
-//    }
 
     //@FXML
     public void handleBack() {
         try {
-            SceneHandlerPrimaPagina.getInstance().loadPrimaPagina();
+            SceneHandlerPrimaPagina.getInstance().init(SceneHandlerPrimaPagina.getInstance().getStage());
         } catch (Exception e) {
             showAlert(Alert.AlertType.ERROR,
                     "Errore di Navigazione",

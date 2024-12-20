@@ -178,7 +178,8 @@ public class AbbonamentoClientController {
         }
     }
 
-    //TODO: rivedere la finestra di dialogo perchè mi mostra entrmbi gli avvisi di pagamento
+    //
+    // TODO: rivedere la finestra di dialogo perchè mi mostra entrmbi gli avvisi di pagamento
     private void registraPagamento(int idAbbonamento, int importo, String stato) {
         Task<Void> task = DBConnection.getInstance().insertPagamento(idAbbonamento, importo, stato);
         Thread thread = new Thread(task);

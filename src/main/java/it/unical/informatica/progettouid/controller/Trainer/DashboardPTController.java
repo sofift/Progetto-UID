@@ -3,6 +3,7 @@ package it.unical.informatica.progettouid.controller.Trainer;
 import it.unical.informatica.progettouid.model.DBConnection;
 import it.unical.informatica.progettouid.model.Notifica;
 import it.unical.informatica.progettouid.model.PrenotazionePT;
+import it.unical.informatica.progettouid.view.SceneHandlerPT;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -33,6 +34,8 @@ public class DashboardPTController {
             List<PrenotazionePT> prenotazioni = task.getValue();
 
             displayPrenotazioni(prenotazioni);
+
+
 
         });
         task.setOnFailed(event -> {
@@ -140,29 +143,29 @@ public class DashboardPTController {
     }
 
 
-    /*@FXML
+    @FXML
     public void onNavigationButtonClick(ActionEvent event) {
         Button button = (Button) event.getSource();
         try {
             switch (button.getId()) {
-                case "dashboardClient":
+                case "dashboardTrainer":
                     SceneHandlerPT.getInstance().setDashboardView();
                     break;
-                case "attivitaClient":
-                    SceneHandlerPT.getInstance().setAttivitaView();
+                case "attivitaPT":
+                    SceneHandlerPT.getInstance().setAttivitaPTView();
                     break;
-                case "prenotazionePT":
-                    SceneHandlerPT.getInstance().setPrenotazioniView();
+                case "creazioneScheda":
+                    SceneHandlerPT.getInstance().setCreazioneSchedaView();
                     break;
-                case "schedaClient":
-                    SceneHandlerPT.getInstance().setSchedaView();
+                /*case "accountPT":
+                    SceneHandlerPT.getInstance().setCreazioneSchedaView();
                     break;
                 case "abbonamentoClient":
                     SceneHandlerPT.getInstance().setAbbonamentoView();
-                    break;
+                    break;*/
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }*/
+    }
 }

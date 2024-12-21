@@ -1,6 +1,7 @@
 package it.unical.informatica.progettouid.controller.Trainer;
 
 import it.unical.informatica.progettouid.model.*;
+import it.unical.informatica.progettouid.view.SceneHandlerPT;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
@@ -8,6 +9,7 @@ import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
@@ -18,36 +20,37 @@ public class CreaSchedaController {
     @FXML private ComboBox<Client> clienteComboBox;
     @FXML private VBox schedaInfoPanel;
     @FXML private ScrollPane aggiungiEsercizioPanel;
-    @FXML private ComboBox<String> esercizioComboBox;
+    @FXML private TextField esercizioTextField;
+    @FXML private TextField giornoField;
     @FXML private Spinner<Integer> serieSpinner;
     @FXML private Spinner<Integer> ripetizioniSpinner;
     @FXML private Spinner<Integer> recuperoSpinner;
     @FXML private TextArea noteEsercizioTextArea;
     @FXML private DatePicker dataInizioPicker;
     @FXML private DatePicker dataFinePicker;
-    @FXML private TextField durataSettField;
+    @FXML private TextField gruppoMuscTextfield;
+    @FXML private FlowPane flowpaneScheda;
+    private Client selectedClient = null;
+
 
 
     // TODO: implementare la logica di visualizzazione delle tabelle se il client ha una scheda o meno
 
     @FXML
     private void initialize() {
-        // Inizializzazione dei componenti
         mostraClienti();
         clienteComboBox.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
             if (newSelection != null) {
-                verificaSchedaClient(newSelection);  // newSelection è l'oggetto Client selezionato
+                selectedClient = newSelection;
+                verificaSchedaClient(newSelection);
             }
         });
-
-
 
     }
 
     private void loadSchedaCliente(Client client) {
         dataInizioPicker.setEditable(false);
         dataFinePicker.setEditable(false);
-        durataSettField.setEditable(false);
 
         HBox buttons = new HBox();
         Button modifica = new Button("Modifica scheda");
@@ -80,7 +83,6 @@ public class CreaSchedaController {
     private void modificaScheda(Client client) {
         dataInizioPicker.setEditable(false);
         dataFinePicker.setEditable(false);
-        durataSettField.setEditable(false);
 
         schedaInfoPanel.setVisible(false);
         aggiungiEsercizioPanel.setVisible(true);
@@ -123,18 +125,7 @@ public class CreaSchedaController {
                 loadSchedaCliente(client);
             }
             else{
-                VBox info = new VBox(10);
-                info.setAlignment(Pos.CENTER);
-                Label nota = new Label(STR."\{client.getNome()} non ha ancora una scheda, creala subito");
-                Button creaScheda = new Button("Crea scheda");
-
-                creaScheda.setOnAction(event-> {
-                    schedaInfoPanel.setVisible(false);
-                    aggiungiEsercizioPanel.setVisible(true);
-                });
-
-                info.getChildren().addAll(nota, creaScheda);
-                vboxCenter.getChildren().addAll(info);
+                creaSchedaClient(client);
             }
         });
 
@@ -144,9 +135,61 @@ public class CreaSchedaController {
 
     }
 
+    private void creaSchedaClient(Client client) {
+        VBox info = new VBox(10);
+        info.setAlignment(Pos.CENTER);
+        Label nota = new Label(STR."\{client.getNome()} non ha ancora una scheda, creala subito");
+        Button creaScheda = new Button("Crea scheda");
+        info.getChildren().addAll(nota, creaScheda);
+        vboxCenter.getChildren().addAll(info);
+
+        creaScheda.setOnAction(event-> {
+            creaScheda.setDisable(true);
+            schedaInfoPanel.setVisible(false);
+            aggiungiEsercizioPanel.setVisible(true);
+            Label ob = new Label("Obiettivi");
+            TextField obiettivi = new TextField();
+            Label ng = new Label("Note generali:");
+            TextField noteGenerali = new TextField();
+            Label SuggAl = new Label("Suggerimenti alimentari");
+            TextField suggerimentiAlimentari = new TextField();
+            Button crea = new Button("Crea");
+            crea.setOnAction(ev -> {
+                if(dataFinePicker.getValue() == null || dataInizioPicker.getValue() == null){
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Attenzione");
+                    alert.setHeaderText(null);
+                    alert.setContentText("Inserisci le date di validità della scheda");
+                    alert.showAndWait();
+                    return;
+                }
+
+                Task<Void> taskCreazione = DBConnection.getInstance().insertSchedaClient(selectedClient.getId(), dataInizioPicker.getValue(), dataFinePicker.getValue(), obiettivi.getText(), noteGenerali.getText(), suggerimentiAlimentari.getText());
+
+                Thread thread = new Thread(taskCreazione);
+                thread.setDaemon(true);
+                thread.start();
+
+                taskCreazione.setOnSucceeded(suc->{
+                    System.out.println(taskCreazione.getValue());
+                    System.out.println("Scheda creata con successo");
+                    vboxCenter.getChildren().remove(info);
+                    loadSchedaCliente(selectedClient);
+                });
+
+                taskCreazione.setOnFailed(fal->{
+                    System.err.println("Errore durante la creazione della scheda");
+                    System.out.println(taskCreazione.getException());
+                });
+
+            });
+            info.getChildren().addAll(ob, obiettivi, ng, noteGenerali, SuggAl, suggerimentiAlimentari, crea);
+
+        });
+    }
+
 
     private void loadEserciziScheda(int clientId, String selectedDay, TableView<Esercizio> esercizioTableView) {
-
         Task<ObservableList<Esercizio> > task = DBConnection.getInstance().getEserciziGiorno(clientId, selectedDay);
 
         task.setOnSucceeded(event -> {
@@ -157,7 +200,7 @@ public class CreaSchedaController {
         });
 
         task.setOnFailed(event -> {
-            System.out.println("Errore durante il caricamento delle informazioni: " + task.getException().getMessage());
+            System.out.println(STR."Errore durante il caricamento delle informazioni: \{task.getException().getMessage()}");
         });
 
         new Thread(task).start();
@@ -185,31 +228,22 @@ public class CreaSchedaController {
         new Thread(task).start();
     }
 
-    public void formAggiungiEsercizio(ActionEvent actionEvent) {
-        schedaInfoPanel.setVisible(false);
-        aggiungiEsercizioPanel.setVisible(true);
-    }
-
 
     // TODO: logica per inserire i nuovi esercizi al database, devo collegare gli esercizi delle scheda con i dettagli della tab Esercizi
     @FXML
     private void aggiungiEsercizio() {
-        String nomeEsercizio = esercizioComboBox.getValue();
-        if (nomeEsercizio == null || nomeEsercizio.trim().isEmpty()) {
+        EsercizioScheda nuovoEsercizio = new EsercizioScheda(serieSpinner.getValue(), ripetizioniSpinner.getValue(), recuperoSpinner.getValue(), noteEsercizioTextArea.getText(), esercizioTextField.getText(), gruppoMuscTextfield.getText(), giornoField.getText());
+
+        if (nuovoEsercizio.nomeEserc() == null || nuovoEsercizio.nomeEserc().isEmpty()) {
             mostraErrore("Devi selezionare o inserire un esercizio!");
             return;
         }
 
-        /*Esercizio nuovoEsercizio = new Esercizio(
-
-                serieSpinner.getValue(),
-                ripetizioniSpinner.getValue(),
-                STR."\{recuperoSpinner.getValue()} sec",
-                noteEsercizioTextArea.getText(),
-                nomeEsercizio,
+        Task<Void> task = DBConnection.getInstance().insertEsercizioScheda(nuovoEsercizio, selectedClient.getId());
 
 
-        );
+
+        /*
 
         eserciziTable.getItems().add(nuovoEsercizio);
         pulisciFormEsercizio();
@@ -248,7 +282,7 @@ public class CreaSchedaController {
     }
 
     private void pulisciFormEsercizio() {
-        esercizioComboBox.setValue(null);
+        esercizioTextField.setText(null);
         serieSpinner.getValueFactory().setValue(3);
         ripetizioniSpinner.getValueFactory().setValue(12);
         recuperoSpinner.getValueFactory().setValue(90);
@@ -268,6 +302,31 @@ public class CreaSchedaController {
         alert.showAndWait();
     }
 
+    @FXML
+    public void onNavigationButtonClick(ActionEvent event) {
+        Button button = (Button) event.getSource();
+        try {
+            switch (button.getId()) {
+                case "dashboardTrainer":
+                    SceneHandlerPT.getInstance().setDashboardView();
+                    break;
+                case "attivitaPT":
+                    SceneHandlerPT.getInstance().setAttivitaPTView();
+                    break;
+                case "creazioneScheda":
+                    SceneHandlerPT.getInstance().setCreazioneSchedaView();
+                    break;
+                /*case "accountPT":
+                    SceneHandlerPT.getInstance().setCreazioneSchedaView();
+                    break;
+                case "abbonamentoClient":
+                    SceneHandlerPT.getInstance().setAbbonamentoView();
+                    break;*/
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }
 
 

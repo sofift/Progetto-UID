@@ -188,16 +188,6 @@
                     </graphic>
                 </Button>
             </VBox>
-
-            <VBox spacing="10" styleClass="stats-section">
-                <Label styleClass="section-header" text="Statistiche">
-                    <graphic>
-                        <FontIcon iconLiteral="fas-chart-line" />
-                    </graphic>
-                </Label>
-                <VBox fx:id="statsContainer" spacing="5">
-                </VBox>
-            </VBox>
         </VBox>
     </right>
 </BorderPane>

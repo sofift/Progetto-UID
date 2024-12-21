@@ -23,108 +23,82 @@
             fx:controller="it.unical.informatica.progettouid.controller.Trainer.AttivitaPTController"
             stylesheets="@../../styles/calendar.css">
     <left>
-        <VBox spacing="10" alignment="TOP_CENTER" styleClass="sidebar-left" maxWidth="100" minWidth="95">
+        <VBox maxWidth="95" minWidth="95" spacing="10" styleClass="sidebar">
             <padding>
-                <Insets top="20" bottom="20" left="10" right="10"/>
+                <Insets bottom="20" top="20" />
             </padding>
-            <children>
-                <Button maxWidth="Infinity" styleClass="nav-button">
-                    <graphic>
-                        <VBox alignment="CENTER" spacing="5">
-                            <FontIcon iconLiteral="fas-home"/>
-                            <Text text="Home">
-                                <font>
-                                    <Font size="9.0"/>
-                                </font>
-                            </Text>
-                        </VBox>
-                    </graphic>
-                </Button>
-                <Button maxWidth="Infinity" styleClass="nav-button">
-                    <graphic>
-                        <VBox alignment="CENTER" spacing="5">
-                            <FontIcon iconLiteral="fas-calendar-alt"/>
-                            <Text text="Attività">
-                                <font>
-                                    <Font size="9.0"/>
-                                </font>
-                            </Text>
-                        </VBox>
-                    </graphic>
-                </Button>
-                <Button maxWidth="Infinity" styleClass="nav-button">
-                    <graphic>
-                        <VBox alignment="CENTER" spacing="5">
-                            <FontIcon iconLiteral="fas-dumbbell"/>
-                            <Text text="Personal trainer">
-                                <font>
-                                    <Font size="9.0"/>
-                                </font>
-                            </Text>
-                        </VBox>
-                    </graphic>
-                </Button>
-                <Button maxWidth="Infinity" styleClass="nav-button">
-                    <graphic>
-                        <VBox alignment="CENTER" spacing="5">
-                            <FontIcon iconLiteral="far-clipboard"/>
-                            <Text text="Scheda">
-                                <font>
-                                    <Font size="9.0"/>
-                                </font>
-                            </Text>
-                        </VBox>
-                    </graphic>
-                </Button>
-                <Button maxWidth="Infinity" styleClass="nav-button">
-                    <graphic>
-                        <VBox alignment="CENTER" spacing="5">
-                            <FontIcon iconLiteral="far-credit-card"/>
-                            <Text text="Il tuo abbonamento">
-                                <font>
-                                    <Font size="9.0"/>
-                                </font>
-                            </Text>
-                        </VBox>
-                    </graphic>
-                </Button>
-                <Button maxWidth="Infinity" styleClass="nav-button">
-                    <graphic>
-                        <VBox alignment="CENTER" spacing="5">
-                            <FontIcon iconLiteral="far-user"/>
-                            <Text text="Account">
-                                <font>
-                                    <Font size="9.0"/>
-                                </font>
-                            </Text>
-                        </VBox>
-                    </graphic>
-                </Button>
-                <Button maxWidth="Infinity" styleClass="nav-button">
-                    <graphic>
-                        <VBox alignment="CENTER" spacing="5">
-                            <FontIcon iconLiteral="fas-cogs"/>
-                            <Text text="Impostazioni">
-                                <font>
-                                    <Font size="9.0"/>
-                                </font>
-                            </Text>
-                        </VBox>
-                    </graphic>
-                </Button>
-                <Button maxWidth="Infinity" styleClass="nav-button">
-                    <graphic>
-                        <VBox alignment="CENTER" spacing="5">
-                            <FontIcon iconLiteral="far-question-circle"/>
-                            <Text text="Help">
-                                <font>
-                                    <Font size="9.0"/>
-                                </font>
-                            </Text>
-                        </VBox>
-                    </graphic>
-                </Button>
-            </children>
+            <Button fx:id="dashboardTrainer" maxWidth="Infinity" onAction="#onNavigationButtonClick" styleClass="sidebar-button">
+                <graphic>
+                    <VBox alignment="CENTER" spacing="5">
+                        <FontIcon iconLiteral="fab-cuttlefish" />
+                        <Text text="Dashboard">
+                            <font>
+                                <Font size="9.0" />
+                            </font>
+                        </Text>
+                    </VBox>
+                </graphic>
+            </Button>
+            <Button fx:id="attivitaPT" maxWidth="Infinity" onAction="#onNavigationButtonClick" styleClass="sidebar-button">
+                <graphic>
+                    <VBox alignment="CENTER" spacing="5">
+                        <FontIcon iconLiteral="fas-calendar-alt" />
+                        <Text text="Attività">
+                            <font>
+                                <Font size="9.0" />
+                            </font>
+                        </Text>
+                    </VBox>
+                </graphic>
+            </Button>
+            <Button fx:id="creazioneScheda" maxWidth="Infinity" onAction="#onNavigationButtonClick" styleClass="sidebar-button">
+                <graphic>
+                    <VBox alignment="CENTER" spacing="5">
+                        <FontIcon iconLiteral="far-clipboard" />
+                        <Text text="Crea scheda">
+                            <font>
+                                <Font size="9.0" />
+                            </font>
+                        </Text>
+                    </VBox>
+                </graphic>
+            </Button>
+            <Button fx:id="accountPT" maxWidth="Infinity" onAction="#onNavigationButtonClick" styleClass="sidebar-button">
+                <graphic>
+                    <VBox alignment="CENTER" spacing="5">
+                        <FontIcon iconLiteral="far-user" />
+                        <Text text="Account">
+                            <font>
+                                <Font size="9.0" />
+                            </font>
+                        </Text>
+                    </VBox>
+                </graphic>
+            </Button>
+            <Button maxWidth="Infinity" onAction="#onNavigationButtonClick" styleClass="sidebar-button">
+                <graphic>
+                    <VBox alignment="CENTER" spacing="5">
+                        <FontIcon iconLiteral="fas-cogs" />
+                        <Text text="Impostazioni">
+                            <font>
+                                <Font size="9.0" />
+                            </font>
+                        </Text>
+                    </VBox>
+                </graphic>
+            </Button>
+            <Button maxWidth="Infinity" onAction="#onNavigationButtonClick" styleClass="sidebar-button">
+                <graphic>
+                    <VBox alignment="CENTER" spacing="5">
+                        <FontIcon iconLiteral="far-question-circle" />
+                        <Text text="Help">
+                            <font>
+                                <Font size="9.0" />
+                            </font>
+                        </Text>
+                    </VBox>
+                </graphic>
+            </Button>
         </VBox>
     </left>
 

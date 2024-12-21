@@ -72,14 +72,22 @@ public class SchedaClientController {
             Label note = new Label("Inserisci cosa deve sapere il tuo personal trainer");
             TextField notes = new TextField();
             Button invia = new Button("Invia");
-            invia.setOnAction((ActionEvent e) ->{
+            invia.setOnAction(e ->{
+                invia.setDisable(true);
                 Task<Void> task = DBConnection.getInstance().insertNotifyTrainer(diplayPt.getValue().getId(), STR."Il/La signore/a \{ClientSession.getInstance().getCurrentClient().getNome()} ha richiesto una scheda di allenamento");
+                Thread thread = new Thread(task);
+                thread.start();
 
                 task.setOnSucceeded(event1->{
                     Alert confirmDialog = new Alert(Alert.AlertType.INFORMATION);
                     confirmDialog.setTitle("Richiesta inviata!");
                     confirmDialog.setContentText("SchedaRichiesta");
                     confirmDialog.setHeaderText(null);
+                    confirmDialog.showAndWait();
+                });
+
+                task.setOnFailed(event1 ->{
+                    task.getException().printStackTrace();
                 });
             } );
             inserisciInfo.getChildren().addAll(pt, diplayPt, ob, obiettivo, note, notes, invia);

@@ -43,11 +43,11 @@
             <padding>
                 <Insets bottom="20" top="20" />
             </padding>
-            <Button maxWidth="Infinity" styleClass="sidebar-button">
+            <Button fx:id="dashboardTrainer" maxWidth="Infinity" onAction="#onNavigationButtonClick" styleClass="sidebar-button">
                 <graphic>
                     <VBox alignment="CENTER" spacing="5">
-                        <FontIcon iconLiteral="fas-home" />
-                        <Text text="Home">
+                        <FontIcon iconLiteral="fab-cuttlefish" />
+                        <Text text="Dashboard">
                             <font>
                                 <Font size="9.0" />
                             </font>
@@ -55,7 +55,7 @@
                     </VBox>
                 </graphic>
             </Button>
-            <Button maxWidth="Infinity" styleClass="sidebar-button">
+            <Button fx:id="attivitaPT" maxWidth="Infinity" onAction="#onNavigationButtonClick" styleClass="sidebar-button">
                 <graphic>
                     <VBox alignment="CENTER" spacing="5">
                         <FontIcon iconLiteral="fas-calendar-alt" />
@@ -67,23 +67,11 @@
                     </VBox>
                 </graphic>
             </Button>
-            <Button maxWidth="Infinity" styleClass="sidebar-button">
-                <graphic>
-                    <VBox alignment="CENTER" spacing="5">
-                        <FontIcon iconLiteral="fas-dumbbell" />
-                        <Text text="Personal trainer">
-                            <font>
-                                <Font size="9.0" />
-                            </font>
-                        </Text>
-                    </VBox>
-                </graphic>
-            </Button>
-            <Button maxWidth="Infinity" styleClass="sidebar-button">
+            <Button fx:id="creazioneScheda" maxWidth="Infinity" onAction="#onNavigationButtonClick" styleClass="sidebar-button">
                 <graphic>
                     <VBox alignment="CENTER" spacing="5">
                         <FontIcon iconLiteral="far-clipboard" />
-                        <Text text="Scheda">
+                        <Text text="Crea scheda">
                             <font>
                                 <Font size="9.0" />
                             </font>
@@ -91,19 +79,7 @@
                     </VBox>
                 </graphic>
             </Button>
-            <Button maxWidth="Infinity" styleClass="sidebar-button">
-                <graphic>
-                    <VBox alignment="CENTER" spacing="5">
-                        <FontIcon iconLiteral="far-credit-card" />
-                        <Text text="Il tuo abbonamento">
-                            <font>
-                                <Font size="9.0" />
-                            </font>
-                        </Text>
-                    </VBox>
-                </graphic>
-            </Button>
-            <Button maxWidth="Infinity" styleClass="sidebar-button">
+            <Button fx:id="accountPT" maxWidth="Infinity" onAction="#onNavigationButtonClick" styleClass="sidebar-button">
                 <graphic>
                     <VBox alignment="CENTER" spacing="5">
                         <FontIcon iconLiteral="far-user" />
@@ -115,7 +91,7 @@
                     </VBox>
                 </graphic>
             </Button>
-            <Button maxWidth="Infinity" styleClass="sidebar-button">
+            <Button maxWidth="Infinity" onAction="#onNavigationButtonClick" styleClass="sidebar-button">
                 <graphic>
                     <VBox alignment="CENTER" spacing="5">
                         <FontIcon iconLiteral="fas-cogs" />
@@ -127,7 +103,7 @@
                     </VBox>
                 </graphic>
             </Button>
-            <Button maxWidth="Infinity" styleClass="sidebar-button">
+            <Button maxWidth="Infinity" onAction="#onNavigationButtonClick" styleClass="sidebar-button">
                 <graphic>
                     <VBox alignment="CENTER" spacing="5">
                         <FontIcon iconLiteral="far-question-circle" />
@@ -147,7 +123,7 @@
             <padding>
                 <Insets bottom="20" left="20" right="20" top="20" />
             </padding>
-         <FlowPane hgap="10.0" vgap="20.0">
+         <FlowPane fx:id="flowpaneScheda" hgap="10.0" vgap="20.0">
             <children>
                    <Label styleClass="form-label" text="Cliente:" />
                    <ComboBox fx:id="clienteComboBox" prefWidth="200" />
@@ -155,8 +131,6 @@
                    <DatePicker fx:id="dataInizioPicker" />
                <Label styleClass="form-label" text="Scadenza:" />
                <DatePicker fx:id="dataFinePicker" />
-                   <Label styleClass="form-label" text="Durata (settimane):" />
-               <TextField fx:id="durataField" prefWidth="100.0" />
             </children>
          </FlowPane>
         </VBox>
@@ -231,7 +205,7 @@
       
                       <VBox spacing="10">
                           <Label styleClass="form-label" text="Nome Esercizio:" />
-                          <ComboBox fx:id="esercizioComboBox" editable="true" maxWidth="210.0" />
+                     <TextField fx:id="esercizioTextField" />
                       </VBox>
       
                       <VBox spacing="10">
@@ -253,6 +227,12 @@
 
                     </Spinner>
                       </VBox>
+                  <VBox spacing="10">
+                     <children>
+                        <Label styleClass="form-label" text="Gruppo muscolare:" />
+                        <TextField fx:id="gruppoMuscTextfield" />
+                     </children>
+                  </VBox>
       
                       <VBox spacing="5">
                           <Label styleClass="form-label" text="Note:" />

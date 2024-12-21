@@ -141,6 +141,7 @@
             <Insets bottom="20" left="20" right="20" top="20" />
          </padding>
          <Label fx:id="bentornatoLabel" />
+         <VBox fx:id="vboxAccessi" />
 
          <HBox spacing="20" VBox.vgrow="ALWAYS">
             <VBox spacing="5" styleClass="whiteBox" HBox.hgrow="ALWAYS">

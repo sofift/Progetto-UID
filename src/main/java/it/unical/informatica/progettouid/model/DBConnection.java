@@ -554,9 +554,9 @@ public class DBConnection {
             List<PrenotazionePT> prenotazioni = new ArrayList<>();
             if (isConnected()) {
                 int idPT = PTSession.getInstance().getCurrentTrainer().getId();
-                String query = "SELECT c.nome, c.cognome, p.data, p.oraPrenotazione, p.notes" +
+                String query = "SELECT c.nome, c.cognome, p.data, p.oraPrenotazione, p.notes " +
                         "FROM PrenotazioniPT p " +
-                        "JOIN Clienti c ON c.id = p.idClient" +
+                        "JOIN Clienti c ON c.id = p.idClient " +
                         "WHERE p.idPT = ?";
                 PreparedStatement stmt = con.prepareStatement(query);
                 stmt.setInt(1, idPT);
@@ -580,7 +580,7 @@ public class DBConnection {
     public Task<Void> insertNotifyTrainer(int trainerID, String message) {
         return asyncCall(() -> {
             if (isConnected()) {
-                String query = "INSERT INTO NotifichePT (trainerId, message, status) VALUES(?, ?, ?);";
+                String query = "INSERT INTO NotifichePT (idPT, message, stato) VALUES(?, ?, ?);";
                 try (PreparedStatement stmt = con.prepareStatement(query)) {
                     stmt.setInt(1, trainerID);
                     stmt.setString(2, message);
@@ -739,6 +739,91 @@ public class DBConnection {
             return null;
         });
     }
+
+    public Task<Void> insertEsercizioScheda(EsercizioScheda nuovoEsercizio, int idClient) {
+        return asyncCall(()->{
+            if(isConnected()){
+                int schedaId = -1;
+                String id = "SELECT ID FROM Schede WHERE ClienteID = ? AND Stato = 'attiva'";
+                PreparedStatement stmtID = con.prepareStatement(id);
+                stmtID.setInt(1, idClient);
+                try (ResultSet rs = stmtID.executeQuery()) {
+                    if (rs.next()) {
+                        schedaId = rs.getInt("ID");
+                    }
+                }
+
+
+
+                String query = "INSERT INTO EserciziScheda(SchedaID, GiornoSettimana, NumeroSerie, NumeroRipetizioni, TempoRecupera, Note, NomeEsercizio, GruppoMuscolare) VALUES (?, ?, ?, ?, ?, ?, ? ,? )";
+                try (PreparedStatement stmt = con.prepareStatement(query)) {
+                    stmt.setInt(1, schedaId);
+                    stmt.setString(2, nuovoEsercizio.giorno());
+                    stmt.setInt(3, nuovoEsercizio.nSerie());
+                    stmt.setInt(4, nuovoEsercizio.nRipetizioni());
+                    stmt.setInt(5, nuovoEsercizio.tmpRecupero());
+                    stmt.setString(6, nuovoEsercizio.notes());
+                    stmt.setString(7, nuovoEsercizio.nomeEserc());
+                    stmt.setString(8, nuovoEsercizio.gMuscolare());
+                    stmt.executeUpdate();
+                }
+
+            }
+            return null;
+        });
+
+    }
+
+    public Task<Void> insertSchedaClient(int selectedClientId, LocalDate dataInizio, LocalDate dataFine, String obiettivi, String note, String suggAlimentari) {
+        return asyncCall(()->{
+            int idPT = PTSession.getInstance().getCurrentTrainer().getId();
+            if(isConnected()){
+                DateTimeFormatter formatterIso = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                String formattedInizio = dataInizio.format(formatterIso);
+                String formattedFine = dataFine.format(formatterIso);
+
+                String query = "INSERT INTO Schede(ClienteID, PersonalTrainerID, DataInizio, DataFine, Obiettivi, NoteGenerali, SuggerimentiAlimentari) VALUES(?, ?, ?, ?, ?, ?, ?,?)";
+                try(PreparedStatement stmt  = con.prepareStatement(query)) {
+                    stmt.setInt(1, selectedClientId);
+                    stmt.setInt(2, idPT);
+                    stmt.setString(3,formattedInizio );
+                    stmt.setString(4, formattedFine);
+                    stmt.setString(5, obiettivi);
+                    stmt.setString(6, note);
+                    stmt.setString(7, suggAlimentari);
+                }
+            }
+            return null;
+        });
+    }
+
+    public Task<PersonalTrainer> getPersonalFromSchedaClient(){
+        return asyncCall(()->{
+            int idClient = ClientSession.getInstance().getCurrentClient().getId();
+            int idPT = -1;
+            if(isConnected()) {
+                String query = "SELECT PersonalTrainerID FROM Schede WHERE ClienteID = ? ";
+                PreparedStatement stmt = con.prepareStatement(query);
+                stmt.setInt(1, idClient);
+                try (ResultSet rs = stmt.executeQuery()) {
+                    if (rs.next()) {
+                        idPT = rs.getInt("PersonalTrainerID");
+                    }
+                }
+
+                String queryPT = "SELECT * FROM PersonalTrainer WHERE ID = ?";
+                PreparedStatement stmtPT = con.prepareStatement(queryPT);
+                stmtPT.setInt(1, idPT);
+                try (ResultSet rs = stmtPT.executeQuery()) {
+                    if (rs.next()) {
+                        return new PersonalTrainer(idPT, rs.getString("Nome"), rs.getString("Cognome"), rs.getString("DataNascita"), rs.getString("Specializzazione"), rs.getString("Email"), rs.getString("Telefono"));
+                    }
+                }
+            }
+            return null;
+        });
+    }
+
 
     /*public LocalDate getInizioSettimana() {
         LocalDate today = LocalDate.now();

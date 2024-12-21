@@ -25,7 +25,7 @@ public class CheckInController {
             statusLabel.setText("Inserire un codice valido.");
             return;
         }
-        Task<Boolean> task = DBConnection.getInstance().checkIn(code);
+        /*Task<Boolean> task = DBConnection.getInstance().checkIn(code);
 
         task.setOnSucceeded(event -> {
             statusLabel.setText("Check-in registrato con successo.");
@@ -43,7 +43,7 @@ public class CheckInController {
 
         Thread thread = new Thread(task);
         thread.setDaemon(true);
-        thread.start();
+        thread.start();*/
     }
     @FXML
     private void onClear(){

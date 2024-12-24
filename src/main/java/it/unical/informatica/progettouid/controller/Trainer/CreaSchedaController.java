@@ -1,17 +1,18 @@
 package it.unical.informatica.progettouid.controller.Trainer;
 
 import it.unical.informatica.progettouid.model.*;
+import it.unical.informatica.progettouid.view.AlertManager;
 import it.unical.informatica.progettouid.view.SceneHandlerPT;
+import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
+import javafx.scene.text.Text;
 
 import java.util.List;
 
@@ -22,17 +23,16 @@ public class CreaSchedaController {
     @FXML private ScrollPane aggiungiEsercizioPanel;
     @FXML private TextField esercizioTextField;
     @FXML private TextField giornoField;
-    @FXML private Spinner<Integer> serieSpinner;
-    @FXML private Spinner<Integer> ripetizioniSpinner;
-    @FXML private Spinner<Integer> recuperoSpinner;
+    @FXML private TextField serieField;
+    @FXML private TextField ripetizioniField;
+    @FXML private TextField recuperoField;
     @FXML private TextArea noteEsercizioTextArea;
     @FXML private DatePicker dataInizioPicker;
     @FXML private DatePicker dataFinePicker;
     @FXML private TextField gruppoMuscTextfield;
     @FXML private FlowPane flowpaneScheda;
+    @FXML private VBox info;
     private Client selectedClient = null;
-
-
 
     // TODO: implementare la logica di visualizzazione delle tabelle se il client ha una scheda o meno
 
@@ -42,31 +42,39 @@ public class CreaSchedaController {
         clienteComboBox.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
             if (newSelection != null) {
                 selectedClient = newSelection;
-                verificaSchedaClient(newSelection);
+                verificaSchedaClient();
             }
         });
 
-    }
-
-    private void loadSchedaCliente(Client client) {
         dataInizioPicker.setEditable(false);
         dataFinePicker.setEditable(false);
 
+    }
+
+    private void loadSchedaCliente() {
+        info.getChildren().clear();
         HBox buttons = new HBox();
         Button modifica = new Button("Modifica scheda");
         buttons.getChildren().add(modifica);
-        modifica.setOnAction(event -> {modificaScheda(client);});
+        buttons.setAlignment(Pos.CENTER);
+        modifica.setOnAction(event -> showFormModificaScheda());
 
         TabPane weekdayTabs = new TabPane();
-        String[] giorniSet = {"Lunedì, Martedì, Mercoledì, Giovedì, Venerdì, Sabato"};
+        weekdayTabs.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
+        VBox.setVgrow(weekdayTabs, Priority.ALWAYS);
+
+        String[] giorniSet = {"Lunedì", "Martedì", "Mercoledì", "Giovedì", "Venerdì", "Sabato"};
 
         for (String day : giorniSet) {
             Tab tab = new Tab(day);
-            VBox vbox = new VBox();
+            VBox vbox = new VBox(10); // spacing di 10
+            vbox.setPadding(new Insets(10));
+            VBox.setVgrow(vbox, Priority.ALWAYS);
+
             TableView<Esercizio> tableView = createEsercizioTableView();
+            VBox.setVgrow(tableView, Priority.ALWAYS);
 
             vbox.getChildren().add(tableView);
-
             tab.setContent(vbox);
             weekdayTabs.getTabs().add(tab);
         }
@@ -74,46 +82,88 @@ public class CreaSchedaController {
         weekdayTabs.getSelectionModel().selectedItemProperty().addListener((observable, oldTab, newTab) -> {
             if (newTab != null && clienteComboBox.getSelectionModel().getSelectedItem() != null) {
                 String selectedDay = newTab.getText();
-                loadEserciziScheda(client.getId(), selectedDay, (TableView<Esercizio>) ((VBox) newTab.getContent()).getChildren().get(0));
+                loadEserciziScheda(selectedDay, (TableView<Esercizio>) ((VBox) newTab.getContent()).getChildren().get(0));
             }
         });
-
+        Button aggEsercizio = new Button("Aggiungi esercizio");
+        info.getChildren().addAll(aggEsercizio, weekdayTabs);
     }
 
-    private void modificaScheda(Client client) {
-        dataInizioPicker.setEditable(false);
-        dataFinePicker.setEditable(false);
-
+    private void showFormModificaScheda() {
+        dataInizioPicker.setEditable(true);
+        dataFinePicker.setEditable(true);
         schedaInfoPanel.setVisible(false);
         aggiungiEsercizioPanel.setVisible(true);
     }
 
     private TableView<Esercizio> createEsercizioTableView() {
         TableView<Esercizio> tableView = new TableView<>();
+
+        // Imposta la TableView per occupare tutto lo spazio disponibile
+        tableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        VBox.setVgrow(tableView, Priority.ALWAYS);
+
+        // Definizione colonne con larghezze relative
+        TableColumn<Esercizio, String> nomeEsercizioColumn = new TableColumn<>("Esercizio");
         TableColumn<Esercizio, Number> serieColumn = new TableColumn<>("Serie");
         TableColumn<Esercizio, Number> ripetizioniColumn = new TableColumn<>("Ripetizioni");
-        TableColumn<Esercizio, Number> tempoRecuperoColumn = new TableColumn<>("Tempo Recupero");
-        TableColumn<Esercizio, String> noteColumn = new TableColumn<>("Note");
-        TableColumn<Esercizio, String> nomeEsercizioColumn = new TableColumn<>("Esercizio");
-        TableColumn<Esercizio, String> descrizioneColumn = new TableColumn<>("Descrizione");
+        TableColumn<Esercizio, Number> tempoRecuperoColumn = new TableColumn<>("Recupero");
         TableColumn<Esercizio, String> gMuscolareColumn = new TableColumn<>("Gruppo Muscolare");
         TableColumn<Esercizio, String> difficoltaColumn = new TableColumn<>("Difficoltà");
-        tableView.getColumns().addAll(serieColumn, ripetizioniColumn, tempoRecuperoColumn, noteColumn, nomeEsercizioColumn, descrizioneColumn, gMuscolareColumn, difficoltaColumn);
+        TableColumn<Esercizio, String> noteColumn = new TableColumn<>("Note");
+        TableColumn<Esercizio, String> descrizioneColumn = new TableColumn<>("Descrizione");
 
+        // Imposta le percentuali di larghezza delle colonne
+        nomeEsercizioColumn.prefWidthProperty().bind(tableView.widthProperty().multiply(0.15));
+        serieColumn.prefWidthProperty().bind(tableView.widthProperty().multiply(0.08));
+        ripetizioniColumn.prefWidthProperty().bind(tableView.widthProperty().multiply(0.10));
+        tempoRecuperoColumn.prefWidthProperty().bind(tableView.widthProperty().multiply(0.10));
+        gMuscolareColumn.prefWidthProperty().bind(tableView.widthProperty().multiply(0.15));
+        difficoltaColumn.prefWidthProperty().bind(tableView.widthProperty().multiply(0.10));
+        noteColumn.prefWidthProperty().bind(tableView.widthProperty().multiply(0.15));
+        descrizioneColumn.prefWidthProperty().bind(tableView.widthProperty().multiply(0.17));
+
+        // Imposta i cell value factories
+        nomeEsercizioColumn.setCellValueFactory(cellData -> cellData.getValue().nomeEsercProperty());
         serieColumn.setCellValueFactory(cellData -> cellData.getValue().nSerieProperty());
         ripetizioniColumn.setCellValueFactory(cellData -> cellData.getValue().nRipetizioniProperty());
         tempoRecuperoColumn.setCellValueFactory(cellData -> cellData.getValue().tmpRecuperoProperty());
-        noteColumn.setCellValueFactory(cellData -> cellData.getValue().notesProperty());
-        nomeEsercizioColumn.setCellValueFactory(cellData -> cellData.getValue().nomeEsercProperty());
-        descrizioneColumn.setCellValueFactory(cellData -> cellData.getValue().descrizioneProperty());
         gMuscolareColumn.setCellValueFactory(cellData -> cellData.getValue().gMuscolareProperty());
         difficoltaColumn.setCellValueFactory(cellData -> cellData.getValue().diffProperty());
+        noteColumn.setCellValueFactory(cellData -> cellData.getValue().notesProperty());
+        descrizioneColumn.setCellValueFactory(cellData -> cellData.getValue().descrizioneProperty());
+
+        // Abilita il wrap del testo per le colonne con testo lungo
+        noteColumn.setCellFactory(tc -> {
+            TableCell<Esercizio, String> cell = new TableCell<>() {
+                private Text text = new Text();
+                @Override
+                protected void updateItem(String item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (empty || item == null) {
+                        setGraphic(null);
+                    } else {
+                        text.setText(item);
+                        text.setWrappingWidth(tc.getWidth() - 10);
+                        setGraphic(text);
+                    }
+                }
+            };
+            return cell;
+        });
+
+        // Aggiungi le colonne alla TableView
+        tableView.getColumns().addAll(
+                nomeEsercizioColumn, serieColumn, ripetizioniColumn,
+                tempoRecuperoColumn, gMuscolareColumn, difficoltaColumn,
+                noteColumn, descrizioneColumn
+        );
 
         return tableView;
     }
 
-    private void verificaSchedaClient(Client client) {
-        Task<Boolean> task = DBConnection.getInstance().clientHaUnaScheda(client.getId());
+    private void verificaSchedaClient() {
+        Task<Boolean> task = DBConnection.getInstance().clientHaUnaScheda(selectedClient.getId());
         Thread thread = new Thread(task);
         thread.setDaemon(true);
         thread.start();
@@ -122,10 +172,10 @@ public class CreaSchedaController {
             Boolean result = task.getValue();
             System.out.println(result);
             if(result){
-                loadSchedaCliente(client);
+                loadSchedaCliente();
             }
             else{
-                creaSchedaClient(client);
+                creaSchedaClient();
             }
         });
 
@@ -135,18 +185,16 @@ public class CreaSchedaController {
 
     }
 
-    private void creaSchedaClient(Client client) {
-        VBox info = new VBox(10);
-        info.setAlignment(Pos.CENTER);
-        Label nota = new Label(STR."\{client.getNome()} non ha ancora una scheda, creala subito");
+    private void creaSchedaClient() {
+        info.getChildren().clear();
+        Label nota = new Label(STR."\{selectedClient.getNome()} non ha ancora una scheda, creala subito");
         Button creaScheda = new Button("Crea scheda");
         info.getChildren().addAll(nota, creaScheda);
         vboxCenter.getChildren().addAll(info);
 
         creaScheda.setOnAction(event-> {
             creaScheda.setDisable(true);
-            schedaInfoPanel.setVisible(false);
-            aggiungiEsercizioPanel.setVisible(true);
+            showFormModificaScheda();
             Label ob = new Label("Obiettivi");
             TextField obiettivi = new TextField();
             Label ng = new Label("Note generali:");
@@ -154,13 +202,10 @@ public class CreaSchedaController {
             Label SuggAl = new Label("Suggerimenti alimentari");
             TextField suggerimentiAlimentari = new TextField();
             Button crea = new Button("Crea");
+            info.getChildren().addAll(ob, obiettivi, ng, noteGenerali, SuggAl, suggerimentiAlimentari, crea);
             crea.setOnAction(ev -> {
                 if(dataFinePicker.getValue() == null || dataInizioPicker.getValue() == null){
-                    Alert alert = new Alert(Alert.AlertType.ERROR);
-                    alert.setTitle("Attenzione");
-                    alert.setHeaderText(null);
-                    alert.setContentText("Inserisci le date di validità della scheda");
-                    alert.showAndWait();
+                    AlertManager info = new AlertManager(Alert.AlertType.INFORMATION, "Attenzione", null, "Inserisci la data di inizio e di fine validità");
                     return;
                 }
 
@@ -173,8 +218,11 @@ public class CreaSchedaController {
                 taskCreazione.setOnSucceeded(suc->{
                     System.out.println(taskCreazione.getValue());
                     System.out.println("Scheda creata con successo");
-                    vboxCenter.getChildren().remove(info);
-                    loadSchedaCliente(selectedClient);
+                    Platform.runLater(() -> {
+                        info.getChildren().clear();
+                        loadSchedaCliente(); // Aggiungi la TableView aggiornata
+                    });
+
                 });
 
                 taskCreazione.setOnFailed(fal->{
@@ -183,14 +231,14 @@ public class CreaSchedaController {
                 });
 
             });
-            info.getChildren().addAll(ob, obiettivi, ng, noteGenerali, SuggAl, suggerimentiAlimentari, crea);
+
 
         });
+
     }
 
-
-    private void loadEserciziScheda(int clientId, String selectedDay, TableView<Esercizio> esercizioTableView) {
-        Task<ObservableList<Esercizio> > task = DBConnection.getInstance().getEserciziGiorno(clientId, selectedDay);
+    private void loadEserciziScheda(String selectedDay, TableView<Esercizio> esercizioTableView) {
+        Task<ObservableList<Esercizio> > task = DBConnection.getInstance().getEserciziGiorno(selectedClient.getId(), selectedDay);
 
         task.setOnSucceeded(event -> {
             ObservableList<Esercizio> esercizi = task.getValue();
@@ -213,7 +261,7 @@ public class CreaSchedaController {
             clienteComboBox.getItems().clear();
             List<Client> clients = task.getValue();
             if (clients.isEmpty()) {
-                showAlertSucc("Errore", "Erorre nel caricamento dei client");
+                AlertManager errore = new AlertManager(Alert.AlertType.ERROR, "Errore", null, "Errore nel caricamento dei client");
             } else {
                 for (Client client : clients) {
                     clienteComboBox.getItems().add(client);
@@ -232,10 +280,10 @@ public class CreaSchedaController {
     // TODO: logica per inserire i nuovi esercizi al database, devo collegare gli esercizi delle scheda con i dettagli della tab Esercizi
     @FXML
     private void aggiungiEsercizio() {
-        EsercizioScheda nuovoEsercizio = new EsercizioScheda(serieSpinner.getValue(), ripetizioniSpinner.getValue(), recuperoSpinner.getValue(), noteEsercizioTextArea.getText(), esercizioTextField.getText(), gruppoMuscTextfield.getText(), giornoField.getText());
+        EsercizioScheda nuovoEsercizio = new EsercizioScheda(serieField.getText(), ripetizioniField.getText(), recuperoField.getText(), noteEsercizioTextArea.getText(), esercizioTextField.getText(), gruppoMuscTextfield.getText(), giornoField.getText());
 
         if (nuovoEsercizio.nomeEserc() == null || nuovoEsercizio.nomeEserc().isEmpty()) {
-            mostraErrore("Devi selezionare o inserire un esercizio!");
+            AlertManager warn = new AlertManager(Alert.AlertType.INFORMATION, "Attenzione", null, "Per continuare devi selezionare un esercizio");
             return;
         }
 
@@ -250,31 +298,12 @@ public class CreaSchedaController {
         mostraPannelloPrincipale();*/
     }
 
-    @FXML
-    private void salvaScheda() {
-        // Salvare la scheda nel database
-    }
 
     @FXML
     private void anteprimaPDF() {
         // Generare anteprima PDF della scheda
     }
 
-    private void showAlertSucc(String title, String content) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(content);
-        alert.showAndWait();
-    }
-
-    private void showError(String title, String content) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(content);
-        alert.showAndWait();
-    }
 
     public void annullaAggiuntaEsercizio(ActionEvent actionEvent) {
         pulisciFormEsercizio();
@@ -283,23 +312,15 @@ public class CreaSchedaController {
 
     private void pulisciFormEsercizio() {
         esercizioTextField.setText(null);
-        serieSpinner.getValueFactory().setValue(3);
-        ripetizioniSpinner.getValueFactory().setValue(12);
-        recuperoSpinner.getValueFactory().setValue(90);
+        serieField.setText(null);
+        ripetizioniField.setText(null);
+        recuperoField.setText(null);
         noteEsercizioTextArea.clear();
     }
 
     private void mostraPannelloPrincipale() {
         schedaInfoPanel.setVisible(true);
         aggiungiEsercizioPanel.setVisible(false);
-    }
-
-    private void mostraErrore(String messaggio) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle("Errore");
-        alert.setHeaderText(null);
-        alert.setContentText(messaggio);
-        alert.showAndWait();
     }
 
     @FXML

@@ -71,13 +71,6 @@ public class DBConnection {
         };
     }
 
-    public void removeAllUser() throws SQLException {
-        if (isConnected()) {
-            Statement stmt = con.createStatement();
-            stmt.executeUpdate("DELETE from users;");
-            stmt.close();
-        }
-    }
 
     public Task<Boolean> insertClient(String nome, String cognome, String datadinascita, String email, String password) {
         return asyncCall(() -> {
@@ -172,7 +165,7 @@ public class DBConnection {
         });
     }
 
-    public Task<PersonalTrainer> getInfoPT() {
+    /*public Task<PersonalTrainer> getInfoPT() {
         return asyncCall(() -> {
             if (isConnected()) {
                 int idClient = ClientSession.getInstance().getCurrentClient().getId();
@@ -197,7 +190,7 @@ public class DBConnection {
             }
             return null;
         });
-    }
+    }*/
 
     public Task<List<Corsi>> getCorsi() {
         return asyncCall(() -> {
@@ -537,9 +530,9 @@ public class DBConnection {
                 try (PreparedStatement stmt = con.prepareStatement(query)) {
                     stmt.setInt(1, idScheda);
                     stmt.setInt(2, esercizioId);
-                    stmt.setInt(3, esercizioScheda.nSerie());
-                    stmt.setInt(4, esercizioScheda.nRipetizioni());
-                    stmt.setInt(5, esercizioScheda.tmpRecupero());
+                    stmt.setString(3, esercizioScheda.nSerie());
+                    stmt.setString(4, esercizioScheda.nRipetizioni());
+                    stmt.setString(5, esercizioScheda.tmpRecupero());
                     stmt.setString(6, esercizioScheda.notes());
                     stmt.executeUpdate();
                 }
@@ -759,9 +752,9 @@ public class DBConnection {
                 try (PreparedStatement stmt = con.prepareStatement(query)) {
                     stmt.setInt(1, schedaId);
                     stmt.setString(2, nuovoEsercizio.giorno());
-                    stmt.setInt(3, nuovoEsercizio.nSerie());
-                    stmt.setInt(4, nuovoEsercizio.nRipetizioni());
-                    stmt.setInt(5, nuovoEsercizio.tmpRecupero());
+                    stmt.setString(3, nuovoEsercizio.nSerie());
+                    stmt.setString(4, nuovoEsercizio.nRipetizioni());
+                    stmt.setString(5, nuovoEsercizio.tmpRecupero());
                     stmt.setString(6, nuovoEsercizio.notes());
                     stmt.setString(7, nuovoEsercizio.nomeEserc());
                     stmt.setString(8, nuovoEsercizio.gMuscolare());
@@ -782,7 +775,7 @@ public class DBConnection {
                 String formattedInizio = dataInizio.format(formatterIso);
                 String formattedFine = dataFine.format(formatterIso);
 
-                String query = "INSERT INTO Schede(ClienteID, PersonalTrainerID, DataInizio, DataFine, Obiettivi, NoteGenerali, SuggerimentiAlimentari) VALUES(?, ?, ?, ?, ?, ?, ?,?)";
+                String query = "INSERT INTO Schede(ClienteID, PersonalTrainerID, DataInizio, DataFine, Obiettivi, NoteGenerali, SuggerimentiAlimentari) VALUES(?, ?, ?, ?, ?, ?, ?)";
                 try(PreparedStatement stmt  = con.prepareStatement(query)) {
                     stmt.setInt(1, selectedClientId);
                     stmt.setInt(2, idPT);
@@ -791,6 +784,7 @@ public class DBConnection {
                     stmt.setString(5, obiettivi);
                     stmt.setString(6, note);
                     stmt.setString(7, suggAlimentari);
+                    stmt.execute();
                 }
             }
             return null;

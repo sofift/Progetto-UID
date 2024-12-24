@@ -1,6 +1,7 @@
 package it.unical.informatica.progettouid.controller.client;
 
 import it.unical.informatica.progettouid.model.*;
+import it.unical.informatica.progettouid.view.AlertManager;
 import it.unical.informatica.progettouid.view.SceneHandlerClient;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
@@ -117,11 +118,8 @@ public class DashboardClientController {
 
             Button prenota = new Button("Prenota");
             prenota.setOnAction(e -> {
-                Alert confirmDialog = new Alert(Alert.AlertType.CONFIRMATION);
-                confirmDialog.setTitle("Conferma prenotazione");
-                confirmDialog.setHeaderText(null);
-                confirmDialog.setContentText("Confermi la prenotazione per il corso " + c.nome() + "?");
-
+                AlertManager conf = new AlertManager(Alert.AlertType.CONFIRMATION, "Conferma prenotazione", null, STR."Confermi la prenotazione per il corso \{c.nome()}?");
+                conf.display();
             });
 
             content.getChildren().addAll(nomeCorso /*orario*/, trainer /*posti*/, prenota);

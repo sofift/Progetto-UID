@@ -1,6 +1,7 @@
 package it.unical.informatica.progettouid.controller.Trainer;
 
 import it.unical.informatica.progettouid.model.*;
+import it.unical.informatica.progettouid.view.AlertManager;
 import it.unical.informatica.progettouid.view.SceneHandlerPT;
 import it.unical.informatica.progettouid.view.SceneHandlerPrimaPagina;
 import javafx.application.Platform;
@@ -72,22 +73,12 @@ public class TrainerLoginController {
         try {
             SceneHandlerPrimaPagina.getInstance().init(SceneHandlerPrimaPagina.getInstance().getStage());
         } catch (Exception e) {
-            showAlert(Alert.AlertType.ERROR,
-                    "Errore di Navigazione",
-                    "Impossibile tornare indietro",
-                    "Si è verificato un errore: " + e.getMessage());
+            AlertManager err = new AlertManager(Alert.AlertType.ERROR, "Errore di navigazione", "Impossibile tornare indietro", STR."Si è verificato un errore: \{e.getMessage()}");
             e.printStackTrace();
         }
     }
 
 
 
-    private void showAlert(Alert.AlertType type, String title, String header, String content) {
-        Alert alert = new Alert(type);
-        alert.setTitle(title);
-        alert.setHeaderText(header);
-        alert.setContentText(content);
-        alert.showAndWait();
-    }
 
 }

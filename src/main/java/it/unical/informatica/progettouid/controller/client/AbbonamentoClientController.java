@@ -1,6 +1,7 @@
 package it.unical.informatica.progettouid.controller.client;
 
 import it.unical.informatica.progettouid.model.*;
+import it.unical.informatica.progettouid.view.AlertManager;
 import it.unical.informatica.progettouid.view.SceneHandlerClient;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
@@ -161,6 +162,7 @@ public class AbbonamentoClientController {
         hboxButton.setSpacing(20);
         Button confermaButton = new Button("Conferma pagamento");
         Button annulla = new Button("Annulla");
+        annulla.setOnAction(e->loadInformazioniCliente());
         hboxButton.getChildren().addAll(confermaButton, annulla);
         confermaButton.setOnAction(e -> processaPagamento(numeroCartaField.getText(), scadenzaField.getText(), cvvField.getText(), abbonamento.id(), abbonamento.prezzo()));
 
@@ -186,19 +188,14 @@ public class AbbonamentoClientController {
         thread.start();
 
         task.setOnSucceeded(e->{
-            Alert confirmDialog = new Alert(Alert.AlertType.INFORMATION);
             if(stato.equals("avvenuto")){
-                confirmDialog.setTitle("Pagamento avvenuto con successo");
-                confirmDialog.setContentText("Pagamento andato a buonfine");
-
+                AlertManager conferma  = new AlertManager(Alert.AlertType.CONFIRMATION, "Pagamento avvenuto con successo", null, "Pagamento andato a buon fine");
+                conferma.display();
             }
             else if(stato.equals("fallito")){
-                confirmDialog.setTitle("Pagamento fallito");
-                confirmDialog.setContentText("Pagamento non andato a buonfine");
-
+                AlertManager fal  = new AlertManager(Alert.AlertType.ERROR, "Pagamento fallito", null, "Pagamento non andato a buonfine");
+                fal.display();
             }
-
-            confirmDialog.setHeaderText(null);
         });
 
         task.setOnFailed(e->{
@@ -246,4 +243,6 @@ public class AbbonamentoClientController {
             e.printStackTrace();
         }
     }
+
+
 }

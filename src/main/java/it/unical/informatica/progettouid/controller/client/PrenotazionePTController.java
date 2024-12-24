@@ -4,6 +4,7 @@ import it.unical.informatica.progettouid.model.Client;
 import it.unical.informatica.progettouid.model.ClientSession;
 import it.unical.informatica.progettouid.model.DBConnection;
 import it.unical.informatica.progettouid.model.PersonalTrainer;
+import it.unical.informatica.progettouid.view.AlertManager;
 import it.unical.informatica.progettouid.view.SceneHandlerClient;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
@@ -36,7 +37,8 @@ public class PrenotazionePTController{
             trainerListContainer.getChildren().clear();
             List<PersonalTrainer> trainers = task.getValue();
             if (trainers.isEmpty()) {
-                showAlertSucc("Errore", "Erorre nel caricamento dei trainer");
+                AlertManager err = new AlertManager(Alert.AlertType.ERROR, "Errore", null, "Errore nel caricamento dei trainer, riprova più tardi");
+                err.display();
             } else {
                 displayPersonal(trainers);
             }
@@ -142,13 +144,16 @@ public class PrenotazionePTController{
                 Task<Void> task1 = DBConnection.getInstance().insertNotifyTrainer(trainerID, message);
             }
 
-            showAlertSucc("Conferma", "Prenotazione inviata al personal trainer, riceverai una notifica di conferma non appena possibile");
+            AlertManager succ = new AlertManager(Alert.AlertType.CONFIRMATION, "Conferma", null, "Prenotazione inviata al personal trainer, riceverai una notifica di conferma non appena possibile");
+            succ.display();
         });
 
         task.setOnFailed(event -> {
             Throwable ex = task.getException();
             ex.printStackTrace();  // Stampa l'errore completo in console
-            showError("Errore prenotazione", "Si è verificato un errore durante la prenotazione: " + ex.getMessage());
+
+            AlertManager errore = new AlertManager(Alert.AlertType.ERROR, "Errore prenotazione", null, STR."Si è verificato un errore durante la prenotazione: \{ex.getMessage()}");
+            errore.display();
 
         });
 
@@ -156,33 +161,21 @@ public class PrenotazionePTController{
 
     private boolean validateBookingInput(LocalDate date, String time) {
         if (date == null || time == null || time.isEmpty()) {
-            showError("Dati mancanti", "Seleziona data e ora per la prenotazione.");
+            AlertManager er = new AlertManager(Alert.AlertType.WARNING, "Attenzione", "Dati mancanti", "Seleziona data e ora per la prenotazione." );
+            er.display();
             return false;
         }
 
         if (date.isBefore(LocalDate.now())) {
-            showError("Data non valida", "Seleziona una data futura.");
+            AlertManager er = new AlertManager(Alert.AlertType.WARNING, "Data non valida", null, "Seleziona una data futura.");
+            er.display();
             return false;
         }
 
         return true;
     }
 
-    private void showAlertSucc(String title, String content) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(content);
-        alert.showAndWait();
-    }
 
-    private void showError(String title, String content) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(content);
-        alert.showAndWait();
-    }
 
     @FXML
     public void onNavigationButtonClick(ActionEvent event) {

@@ -44,13 +44,13 @@
     </top>
 
     <left>
-        <VBox maxWidth="95" minWidth="95" spacing="10" styleClass="sidebar">
+        <VBox maxWidth="95" minWidth="95" spacing="10" styleClass="sidebar" stylesheets="@../../styles/sidebar.css">
             <padding>
                 <Insets bottom="20" top="20" />
             </padding>
             <Button maxWidth="Infinity" styleClass="sidebar-button">
                 <graphic>
-                    <VBox alignment="CENTER" spacing="5">
+                    <VBox alignment="CENTER" spacing="5" styleClass="sidebar-button">
                         <FontIcon iconLiteral="fas-home" />
                         <Text text="Home">
                             <font>
@@ -62,7 +62,7 @@
             </Button>
             <Button maxWidth="Infinity" styleClass="sidebar-button">
                 <graphic>
-                    <VBox alignment="CENTER" spacing="5">
+                    <VBox alignment="CENTER" spacing="5" styleClass="sidebar-button">
                         <FontIcon iconLiteral="fas-user-check" />
                         <Text text="Check-in">
                             <font>
@@ -74,7 +74,7 @@
             </Button>
             <Button maxWidth="Infinity" styleClass="sidebar-button">
                 <graphic>
-                    <VBox alignment="CENTER" spacing="5">
+                    <VBox alignment="CENTER" spacing="5" styleClass="sidebar-button">
                         <children>
                             <FontIcon iconLiteral="fas-users" />
                             <Text text="Membri">
@@ -88,7 +88,7 @@
             </Button>
             <Button maxWidth="Infinity" styleClass="sidebar-button">
                 <graphic>
-                    <VBox alignment="CENTER" spacing="5">
+                    <VBox alignment="CENTER" spacing="5" styleClass="sidebar-button">
                         <FontIcon iconLiteral="fas-user-plus" />
                         <Text text="Aggiungi utente">
                             <font>
@@ -100,7 +100,7 @@
             </Button>
             <Button maxWidth="Infinity" styleClass="sidebar-button">
                 <graphic>
-                    <VBox alignment="CENTER" spacing="5">
+                    <VBox alignment="CENTER" spacing="5" styleClass="sidebar-button">
                         <FontIcon iconLiteral="fas-walking" />
                         <Text text="Aggiungi corso">
                             <font>
@@ -112,7 +112,7 @@
             </Button>
             <Button maxWidth="Infinity" styleClass="sidebar-button">
                 <graphic>
-                    <VBox alignment="CENTER" spacing="5">
+                    <VBox alignment="CENTER" spacing="5" styleClass="sidebar-button">
                         <FontIcon iconLiteral="far-credit-card" />
                         <Text text="Billing">
                             <font>
@@ -124,7 +124,7 @@
             </Button>
             <Button maxWidth="Infinity" styleClass="sidebar-button">
                 <graphic>
-                    <VBox alignment="CENTER" spacing="5">
+                    <VBox alignment="CENTER" spacing="5" styleClass="sidebar-button">
                         <FontIcon iconLiteral="far-user" />
                         <Text text="Account">
                             <font>
@@ -136,7 +136,7 @@
             </Button>
             <Button maxWidth="Infinity" styleClass="sidebar-button">
                 <graphic>
-                    <VBox alignment="CENTER" spacing="5">
+                    <VBox alignment="CENTER" spacing="5" styleClass="sidebar-button">
                         <FontIcon iconLiteral="fas-cogs" />
                         <Text text="Impostazioni">
                             <font>
@@ -148,7 +148,7 @@
             </Button>
             <Button maxWidth="Infinity" styleClass="sidebar-button">
                 <graphic>
-                    <VBox alignment="CENTER" spacing="5">
+                    <VBox alignment="CENTER" spacing="5" styleClass="sidebar-button">
                         <FontIcon iconLiteral="far-question-circle" />
                         <Text text="Help">
                             <font>

@@ -4,38 +4,15 @@
     -fx-font-family: "Segoe UI", Arial, sans-serif;
 }
 
-/* Sidebar styles */
-.sidebar {
-    -fx-background-color: #1a3246;
-    -fx-padding: 20px 0;
+.main-text {
+    -fx-font-family: "Segoe UI", Arial, sans-serif;
+    -fx-text-fill: #1a3246;
+    -fx-font-weight: bold;
 }
-
-.sidebar-button {
-    -fx-background-color: transparent;
-    -fx-text-fill: #ffffff;
-    -fx-padding: 10px 0;
-    -fx-cursor: hand;
-}
-
-.sidebar-button:hover {
-    -fx-background-color: #2a4356;
-}
-
-.sidebar-button .ikonli-font-icon {
-    -fx-icon-color: #ffffff;
-    -fx-icon-size: 20px;
-}
-
-.sidebar-button Text {
-    -fx-fill: #ffffff;
-}
-
-
 
 BorderPane > .top{
-    -fx-background-color: #04222a;
+    -fx-background-color: rgb(16, 33, 44);
 }
-
 
 /* Header section styles */
 VBox > Label:first-child {
@@ -53,6 +30,7 @@ VBox > Label:nth-child(2) {
     -fx-font-size: 18px;
     -fx-text-fill: black;
 }
+
 
 /* Info section styles */
 HBox Text {

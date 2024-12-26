@@ -1,0 +1,298 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.String?>
+<?import javafx.collections.FXCollections?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Spinner?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
+
+<BorderPane prefHeight="400.0" prefWidth="600.0" stylesheets="@../../styles/home.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unical.informatica.progettouid.controller.Admin.AggiungiCorsoController">
+
+    <top>
+        <VBox styleClass="top">
+            <children>
+                <Label text="Aggiungi Corso">
+                    <graphic>
+                        <FontIcon iconLiteral="fas-dumbbell" />
+                    </graphic>
+                    <padding>
+                        <Insets bottom="10" top="10" />
+                    </padding>
+                    <font>
+                        <Font size="18.0" />
+                    </font>
+                </Label>
+            </children>
+        </VBox>
+    </top>
+
+    <left>
+        <VBox maxWidth="95" minWidth="95" spacing="10" styleClass="sidebar" stylesheets="@../../styles/sidebar.css">
+            <padding>
+                <Insets bottom="20" top="20" />
+            </padding>
+            <Button maxWidth="Infinity" styleClass="sidebar-button">
+                <graphic>
+                    <VBox alignment="CENTER" spacing="5" styleClass="sidebar-button">
+                        <FontIcon iconLiteral="fas-home" />
+                        <Text text="Home">
+                            <font>
+                                <Font size="9.0" />
+                            </font>
+                        </Text>
+                    </VBox>
+                </graphic>
+            </Button>
+            <Button maxWidth="Infinity" styleClass="sidebar-button">
+                <graphic>
+                    <VBox alignment="CENTER" spacing="5" styleClass="sidebar-button">
+                        <FontIcon iconLiteral="fas-user-check" />
+                        <Text text="Check-in">
+                            <font>
+                                <Font size="9.0" />
+                            </font>
+                        </Text>
+                    </VBox>
+                </graphic>
+            </Button>
+            <Button maxWidth="Infinity" styleClass="sidebar-button">
+                <graphic>
+                    <VBox alignment="CENTER" spacing="5" styleClass="sidebar-button">
+                        <children>
+                            <FontIcon iconLiteral="fas-users" />
+                            <Text text="Membri">
+                                <font>
+                                    <Font size="9.0" />
+                                </font>
+                            </Text>
+                        </children>
+                    </VBox>
+                </graphic>
+            </Button>
+            <Button maxWidth="Infinity" styleClass="sidebar-button">
+                <graphic>
+                    <VBox alignment="CENTER" spacing="5" styleClass="sidebar-button">
+                        <FontIcon iconLiteral="fas-user-plus" />
+                        <Text text="Aggiungi utente">
+                            <font>
+                                <Font size="9.0" />
+                            </font>
+                        </Text>
+                    </VBox>
+                </graphic>
+            </Button>
+            <Button maxWidth="Infinity" styleClass="sidebar-button">
+                <graphic>
+                    <VBox alignment="CENTER" spacing="5" styleClass="sidebar-button">
+                        <FontIcon iconLiteral="fas-walking" />
+                        <Text text="Aggiungi corso">
+                            <font>
+                                <Font size="9.0" />
+                            </font>
+                        </Text>
+                    </VBox>
+                </graphic>
+            </Button>
+            <Button maxWidth="Infinity" styleClass="sidebar-button">
+                <graphic>
+                    <VBox alignment="CENTER" spacing="5" styleClass="sidebar-button">
+                        <FontIcon iconLiteral="far-credit-card" />
+                        <Text text="Billing">
+                            <font>
+                                <Font size="9.0" />
+                            </font>
+                        </Text>
+                    </VBox>
+                </graphic>
+            </Button>
+            <Button maxWidth="Infinity" styleClass="sidebar-button">
+                <graphic>
+                    <VBox alignment="CENTER" spacing="5" styleClass="sidebar-button">
+                        <FontIcon iconLiteral="far-user" />
+                        <Text text="Account">
+                            <font>
+                                <Font size="9.0" />
+                            </font>
+                        </Text>
+                    </VBox>
+                </graphic>
+            </Button>
+            <Button maxWidth="Infinity" styleClass="sidebar-button">
+                <graphic>
+                    <VBox alignment="CENTER" spacing="5" styleClass="sidebar-button">
+                        <FontIcon iconLiteral="fas-cogs" />
+                        <Text text="Impostazioni">
+                            <font>
+                                <Font size="9.0" />
+                            </font>
+                        </Text>
+                    </VBox>
+                </graphic>
+            </Button>
+            <Button maxWidth="Infinity" styleClass="sidebar-button">
+                <graphic>
+                    <VBox alignment="CENTER" spacing="5" styleClass="sidebar-button">
+                        <FontIcon iconLiteral="far-question-circle" />
+                        <Text text="Help">
+                            <font>
+                                <Font size="9.0" />
+                            </font>
+                        </Text>
+                    </VBox>
+                </graphic>
+            </Button>
+        </VBox>
+    </left>
+
+    <center>
+        <ScrollPane fitToWidth="true" styleClass="content-area">
+            <VBox spacing="20" styleClass="form-container">
+                <padding>
+                    <Insets bottom="20" left="20" right="20" top="20" />
+                </padding>
+
+                <VBox styleClass="form-section">
+                    <Label styleClass="section-header" text="Dettagli Corso">
+                        <graphic>
+                            <FontIcon iconLiteral="fas-dumbbell" />
+                        </graphic>
+                    </Label>
+
+                    <GridPane hgap="15" vgap="10">
+                        <padding>
+                            <Insets top="10" />
+                        </padding>
+
+                        <Label text="Nome Corso *" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                        <TextField fx:id="nomeCorso" promptText="Nome del corso" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+
+                        <Label text="Tipo Corso *" GridPane.columnIndex="2" GridPane.rowIndex="0" />
+                        <ComboBox fx:id="tipoCorso" promptText="Seleziona tipo" GridPane.columnIndex="3" GridPane.rowIndex="0">
+                            <items>
+                                <FXCollections fx:factory="observableArrayList">
+                                    <String fx:value="Fitness" />
+                                    <String fx:value="Yoga" />
+                                    <String fx:value="Pilates" />
+                                    <String fx:value="Zumba" />
+                                    <String fx:value="Spinning" />
+                                    <String fx:value="Boxe" />
+                                    <String fx:value="Funzionale" />
+                                </FXCollections>
+                            </items>
+                        </ComboBox>
+
+                        <Label text="Durata (minuti) *" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                        <Spinner fx:id="durata" editable="true" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+
+                        <Label text="Max Partecipanti *" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                        <Spinner fx:id="maxPartecipanti" editable="true" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+
+                        <Label text="Personal Trainer *" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+                        <ComboBox fx:id="personalTrainer" promptText="Seleziona trainer" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+
+                        <Label text="Descrizione" GridPane.columnIndex="0" GridPane.rowIndex="3" />
+                        <TextArea fx:id="descrizione" prefRowCount="3" promptText="Inserisci una descrizione del corso..." wrapText="true" GridPane.columnIndex="1" GridPane.columnSpan="3" GridPane.rowIndex="3" />
+                  <columnConstraints>
+                     <ColumnConstraints />
+                     <ColumnConstraints />
+                     <ColumnConstraints />
+                     <ColumnConstraints />
+                  </columnConstraints>
+                  <rowConstraints>
+                     <RowConstraints />
+                     <RowConstraints />
+                     <RowConstraints />
+                     <RowConstraints />
+                  </rowConstraints>
+                    </GridPane>
+                </VBox>
+
+                <VBox styleClass="form-section">
+                    <Label styleClass="section-header" text="Pianificazione">
+                        <graphic>
+                            <FontIcon iconLiteral="fas-calendar-alt" />
+                        </graphic>
+                    </Label>
+
+                    <GridPane hgap="15" vgap="10">
+                        <padding>
+                            <Insets top="10" />
+                        </padding>
+
+                        <Label text="Giorni" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                        <VBox spacing="5" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                            <CheckBox fx:id="lunedi" text="Lunedì" />
+                            <CheckBox fx:id="martedi" text="Martedì" />
+                            <CheckBox fx:id="mercoledi" text="Mercoledì" />
+                            <CheckBox fx:id="giovedi" text="Giovedì" />
+                            <CheckBox fx:id="venerdi" text="Venerdì" />
+                            <CheckBox fx:id="sabato" text="Sabato" />
+                            <CheckBox fx:id="domenica" text="Domenica" />
+                        </VBox>
+
+                        <Label text="Orario" GridPane.columnIndex="2" GridPane.rowIndex="0" />
+                        <VBox spacing="10" GridPane.columnIndex="3" GridPane.rowIndex="0">
+                            <ComboBox fx:id="orarioInizio" promptText="Ora inizio">
+                                <items>
+                                    <FXCollections fx:factory="observableArrayList">
+                                        <String fx:value="08:00" />
+                                        <String fx:value="09:00" />
+                                        <String fx:value="10:00" />
+                                        <String fx:value="11:00" />
+                                        <String fx:value="12:00" />
+                                        <String fx:value="13:00" />
+                                        <String fx:value="14:00" />
+                                        <String fx:value="15:00" />
+                                        <String fx:value="16:00" />
+                                        <String fx:value="17:00" />
+                                        <String fx:value="18:00" />
+                                        <String fx:value="19:00" />
+                                        <String fx:value="20:00" />
+                                    </FXCollections>
+                                </items>
+                            </ComboBox>
+                        </VBox>
+                  <columnConstraints>
+                     <ColumnConstraints />
+                     <ColumnConstraints />
+                     <ColumnConstraints />
+                     <ColumnConstraints />
+                  </columnConstraints>
+                  <rowConstraints>
+                     <RowConstraints />
+                  </rowConstraints>
+                    </GridPane>
+                </VBox>
+
+                <HBox alignment="CENTER_RIGHT" spacing="10">
+                    <Button fx:id="annullaButton" styleClass="button-secondary" text="Annulla">
+                        <graphic>
+                            <FontIcon iconLiteral="fas-times" />
+                        </graphic>
+                    </Button>
+                    <Button fx:id="salvaCorso" styleClass="button-primary" text="Salva Corso">
+                        <graphic>
+                            <FontIcon iconLiteral="fas-check" />
+                        </graphic>
+                    </Button>
+                </HBox>
+            </VBox>
+        </ScrollPane>
+    </center>
+
+</BorderPane>

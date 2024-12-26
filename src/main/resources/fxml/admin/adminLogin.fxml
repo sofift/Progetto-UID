@@ -10,7 +10,6 @@
 <?import javafx.scene.text.Text?>
 
 <?import javafx.scene.control.ProgressIndicator?>
-<?import javafx.scene.control.Label?>
 <StackPane prefHeight="600.0" prefWidth="1000.0" stylesheets="@../../styles/loginStyle.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unical.informatica.progettouid.controller.Admin.AdminLoginController">
 
     <VBox alignment="CENTER" maxWidth="400" spacing="20.0" styleClass="login-container">
@@ -29,6 +28,5 @@
 
             <Button fx:id="backButton" onAction="#handleBack" styleClass="secondary-button" text="Indietro" />
         </HBox>
-        <Label fx:id="checkAccess"/>
     </VBox>
 </StackPane>

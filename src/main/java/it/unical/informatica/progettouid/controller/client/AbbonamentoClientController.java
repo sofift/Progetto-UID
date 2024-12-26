@@ -31,19 +31,23 @@ public class AbbonamentoClientController {
     }
 
     private void loadInformazioniCliente() {
-        if(ClientSession.getInstance().getCurrentClient() == null) {
-            //scrollPiani.setPrefWidth(500);
-            Label clientNonAbbonato = new Label("Ops, pare che tu non abbia ancora un abbonamento, scorri tra i nostri piani disponibili e scelgi quello più adatto a te");
-            datiAbbonamentoVBox.getChildren().add(clientNonAbbonato);
-            return;
-        }
-
         Task<InfoBaseAbbonamento> task = DBConnection.getInstance().getInfoAbbonamento();
+        Thread thread = new Thread(task);
+        thread.setDaemon(true);
+        thread.start();
+
 
         task.setOnSucceeded(event -> {
             InfoBaseAbbonamento info = task.getValue();
-
-            displayInfoAbbonamento(info);
+            if(info == null) {
+                scrollPiani.setPrefWidth(500);
+                Label clientNonAbbonato = new Label("Ops, pare che tu non abbia ancora un abbonamento, scorri tra i nostri piani disponibili e scelgi quello più adatto a te");
+                datiAbbonamentoVBox.getChildren().add(clientNonAbbonato);
+                return;
+            }
+            else{
+                displayInfoAbbonamento(info);
+            }
 
         });
 
@@ -120,16 +124,16 @@ public class AbbonamentoClientController {
 
     private void showFormAbbonamento(TipiAbbonamento abbonamento) {
         //scrollPiani.setPrefWidth(300);
-        centerBox.getChildren().clear(); // Pulisce il centro del box prima di aggiungere nuovi elementi
+        centerBox.getChildren().clear();
         VBox formBox = new VBox(10);
 
         Label title = new Label("Acquisto abbonamento");
         Client loggedClient = ClientSession.getInstance().getCurrentClient();
 
-        Label nomeLabel = new Label("Nome: " + loggedClient.getNome());
+        Label nomeLabel = new Label(STR."Nome: \{loggedClient.getNome()}");
         nomeLabel.setDisable(true);
 
-        Label cognomeLabel = new Label("Cognome: " + loggedClient.getCognome());
+        Label cognomeLabel = new Label(STR."Cognome: \{loggedClient.getCognome()}");
         cognomeLabel.setDisable(true);
 
         Label numeroCartaLabel = new Label("Numero Carta:");
@@ -148,7 +152,7 @@ public class AbbonamentoClientController {
 
         Label resoConto = new Label("Piano: ");
         Label nome = new Label(abbonamento.nome());
-        Label prezzo = new Label(abbonamento.prezzo() + "€");
+        Label prezzo = new Label(STR."\{abbonamento.prezzo()}€");
 
         formBox.getChildren().addAll(title, nomeLabel, cognomeLabel, numeroCartaLabel, numeroCartaField, scadenzaLabel, scadenzaField, cvvLabel, cvvField);
         formBox.getChildren().addAll(separator, resoConto, nome, prezzo);
@@ -158,7 +162,7 @@ public class AbbonamentoClientController {
         Button confermaButton = new Button("Conferma pagamento");
         Button annulla = new Button("Annulla");
         hboxButton.getChildren().addAll(confermaButton, annulla);
-        confermaButton.setOnAction(e -> processaPagamento(numeroCartaField.getText(), scadenzaField.getText(), cvvField.getText()));
+        confermaButton.setOnAction(e -> processaPagamento(numeroCartaField.getText(), scadenzaField.getText(), cvvField.getText(), abbonamento.id(), abbonamento.prezzo()));
 
         formBox.getChildren().add(hboxButton);
 
@@ -166,12 +170,40 @@ public class AbbonamentoClientController {
         centerBox.getChildren().add(formBox);
     }
 
-    private void processaPagamento(String numeroCarta, String scadenzaLabel, String cvv) {
+    private void processaPagamento(String numeroCarta, String scadenzaLabel, String cvv, int idAbbonamento, int importo) {
         if(!numeroCarta.matches("\\d{13,19}") || !cvv.matches("\\d{3}") || !isDateValid(scadenzaLabel)){
-            System.out.println("Pagamento non andato a buon fine, controlla che i dati siano corretti");
+            registraPagamento(idAbbonamento, importo, "fallito");
         } else{
-            System.out.println("Pagamento in processazione per la carta: " + numeroCarta);
+            registraPagamento(idAbbonamento, importo, "avvenuto");
         }
+    }
+
+    //
+    // TODO: rivedere la finestra di dialogo perchè mi mostra entrmbi gli avvisi di pagamento
+    private void registraPagamento(int idAbbonamento, int importo, String stato) {
+        Task<Void> task = DBConnection.getInstance().insertPagamento(idAbbonamento, importo, stato);
+        Thread thread = new Thread(task);
+        thread.start();
+
+        task.setOnSucceeded(e->{
+            Alert confirmDialog = new Alert(Alert.AlertType.INFORMATION);
+            if(stato.equals("avvenuto")){
+                confirmDialog.setTitle("Pagamento avvenuto con successo");
+                confirmDialog.setContentText("Pagamento andato a buonfine");
+
+            }
+            else if(stato.equals("fallito")){
+                confirmDialog.setTitle("Pagamento fallito");
+                confirmDialog.setContentText("Pagamento non andato a buonfine");
+
+            }
+
+            confirmDialog.setHeaderText(null);
+        });
+
+        task.setOnFailed(e->{
+            task.getException().printStackTrace();
+        });
     }
 
     private static boolean isDateValid(String dataScadenza) {

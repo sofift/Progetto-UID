@@ -172,7 +172,7 @@
                             <FontIcon iconLiteral="fas-calendar-check" styleClass="card-icon" />
                             <Label styleClass="card-title" text="My Bookings" />
                         </HBox>
-                        <ListView fx:id="todayActivitiesList" VBox.vgrow="ALWAYS" />
+                        <ListView fx:id="prenotazioniList" VBox.vgrow="ALWAYS" />
                     </VBox>
 
                     <VBox styleClass="dashboard-card" HBox.hgrow="ALWAYS">
@@ -180,7 +180,7 @@
                             <FontIcon iconLiteral="fas-bell" styleClass="card-icon" />
                             <Label styleClass="card-title" text="Notifications" />
                             <Region HBox.hgrow="ALWAYS" />
-                            <Button styleClass="dismiss-button" text="DISMISS ALL" />
+                            <Button fx:id="eliminaNotifiche" onAction="#deleteNotify" styleClass="dismiss-button" text="DISMISS ALL" />
                         </HBox>
                         <ListView fx:id="notificationsList" VBox.vgrow="ALWAYS" />
                     </VBox>

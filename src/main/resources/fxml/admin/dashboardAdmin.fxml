@@ -15,10 +15,10 @@
 <?import javafx.scene.text.Text?>
 <?import org.kordamp.ikonli.javafx.FontIcon?>
 
-<BorderPane fx:id="root" stylesheets="@../../styles/home.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unical.informatica.progettouid.controller.Admin.AdminDashboardController">
+<BorderPane stylesheets="@../../styles/home.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unical.informatica.progettouid.controller.Admin.AdminDashboardController">
 
     <top>
-        <VBox fx:id="mainContent" styleClass="top">
+        <VBox styleClass="top">
             <Label text="Dashboard">
                 <graphic>
                     <FontIcon iconLiteral="fas-home" />

@@ -18,7 +18,6 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 public class AdminDashboardController implements Initializable {
-
     @FXML private BorderPane root;
     @FXML private BarChart<String, Number> attendanceChart;
     @FXML private ListView<String> bookingsList;

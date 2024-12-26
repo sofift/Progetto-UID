@@ -1,6 +1,5 @@
 package it.unical.informatica.progettouid;
 
-import it.unical.informatica.progettouid.model.AdminInitializer;
 import it.unical.informatica.progettouid.view.SceneHandlerClient;
 import it.unical.informatica.progettouid.view.SceneHandlerPrimaPagina;
 import javafx.application.Application;
@@ -23,8 +22,6 @@ public class FlexFit extends Application {
     }*/
 
     public static void main(String[] args) {
-        AdminInitializer adminInitializer = new AdminInitializer();
-        adminInitializer.initializeAdmins();
         launch(args);
     }
 }

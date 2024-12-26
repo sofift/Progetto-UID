@@ -7,35 +7,23 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Region;
-import javafx.scene.text.Text;
-
+import javafx.scene.layout.VBox;
 import java.util.List;
-import java.util.Optional;
 
 
 public class DashboardClientController {
-    @FXML
-    public ListView<HBox> corsiListView;
+    @FXML public ListView<HBox> corsiListView;
     public Label bentornatoLabel;
-    @FXML
-    private BorderPane mainPane;
-    @FXML
-    public Text accessiRimanentiText;
-    @FXML
-    public Text accessiTotaliText;
-    @FXML
-    public Text scadenzaAbbText;
-    private Client currentClient = null;
+    @FXML public VBox vboxCenter;
+    @FXML public ListView<HBox> notificationListView;
 
 
     public void initialize() {
-        //currentClient = SessionManager.getInstance().getLoggedClient();
-        bentornatoLabel.setText("Bentornato" );//+ currentClient.getNome());
-        //mostraStatoAbbonamento();
+        bentornatoLabel.setText(STR."Bentornato \{ClientSession.getInstance().getCurrentClient().getNome()}");
+        mostraStatoAbbonamento();
         loadCorsiOggi();
+        loadNotifiche();
     }
 
     private void mostraStatoAbbonamento() {
@@ -43,10 +31,31 @@ public class DashboardClientController {
 
         task.setOnSucceeded(event -> {
             InfoAccessiAbbonamento abbonamento= task.getValue();
+            if(abbonamento == null){
+                Label nessunAbbonamento = new Label("Non è abbonato, scopri i piani disponibili e adatti a lei: ");
+                Button piani = new Button("Scopri");
+                piani.setOnAction(e-> {
+                    try {
+                        SceneHandlerClient.getInstance().setAbbonamentoView();
+                    } catch (Exception ex) {
+                        throw new RuntimeException(ex);
+                    }
+                });
+                vboxCenter.getChildren().addAll(nessunAbbonamento, piani);
+            }
+            else{
+                HBox accessi = new HBox(10);
+                Label accessiRimanentiText = new Label(STR."\{abbonamento.accessiRimanenti()}");
+                Label accessiTotaliText = new Label(STR."\{abbonamento.accessiTotali()}");
+                VBox info = new VBox(10);
+                Label scadenzaAbbText = new Label(abbonamento.dataScadenza());
+                Label tipoAbb = new Label(abbonamento.tipoAbbonamento());
 
-            accessiRimanentiText.setText("" + abbonamento.accessiRimanenti());
-            accessiTotaliText.setText("" + abbonamento.accessiTotali());
-            scadenzaAbbText.setText(abbonamento.dataScadenza());
+                info.getChildren().addAll(scadenzaAbbText, tipoAbb);
+                accessi.getChildren().addAll(accessiRimanentiText, accessiTotaliText, info);
+                vboxCenter.getChildren().add(accessi);
+            }
+
         });
 
         task.setOnFailed(event -> {
@@ -94,13 +103,13 @@ public class DashboardClientController {
             Label nomeCorso = new Label(c.nome());
             //nomeCorso.setPrefWidth(150); // Fissa larghezza per allineamento
 
-            Label orario = new Label(c.oraInizio());
+            //Label orario = new Label(c.oraInizio());
             //orario.setPrefWidth(100);
 
             Label trainer = new Label(c.PT());
             //trainer.setPrefWidth(150);
 
-            Label posti = new Label(String.valueOf(c.maxPartecipanti()));
+            //Label posti = new Label(String.valueOf(c.maxPartecipanti()));
 
             Button prenota = new Button("Prenota");
             prenota.setOnAction(e -> {
@@ -109,19 +118,47 @@ public class DashboardClientController {
                 confirmDialog.setHeaderText(null);
                 confirmDialog.setContentText("Confermi la prenotazione per il corso " + c.nome() + "?");
 
-                Optional<ButtonType> result = confirmDialog.showAndWait();
-                if (result.isPresent() && result.get() == ButtonType.OK) {
-                    Alert successDialog = new Alert(Alert.AlertType.INFORMATION);
-                    successDialog.setTitle("Successo");
-                    successDialog.setHeaderText(null);
-                    successDialog.setContentText("Prenotazione effettuata con successo!");
-                    successDialog.showAndWait();
-                }
             });
 
-            content.getChildren().addAll(nomeCorso, orario, trainer, posti, prenota);
+            content.getChildren().addAll(nomeCorso /*orario*/, trainer /*posti*/, prenota);
             corsiListView.getItems().add(content);
 
+        }
+    }
+
+    private void loadNotifiche() {
+        Task<List<Notifica>> task = DBConnection.getInstance().getNotificheClient();
+
+        Thread thread = new Thread(task);
+        thread.setDaemon(true);
+        thread.start();
+
+        task.setOnSucceeded(event -> {
+            List<Notifica> notifiche = task.getValue();
+            displayNotifiche(notifiche);
+        });
+
+        task.setOnFailed(event -> {
+
+        });
+    }
+
+    private void displayNotifiche(List<Notifica> notifiche) {
+        notificationListView.getItems().clear();
+        if (notifiche == null || notifiche.isEmpty()) {
+            HBox emptyContent = new HBox();
+            emptyContent.setAlignment(Pos.CENTER);
+            Label emptyMessage = new Label("Nessun notifiche");
+            emptyContent.getChildren().add(emptyMessage);
+            notificationListView.getItems().add(emptyContent);
+        }
+        for (Notifica notifica : notifiche) {
+            HBox content = new HBox(10);
+            content.setAlignment(Pos.CENTER_LEFT);
+            Label message = new Label(notifica.message());
+
+            content.getChildren().addAll(message);
+            notificationListView.getItems().add(content);
         }
     }
 

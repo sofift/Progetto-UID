@@ -13,14 +13,14 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unical.informatica.progettouid.controller.RegistrazioneController">
+<AnchorPane xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unical.informatica.progettouid.controller.RegistrazioneController">
 
-    <VBox fx:id="regVbox" alignment="CENTER" spacing="15" stylesheets="@../styles/form.css" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
+    <VBox fx:id="regVbox" alignment="CENTER" spacing="15" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
 
         <padding>
             <Insets bottom="20" left="20" right="20" top="20" />
         </padding>
-         <Label style="-fx-font-size: 20px; -fx-font-weight: bold;" styleClass="mainText" text="Registrazione" />
+         <Label style="-fx-font-size: 20px; -fx-font-weight: bold;" styleClass="title-label" text="Registrazione" />
 
          <GridPane alignment="CENTER" hgap="10" vgap="10">
              <padding>
@@ -40,20 +40,20 @@
                  <RowConstraints minHeight="30" prefHeight="35" vgrow="NEVER" />
              </rowConstraints>
 
-             <Label styleClass="Label" text="Nome:" GridPane.columnIndex="0" GridPane.halignment="RIGHT" GridPane.rowIndex="0" />
+             <Label text="Nome:" GridPane.columnIndex="0" GridPane.halignment="RIGHT" GridPane.rowIndex="0" />
              <TextField fx:id="nomeField" prefWidth="200" promptText="Inserisci il nome" GridPane.columnIndex="1" GridPane.rowIndex="0" />
 
-             <Label styleClass="Label" text="Cognome:" GridPane.columnIndex="0" GridPane.halignment="RIGHT" GridPane.rowIndex="1" />
-             <TextField fx:id="cognomeField" prefWidth="200" promptText="Inserisci il cognome" styleClass="TextField" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+             <Label text="Cognome:" GridPane.columnIndex="0" GridPane.halignment="RIGHT" GridPane.rowIndex="1" />
+             <TextField fx:id="cognomeField" prefWidth="200" promptText="Inserisci il cognome" GridPane.columnIndex="1" GridPane.rowIndex="1" />
 
-             <Label styleClass="Label" text="Data di Nascita:" GridPane.columnIndex="0" GridPane.halignment="RIGHT" GridPane.rowIndex="2" />
-             <DatePicker fx:id="dataNascitaPicker" prefWidth="200" promptText="Seleziona data" styleClass="special-field" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+             <Label text="Data di Nascita:" GridPane.columnIndex="0" GridPane.halignment="RIGHT" GridPane.rowIndex="2" />
+             <DatePicker fx:id="dataNascitaPicker" prefWidth="200" promptText="Seleziona data" GridPane.columnIndex="1" GridPane.rowIndex="2" />
 
-             <Label styleClass="Label" text="Email:" GridPane.columnIndex="0" GridPane.halignment="RIGHT" GridPane.rowIndex="3" />
-             <TextField fx:id="emailField" prefWidth="200" promptText="Inserisci email" styleClass="TextField" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+             <Label text="Email:" GridPane.columnIndex="0" GridPane.halignment="RIGHT" GridPane.rowIndex="3" />
+             <TextField fx:id="emailField" prefWidth="200" promptText="Inserisci email" GridPane.columnIndex="1" GridPane.rowIndex="3" />
 
-             <Label styleClass="Label" text="Password:" GridPane.columnIndex="0" GridPane.halignment="RIGHT" GridPane.rowIndex="4" />
-             <PasswordField fx:id="passwordField" prefWidth="200" promptText="Inserisci password" styleClass="TextField" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+             <Label text="Password:" GridPane.columnIndex="0" GridPane.halignment="RIGHT" GridPane.rowIndex="4" />
+             <PasswordField fx:id="passwordField" prefWidth="200" promptText="Inserisci password" GridPane.columnIndex="1" GridPane.rowIndex="4" />
          </GridPane>
 
          <HBox alignment="CENTER" spacing="15">

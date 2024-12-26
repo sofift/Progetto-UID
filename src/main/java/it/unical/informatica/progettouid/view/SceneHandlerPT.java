@@ -17,7 +17,6 @@ public class SceneHandlerPT {
     private Stage stage;
     private BorderPane mainPane;
 
-
     private SceneHandlerPT() {}
 
     public static SceneHandlerPT getInstance() {
@@ -68,7 +67,6 @@ public class SceneHandlerPT {
     public void setCreazioneSchedaView() throws Exception {
         loadView("/fxml/pt/creazioneScheda.fxml");
     }
-
 
     // Metodo per gestire il logout
     public void logout() throws Exception {

@@ -2,21 +2,17 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ToggleButton?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Separator?>
 <?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 <?import org.kordamp.ikonli.javafx.FontIcon?>
 
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.RowConstraints?>
-<BorderPane stylesheets="@../../styles/calendar.css" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/22" fx:controller="it.unical.informatica.progettouid.controller.client.AttivitaClientController">
+<BorderPane stylesheets="@../../styles/calendar.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unical.informatica.progettouid.controller.client.AttivitaClientController">
    <left>
       <VBox maxWidth="95" minWidth="95" spacing="10" styleClass="sidebar">
          <padding>
@@ -140,48 +136,15 @@
             <Insets left="10" right="10" />
          </padding>
          <children>
-            <HBox alignment="CENTER_LEFT" spacing="10">
-               <padding>
-                  <Insets bottom="10" top="10" />
-               </padding>
-               <children>
-                  <Button fx:id="todayButton" text="Oggi">
-                     <graphic>
-                        <FontIcon iconLiteral="fas-calendar-day" />
-                     </graphic>
-                  </Button>
-                  <Button fx:id="prevButton">
-                     <graphic>
-                        <FontIcon iconLiteral="fas-chevron-left" />
-                     </graphic>
-                  </Button>
-                  <Button fx:id="nextButton">
-                     <graphic>
-                        <FontIcon iconLiteral="fas-chevron-right" />
-                     </graphic>
-                  </Button>
-                  <Label fx:id="currentDateLabel" style="-fx-font-size: 18; -fx-font-weight: bold;" />
-                  <Region HBox.hgrow="ALWAYS" />
-                  <ToggleButton text="Giorno" />
-                  <ToggleButton text="Settimana" />
-                  <ToggleButton selected="true" text="Mese" />
-                  <Button style="-fx-font-weight: bold;" text="+">
-                     <graphic>
-                        <FontIcon iconLiteral="fas-plus" />
-                     </graphic>
-                  </Button>
-               </children>
-            </HBox>
-            <GridPane fx:id="calendarGrid" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS" style="-fx-background-color: white;">
-               <columnConstraints>
-                  <ColumnConstraints percentWidth="14.28" />
-                  <!-- Ripeti per 7 colonne -->
-               </columnConstraints>
-               <rowConstraints>
-                  <RowConstraints percentHeight="16.66" />
-                  <!-- Ripeti per 6 righe -->
-               </rowConstraints>
-            </GridPane>
+            <Label text="Corsi" />
+            <Label text="Scopri i nostri corsi!" />
+            <FlowPane fx:id="corsiFlowPane" />
+            <Separator prefWidth="200.0" />
+            <ScrollPane fx:id="orariCorsiPane">
+               <content>
+                  <VBox fx:id="orariCorsiVBox" />
+               </content>
+            </ScrollPane>
          </children>
       </VBox>
    </center>
@@ -193,16 +156,6 @@
          </padding>
          <children>
             <Label style="-fx-font-weight: bold;" text="Calendari" />
-            <VBox spacing="5">
-               <children>
-                  <CheckBox selected="true" text="Attività di Gruppo" />
-                  <CheckBox text="Corsi Speciali" />
-                  <CheckBox text="Eventi" />
-                  <CheckBox text="Manutenzione" />
-               </children>
-            </VBox>
-            <Label style="-fx-font-weight: bold;" text="Mini Calendario" />
-            <GridPane fx:id="miniCalendar" hgap="2" vgap="2" VBox.vgrow="NEVER" />
          </children>
       </VBox>
    </right>

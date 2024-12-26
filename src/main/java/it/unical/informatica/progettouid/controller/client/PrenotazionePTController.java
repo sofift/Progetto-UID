@@ -1,5 +1,7 @@
 package it.unical.informatica.progettouid.controller.client;
 
+import it.unical.informatica.progettouid.model.Client;
+import it.unical.informatica.progettouid.model.ClientSession;
 import it.unical.informatica.progettouid.model.DBConnection;
 import it.unical.informatica.progettouid.model.PersonalTrainer;
 import it.unical.informatica.progettouid.view.SceneHandlerClient;
@@ -19,9 +21,10 @@ public class PrenotazionePTController{
     private VBox trainerListContainer;
     @FXML
     private VBox bookingFormContainer;
-    private String trainerID = null;
+    private Client currentClient;
 
     public void initialize() {
+        currentClient = ClientSession.getInstance().getCurrentClient();
         loadTrainers();
     }
 
@@ -80,17 +83,17 @@ public class PrenotazionePTController{
         bookingFormContainer.getChildren().clear();         // pulisce la aprte destra del border pane ogni votla che si preme sul button prenotazione
 
         Label title = new Label("Prenota sessione con " + trainer.getNome());
-        title.setStyle("-fx-font-size: 16px; -fx-font-weight: bold;");
+        //title.setStyle("-fx-font-size: 16px; -fx-font-weight: bold;");
 
         DatePicker datePicker = new DatePicker(LocalDate.now());
         datePicker.setMaxWidth(Double.MAX_VALUE);
 
         ComboBox<String> timeComboBox = new ComboBox<>();
-        for (int i = 8; i <= 20; i++) {
-            timeComboBox.getItems().add(String.format("%02d:00", i));
-            timeComboBox.getItems().add(String.format("%02d:30", i));
-        }
-        timeComboBox.setMaxWidth(Double.MAX_VALUE);
+//        for (int i = 8; i <= 20; i++) {
+//            timeComboBox.getItems().add(String.format("%02d:00", i));
+//            timeComboBox.getItems().add(String.format("%02d:30", i));
+//        }
+//        timeComboBox.setMaxWidth(Double.MAX_VALUE);
 
         TextArea notes = new TextArea();
         notes.setPromptText("Note aggiuntive...");
@@ -130,8 +133,16 @@ public class PrenotazionePTController{
         thread.start();
 
         task.setOnSucceeded(event -> {
-            showAlertSucc("Conferma", String.format("Prenotazione confermata!\n\nPersonal Trainer: %s\nData: %s\nOra: %s",
-                    trainerID, date, time));
+            if(task.getValue()){
+                String message = STR."Hai una nuova prenotazione dal cliente\{currentClient.getNome()}\{currentClient.getCognome()}.";
+                if(!notes.isEmpty()) {
+                    message += STR."""
+                    Richiesta:\{notes}""";
+                }
+                Task<Void> task1 = DBConnection.getInstance().insertNotifyTrainer(trainerID, message);
+            }
+
+            showAlertSucc("Conferma", "Prenotazione inviata al personal trainer, riceverai una notifica di conferma non appena possibile");
         });
 
         task.setOnFailed(event -> {

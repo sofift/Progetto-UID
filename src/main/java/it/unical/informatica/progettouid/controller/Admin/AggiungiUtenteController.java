@@ -268,16 +268,16 @@ public class AggiungiUtenteController {
 
     @FXML
     private void navigateToCheckIn() throws Exception {
-        SceneHandlerAdmin.getInstance().setCheckInView();
+        SceneHandlerAdmin.getInstance().setCheckIn();
     }
 
     @FXML
     private void navigateToMembers() throws Exception {
-        SceneHandlerAdmin.getInstance().setClientView();
+        SceneHandlerAdmin.getInstance().setClient();
     }
 
     @FXML
     private void navigateToBilling() throws Exception {
-        SceneHandlerAdmin.getInstance().setBillingView();
+        SceneHandlerAdmin.getInstance().setBilling();
     }
 }

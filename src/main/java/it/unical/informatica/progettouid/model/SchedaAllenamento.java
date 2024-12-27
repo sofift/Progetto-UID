@@ -1,6 +1,6 @@
 package it.unical.informatica.progettouid.model;
 
-public record SchedaAllenamento(int idScheda, String nomePT, String cognomePT, String dataInizio, String dataFine, String obiettivi, String notes, String suggerimentiAlimentari, String statoScheda){
+public record SchedaAllenamento(int idScheda, String nomePT, String cognomePT, String dataInizio, String dataFine, String obiettivi, String notes, String suggerimentiAlimentari){
     @Override
     public int idScheda() {
         return idScheda;
@@ -36,8 +36,5 @@ public record SchedaAllenamento(int idScheda, String nomePT, String cognomePT, S
         return suggerimentiAlimentari;
     }
 
-    @Override
-    public String statoScheda() {
-        return statoScheda;
-    }
+
 }

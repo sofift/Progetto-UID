@@ -352,7 +352,6 @@ public class DBConnection {
                         "                FROM Schede s" +
                         "                JOIN PersonalTrainer pt ON s.PersonalTrainerID = pt.ID" +
                         "                WHERE s.ClienteID = ?" +
-                        "                AND s.Stato = 'attiva'" +
                         "                AND s.DataFine >= date('now')" +
                         "                LIMIT 1";
                 PreparedStatement stmt = con.prepareStatement(query);
@@ -366,8 +365,7 @@ public class DBConnection {
                             rs.getString("DataFine"),
                             rs.getString("Obiettivi"),
                             rs.getString("NoteGenerali"),
-                            rs.getString("SuggerimentiAlimentari"),
-                            rs.getString("Stato"));
+                            rs.getString("SuggerimentiAlimentari"));
                 }
                 stmt.close();
             }
@@ -737,7 +735,7 @@ public class DBConnection {
         return asyncCall(()->{
             if(isConnected()){
                 int schedaId = -1;
-                String id = "SELECT ID FROM Schede WHERE ClienteID = ? AND Stato = 'attiva'";
+                String id = "SELECT ID FROM Schede WHERE ClienteID = ?";
                 PreparedStatement stmtID = con.prepareStatement(id);
                 stmtID.setInt(1, idClient);
                 try (ResultSet rs = stmtID.executeQuery()) {

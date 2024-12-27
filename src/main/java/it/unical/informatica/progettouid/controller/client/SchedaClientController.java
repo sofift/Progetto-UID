@@ -61,6 +61,7 @@ public class SchedaClientController {
         Label richiediScheda = new Label("Pare che tu non abbia ancora una scheda di allenamento, cosa stai aspettando?! Richiedila subito");
         Button buttonRichiedi = new Button("Richiedi");
         buttonRichiedi.setOnAction((ActionEvent event) -> {
+            buttonRichiedi.setDisable(true);
             VBox inserisciInfo = new VBox();
             Label pt = new Label("Con quale personal trainer vuoi richiedere la tua scheda?");
             ComboBox<PersonalTrainer> diplayPt = new ComboBox<>();
@@ -78,7 +79,6 @@ public class SchedaClientController {
 
                 task.setOnSucceeded(event1->{
                     AlertManager confirmDialog = new AlertManager(Alert.AlertType.CONFIRMATION, "Richiesta inviata", null, "Scheda richiesta");
-
                 });
 
                 task.setOnFailed(event1 ->{
@@ -119,9 +119,8 @@ public class SchedaClientController {
         Label dataInizio = new Label(STR."Data inizio: \{info.dataInizio()}");
         Label dataFine = new Label(STR."Data fine: \{info.dataFine()}");
         Label obiettivo = new Label(STR."Obiettivi : \{info.obiettivi()}");
-        Label stato = new Label(STR."Stato: \{info.statoScheda()}");
 
-        vboxCenter.getChildren().addAll(infoGen, dataInizio, dataFine, obiettivo, stato);
+        vboxCenter.getChildren().addAll(infoGen, dataInizio, dataFine, obiettivo);
 
 
         TabPane weekdayTabs = new TabPane();

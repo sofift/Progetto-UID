@@ -163,7 +163,7 @@
 
     <center>
         <ScrollPane fitToWidth="true" styleClass="content-area">
-            <VBox spacing="20" styleClass="form-container">
+            <VBox spacing="20" stylesheets="@../../styles/form.css">
                 <padding>
                     <Insets bottom="20" left="20" right="20" top="20" />
                 </padding>

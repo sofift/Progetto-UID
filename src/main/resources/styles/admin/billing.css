@@ -1,0 +1,9 @@
+.tab-pane{
+    -fx-background-color: white;
+    -fx-text-fill: #1a3246;
+}
+
+.tab-pane .tab-header-area{
+    -fx-background-color: #1a3246;
+
+}

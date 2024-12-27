@@ -20,10 +20,10 @@
 <?import javafx.scene.text.Text?>
 <?import org.kordamp.ikonli.javafx.FontIcon?>
 
-<BorderPane stylesheets="@../../styles/home.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unical.informatica.progettouid.controller.Admin.BillingController">
+<BorderPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unical.informatica.progettouid.controller.Admin.BillingController">
 
     <top>
-        <VBox styleClass="top">
+        <VBox styleClass="top" stylesheets="@../../styles/home.css">
             <children>
                 <Label text="Billing">
                     <graphic>
@@ -161,7 +161,7 @@
     <center>
         <VBox spacing="10">
 
-            <TabPane fx:id="billingTabPane" styleClass="billing-tabs">
+            <TabPane fx:id="billingTabPane" stylesheets="@../../styles/admin/billing.css">
                 <Tab closable="false" text="Overview">
                     <VBox spacing="20">
                         <!-- Sezione totali -->

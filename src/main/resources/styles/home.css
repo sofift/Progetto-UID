@@ -14,24 +14,6 @@ BorderPane > .top{
     -fx-background-color: rgb(16, 33, 44);
 }
 
-/* Header section styles */
-VBox > Label:first-child {
-    -fx-font-size: 24px;
-    -fx-font-weight: bold;
-    -fx-text-fill: black;
-}
-
-VBox > Label:first-child .ikonli-font-icon {
-    -fx-icon-color: black;
-    -fx-icon-size: 24px;
-}
-
-VBox > Label:nth-child(2) {
-    -fx-font-size: 18px;
-    -fx-text-fill: black;
-}
-
-
 /* Info section styles */
 HBox Text {
     -fx-font-size: 14px;
@@ -174,24 +156,6 @@ VBox > Label {
     -fx-spacing: 20px;
 }
 
-/* Header section styles solo per il VBox centrale */
-.centerVBox > VBox > Label:first-child {
-    -fx-font-size: 24px;
-    -fx-font-weight: bold;
-    -fx-text-fill: white;
-}
-
-.centerVBox > VBox > Label:first-child .ikonli-font-icon {
-    -fx-icon-color: white;
-    -fx-icon-size: 24px;
-}
-
-.centerVBox > VBox > Label:nth-child(2) {
-    -fx-font-size: 18px;
-    -fx-text-fill: white;
-}
-/* Stili per le VBox con sfondo bianco */
-/* Stili per le VBox con sfondo bianco */
 .whiteBox {
     -fx-background-color: white;
     -fx-padding: 15px;

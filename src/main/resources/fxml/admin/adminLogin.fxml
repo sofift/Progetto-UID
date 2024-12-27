@@ -2,6 +2,7 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.HBox?>
@@ -9,8 +10,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
-<?import javafx.scene.control.ProgressIndicator?>
-<StackPane prefHeight="600.0" prefWidth="1000.0" stylesheets="@../../styles/loginStyle.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unical.informatica.progettouid.controller.Admin.AdminLoginController">
+<StackPane prefHeight="600.0" prefWidth="1000.0" styleClass="background" stylesheets="@../../styles/loginLight.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unical.informatica.progettouid.controller.Admin.AdminLoginController">
 
     <VBox alignment="CENTER" maxWidth="400" spacing="20.0" styleClass="login-container">
         <padding>
@@ -28,5 +28,6 @@
 
             <Button fx:id="backButton" onAction="#handleBack" styleClass="secondary-button" text="Indietro" />
         </HBox>
+        <Label fx:id="checkAccess" />
     </VBox>
 </StackPane>

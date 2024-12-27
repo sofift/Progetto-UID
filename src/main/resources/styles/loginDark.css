@@ -1,0 +1,81 @@
+.background {
+    -fx-background-color: #1a3246;
+}
+
+/* Container Styles */
+.login-container {
+    -fx-background-color: #1a3246;
+    -fx-background-radius: 10;
+    -fx-effect: dropshadow(gaussian, rgb(60, 103, 154), 10, 0, 0, 2);
+}
+
+/* Text Styles */
+.title-text {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-fill: white;
+}
+
+/* Input Field Styles */
+.login-field {
+    -fx-pref-width: 300;
+    -fx-pref-height: 40;
+    -fx-background-radius: 5;
+    -fx-border-radius: 5;
+    -fx-border-color: #e0e0e0;
+    -fx-border-width: 1;
+    -fx-padding: 5 10 5 10;
+    -fx-font-size: 14px;
+}
+
+.login-field:focused {
+    -fx-border-color: white;
+    -fx-border-width: 2;
+}
+
+/* Button Styles */
+.primary-button {
+    -fx-background-color: white;
+    -fx-text-fill: #1a3246;
+    -fx-font-size: 14px;
+    -fx-pref-width: 120;
+    -fx-pref-height: 40;
+    -fx-background-radius: 5;
+    -fx-cursor: hand;
+}
+
+.primary-button:hover {
+    -fx-background-color: #1a3246;
+    -fx-text-fill: white;
+    -fx-border-color: white;
+    -fx-border-radius: 5;
+}
+
+.secondary-button {
+    -fx-background-color: #1a3246;
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-pref-width: 120;
+    -fx-pref-height: 40;
+    -fx-border-radius: 5;
+    -fx-cursor: hand;
+    -fx-border-color: white;
+}
+
+.secondary-button:hover {
+    -fx-background-color: #bdc3c7;
+    -fx-background-radius: 5;
+    -fx-border-color: #1a3246;
+    -fx-text-fill: #1a3246;
+}
+
+/* Link Styles */
+.register-link {
+    -fx-font-size: 14px;
+    -fx-text-fill: #1a3246;
+    -fx-cursor: hand;
+}
+
+.register-link:hover {
+    -fx-text-fill: #1a3246;
+}

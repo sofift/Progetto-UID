@@ -24,20 +24,18 @@
 <BorderPane prefHeight="400.0" prefWidth="600.0" stylesheets="@../../styles/home.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unical.informatica.progettouid.controller.Admin.AggiungiCorsoController">
 
     <top>
-        <VBox styleClass="top">
-            <children>
-                <Label text="Aggiungi Corso">
-                    <graphic>
-                        <FontIcon iconLiteral="fas-dumbbell" />
-                    </graphic>
-                    <padding>
-                        <Insets bottom="10" top="10" />
-                    </padding>
-                    <font>
-                        <Font size="18.0" />
-                    </font>
-                </Label>
-            </children>
+        <VBox fx:id="mainContent" styleClass="top">
+            <Label text="Aggiungi Corso">
+                <graphic>
+                    <FontIcon iconLiteral="fas-dumbbell" />
+                </graphic>
+                <padding>
+                    <Insets bottom="10" top="10" />
+                </padding>
+                <font>
+                    <Font size="18.0" />
+                </font>
+            </Label>
         </VBox>
     </top>
 
@@ -160,8 +158,8 @@
     </left>
 
     <center>
-        <ScrollPane fitToWidth="true" styleClass="content-area">
-            <VBox spacing="20" styleClass="form-container">
+        <ScrollPane fitToWidth="true" styleClass="main-content">
+            <VBox spacing="20" stylesheets="@../../styles/form.css">
                 <padding>
                     <Insets bottom="20" left="20" right="20" top="20" />
                 </padding>

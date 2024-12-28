@@ -163,9 +163,9 @@
 
             <TabPane fx:id="billingTabPane" stylesheets="@../../styles/admin/billing.css">
                 <Tab closable="false" text="Overview">
-                    <VBox spacing="20">
+                    <VBox spacing="20" stylesheets="@../../styles/admin/billing.css">
                         <!-- Sezione totali -->
-                        <HBox spacing="15" styleClass="totals-section">
+                        <HBox spacing="15">
                             <VBox styleClass="total-card">
                                 <Label styleClass="amount" text="25,712.50" />
                                 <Label styleClass="label" text="Scheduled" />
@@ -183,7 +183,7 @@
                         <!-- Grafico delle entrate -->
                         <VBox styleClass="chart-section">
                             <Label styleClass="section-title" text="Revenue" />
-                            <LineChart fx:id="revenueChart" styleClass="revenue-chart">
+                            <LineChart fx:id="revenueChart" styleClass="revenue-chart" stylesheets="@../../styles/home.css">
                                 <xAxis>
                                     <CategoryAxis label="Month" />
                                 </xAxis>
@@ -281,7 +281,6 @@
                 </Tab>
 
                 <Tab closable="false" text="Recurring" />
-                <Tab closable="false" text="Discounts" />
                 <Tab closable="false" text="Payment Forms" />
                 <Tab closable="false" text="Accounting" />
                 <Tab closable="false" text="Settings" />

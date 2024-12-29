@@ -2,10 +2,12 @@ package it.unical.informatica.progettouid.controller.client;
 
 import it.unical.informatica.progettouid.model.Client;
 import it.unical.informatica.progettouid.model.ClientSession;
+import it.unical.informatica.progettouid.view.AlertManager;
 import it.unical.informatica.progettouid.view.SceneHandlerClient;
 import it.unical.informatica.progettouid.view.SceneHandlerPrimaPagina;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
@@ -56,6 +58,10 @@ public class ImpostazioniClientController {
     }
 
     public void logout(ActionEvent actionEvent) throws Exception {
-        SceneHandlerClient.getInstance().logout();
-    }
+        try {
+            SceneHandlerClient.getInstance().logout();
+        } catch (Exception e) {
+            AlertManager al = new AlertManager(Alert.AlertType.ERROR, "Errore", "Errore durante il logout", "Si è verificato un errore durante il logout. Riprova");
+            al.showAndWait();
+        }}
 }

@@ -541,53 +541,57 @@ public class DBConnection {
         });
     }
 
-    public Task<Void> addEsercizioScheda(EsercizioScheda esercizioScheda) {
-        return asyncCall(() -> {
-            if (isConnected()) {
-                int idClient = ClientSession.getInstance().getCurrentClient().getId();
-                String queryIDScheda = "SELECT ID FROM Schede where ClienteID = ?";
-
-                int idScheda;
-
-                try (PreparedStatement stmt = con.prepareStatement(queryIDScheda)) {
-                    stmt.setInt(1, idClient);
-                    try (ResultSet rs = stmt.executeQuery()) {
-                        if (rs.next()) {
-                            throw new SQLException("scheda non trovato: " );
-                        }
-                        idScheda = rs.getInt("ID");
+    public Task<Void> insertEsercizioScheda(EsercizioScheda nuovoEsercizio, int idClient) {
+        return asyncCall(()->{
+            if(isConnected()){
+                int schedaId = -1;
+                String id = "SELECT ID FROM Schede WHERE ClienteID = ? AND Stato = 'attiva'";
+                PreparedStatement stmtID = con.prepareStatement(id);
+                stmtID.setInt(1, idClient);
+                try (ResultSet rs = stmtID.executeQuery()) {
+                    if (rs.next()) {
+                        schedaId = rs.getInt("ID");
                     }
                 }
-                String queryEsercizio = "SELECT ID FROM Esercizi WHERE Nome = ?;";
-                int esercizioId;
-
-                try (PreparedStatement stmtEsercizio = con.prepareStatement(queryEsercizio)) {
-                    stmtEsercizio.setString(1, esercizioScheda.nomeEserc());
-                    ResultSet rs = stmtEsercizio.executeQuery();
-                    if (!rs.next()) {
-                        throw new SQLException("Esercizio non trovato: " + esercizioScheda.nomeEserc());
-                    }
-                    esercizioId = rs.getInt("ID");
-                }
-
-                String query = "INSERT INTO EserciziScheda (SchedaID, EsercizioID, " +
-                        "NumeroSerie, NumeroRipetizioni, TempoRecupero, Note) " +
-                        "VALUES (?, ?, ?, ?, ?, ?);";
-
+                String query = "INSERT INTO EserciziScheda(SchedaID, GiornoSettimana, NumeroSerie, NumeroRipetizioni, TempoRecupera, Note, NomeEsercizio, GruppoMuscolare) VALUES (?, ?, ?, ?, ?, ?, ? ,? )";
                 try (PreparedStatement stmt = con.prepareStatement(query)) {
-                    stmt.setInt(1, idScheda);
-                    stmt.setInt(2, esercizioId);
-                    stmt.setString(3, esercizioScheda.nSerie());
-                    stmt.setString(4, esercizioScheda.nRipetizioni());
-                    stmt.setString(5, esercizioScheda.tmpRecupero());
-                    stmt.setString(6, esercizioScheda.notes());
+                    stmt.setInt(1, schedaId);
+                    stmt.setString(2, nuovoEsercizio.giorno());
+                    stmt.setString(3, nuovoEsercizio.nSerie());
+                    stmt.setString(4, nuovoEsercizio.nRipetizioni());
+                    stmt.setString(5, nuovoEsercizio.tmpRecupero());
+                    stmt.setString(6, nuovoEsercizio.notes());
+                    stmt.setString(7, nuovoEsercizio.nomeEserc());
+                    stmt.setString(8, nuovoEsercizio.gMuscolare());
                     stmt.executeUpdate();
                 }
-
             }
             return null;
         });
     }
+    public Task<Void> insertSchedaClient(int selectedClientId, LocalDate dataInizio, LocalDate dataFine, String obiettivi, String note, String suggAlimentari) {
+        return asyncCall(()->{
+            int idPT = PTSession.getInstance().getCurrentTrainer().getId();
+            if(isConnected()){
+                DateTimeFormatter formatterIso = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                String formattedInizio = dataInizio.format(formatterIso);
+                String formattedFine = dataFine.format(formatterIso);
+                String query = "INSERT INTO Schede(ClienteID, PersonalTrainerID, DataInizio, DataFine, Obiettivi, NoteGenerali, SuggerimentiAlimentari) VALUES(?, ?, ?, ?, ?, ?, ?,?)";
+                try(PreparedStatement stmt  = con.prepareStatement(query)) {
+                    stmt.setInt(1, selectedClientId);
+                    stmt.setInt(2, idPT);
+                    stmt.setString(3,formattedInizio );
+                    stmt.setString(4, formattedFine);
+                    stmt.setString(5, obiettivi);
+                    stmt.setString(6, note);
+                    stmt.setString(7, suggAlimentari);
+                }
+            }
+            return null;
+        });
+    }
+
+
 
     public Task<List<PrenotazionePT>> getPrenotazioneTrainer(){
         return asyncCall(() -> {
@@ -614,6 +618,32 @@ public class DBConnection {
                 stmt.close();
             }
             return prenotazioni;
+        });
+    }
+
+    public Task<PersonalTrainer> getPersonalFromSchedaClient(){
+        return asyncCall(()->{
+            int idClient = ClientSession.getInstance().getCurrentClient().getId();
+            int idPT = -1;
+            if(isConnected()) {
+                String query = "SELECT PersonalTrainerID FROM Schede WHERE ClienteID = ? ";
+                PreparedStatement stmt = con.prepareStatement(query);
+                stmt.setInt(1, idClient);
+                try (ResultSet rs = stmt.executeQuery()) {
+                    if (rs.next()) {
+                        idPT = rs.getInt("PersonalTrainerID");
+                    }
+                }
+                String queryPT = "SELECT * FROM PersonalTrainer WHERE ID = ?";
+                PreparedStatement stmtPT = con.prepareStatement(queryPT);
+                stmtPT.setInt(1, idPT);
+                try (ResultSet rs = stmtPT.executeQuery()) {
+                    if (rs.next()) {
+                        return new PersonalTrainer(idPT, rs.getString("Nome"), rs.getString("Cognome"), rs.getString("DataNascita"), rs.getString("Specializzazione"), rs.getString("Email"), rs.getString("Telefono"));
+                    }
+                }
+            }
+            return null;
         });
     }
 

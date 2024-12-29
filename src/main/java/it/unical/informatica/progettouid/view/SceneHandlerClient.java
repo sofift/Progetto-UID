@@ -95,9 +95,19 @@ public class SceneHandlerClient {
 
     // Metodo per gestire il logout
     public void logout() throws Exception {
-        // Pulisci la sessione
-        ClientSession.getInstance().logout();
-        SceneHandlerPrimaPagina.getInstance().loadPrimaPagina();
+        try{
+            ClientSession.getInstance().logout();
+
+            if(mainPane!=null){
+                mainPane.getChildren().clear();
+            }
+
+            SceneHandlerPrimaPagina handler = SceneHandlerPrimaPagina.getInstance();
+            handler.init(this.stage);
+        } catch (Exception e) {
+            System.err.println(STR."Errore durante il logout: \{e.getMessage()}");
+            throw new RuntimeException("Impossibile completare il logout", e);
+        }
     }
 
     public void setAbbonamentoView() throws Exception {

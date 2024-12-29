@@ -53,7 +53,8 @@ public class SceneHandlerPrimaPagina {
         try {
             FXMLLoader loader = new FXMLLoader(FlexFit.class.getResource("/fxml/primaPagina.fxml"));
             Parent root = loader.load();
-            this.mainPane.setCenter(root);
+            mainPane.getChildren().clear();
+            mainPane.setCenter(root);
             stage.setTitle("FlexFit Gym");
         } catch (Exception e) {
             System.err.println(STR."Errore nel caricamento della prima pagina: \{e.getMessage()}");
@@ -71,6 +72,7 @@ public class SceneHandlerPrimaPagina {
         try {
             FXMLLoader loader = new FXMLLoader(FlexFit.class.getResource(fxmlPath));
             Parent view = loader.load();
+            mainPane.getChildren().clear();
             mainPane.setCenter(view);
             stage.setTitle("Login " + getUserTypeTitle(userType));
         } catch (Exception e) {

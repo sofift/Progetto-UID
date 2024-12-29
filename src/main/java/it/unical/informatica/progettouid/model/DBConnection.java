@@ -689,7 +689,6 @@ public class DBConnection {
                     stmt.setString(4, formattedDate);
                     stmt.setString(5, stato);
                     stmt.executeUpdate();
-
                 }
             }
             return null;

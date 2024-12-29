@@ -112,6 +112,8 @@ public class AttivitaClientController {
                 case "abbonamentoClient":
                     SceneHandlerClient.getInstance().setAbbonamentoView();
                     break;
+                case "impostazioniClient":
+                    SceneHandlerClient.getInstance().setImpostazioniView();
             }
         } catch (Exception e) {
             e.printStackTrace();

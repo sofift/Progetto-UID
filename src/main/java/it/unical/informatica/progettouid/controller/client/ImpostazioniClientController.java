@@ -2,6 +2,7 @@ package it.unical.informatica.progettouid.controller.client;
 
 import it.unical.informatica.progettouid.model.Client;
 import it.unical.informatica.progettouid.model.ClientSession;
+import it.unical.informatica.progettouid.view.SceneHandlerClient;
 import it.unical.informatica.progettouid.view.SceneHandlerPrimaPagina;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -18,7 +19,7 @@ public class ImpostazioniClientController {
     @FXML private PasswordField passwordField;
     private Client client = null;
 
-    void initialize() {
+    public void initialize() {
         client = ClientSession.getInstance().getCurrentClient();
         nomeLabel.setText("Nome: " + client.getNome() );
         cognomeLabel.setText("Cognome: " + client.getCognome() );
@@ -27,12 +28,34 @@ public class ImpostazioniClientController {
     }
 
     @FXML
-    void onNavigationButtonClick(ActionEvent event) {
-
+    public void onNavigationButtonClick(ActionEvent event) {
+        Button button = (Button) event.getSource();
+        try {
+            switch (button.getId()) {
+                case "dashboardClient":
+                    SceneHandlerClient.getInstance().setDashboardView();
+                    break;
+                case "attivitaClient":
+                    SceneHandlerClient.getInstance().setAttivitaView();
+                    break;
+                case "prenotazionePT":
+                    SceneHandlerClient.getInstance().setPrenotazioniView();
+                    break;
+                case "schedaClient":
+                    SceneHandlerClient.getInstance().setSchedaView();
+                    break;
+                case "abbonamentoClient":
+                    SceneHandlerClient.getInstance().setAbbonamentoView();
+                    break;
+                case "impostazioniClient":
+                    SceneHandlerClient.getInstance().setImpostazioniView();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void logout(ActionEvent actionEvent) throws Exception {
-        ClientSession.getInstance().logout();
-        SceneHandlerPrimaPagina.getInstance().loadPrimaPagina();
+        SceneHandlerClient.getInstance().logout();
     }
 }

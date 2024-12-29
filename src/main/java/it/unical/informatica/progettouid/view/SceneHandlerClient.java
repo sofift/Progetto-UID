@@ -32,31 +32,37 @@ public class SceneHandlerClient {
 
     public void init(Stage primaryStage) throws Exception {
         this.stage = primaryStage;
-        FXMLLoader fxmlLoader = new FXMLLoader(FlexFit.class.getResource("/fxml/client/dashboardClient.fxml"));
-        this.scene = new Scene((Parent)fxmlLoader.load(), 1000, 600);
+        this.mainPane = new BorderPane();
+        this.scene = new Scene(mainPane, 1000, 600);
         this.stage.setScene(this.scene);
         this.stage.setTitle("FlexFit");
+        loadView("/fxml/client/dashboardClient.fxml");
         this.stage.show();
     }
 
     private void loadView(String fxmlPath) throws Exception {
-        FXMLLoader loader = new FXMLLoader(FlexFit.class.getResource(fxmlPath));
+        /*FXMLLoader loader = new FXMLLoader(FlexFit.class.getResource(fxmlPath));
         Node view = loader.load();
-        this.mainPane = (BorderPane) view;
-        this.scene = new Scene(mainPane, 1000, 600);
-        this.stage.setScene(scene);
-        /*} else {
-            // Aggiornamento vista esistente
-            if (view instanceof BorderPane) {
-                BorderPane loadedBorderPane = (BorderPane) view;
-                mainPane.setCenter(loadedBorderPane.getCenter());
-                mainPane.setRight(loadedBorderPane.getRight() != null ?
-                        loadedBorderPane.getRight() : null);
-                mainPane.setTop(loadedBorderPane.getTop());
-            } else {
-                mainPane.setCenter(view);
-                mainPane.setRight(null);
-            }*/
+        if (view instanceof BorderPane) {
+            BorderPane loadedBorderPane = (BorderPane) view;
+            mainPane.setCenter(loadedBorderPane.getCenter());
+            mainPane.setRight(loadedBorderPane.getRight() != null ?
+                    loadedBorderPane.getRight() : null);
+            mainPane.setTop(loadedBorderPane.getTop());
+        } else {
+            mainPane.setCenter(view);
+        }*/
+
+        try{
+            FXMLLoader loader = new FXMLLoader(FlexFit.class.getResource(fxmlPath));
+            BorderPane newView = loader.load();
+            // Sostituisce l'intero contenuto con il nuovo BorderPane
+            this.mainPane.setCenter(newView);
+        } catch (IOException e) {
+            System.err.println(STR."Errore nel caricamento della vista: \{fxmlPath}");
+            throw e;
+
+        }
 
     }
 
@@ -91,11 +97,14 @@ public class SceneHandlerClient {
     public void logout() throws Exception {
         // Pulisci la sessione
         ClientSession.getInstance().logout();
-        // Torna alla schermata di login
-        //loadView("/fxml/login.fxml", true);
+        SceneHandlerPrimaPagina.getInstance().loadPrimaPagina();
     }
 
     public void setAbbonamentoView() throws Exception {
         loadView("/fxml/client/abbonamentoClient.fxml");
+    }
+
+    public void setImpostazioniView() throws Exception {
+        loadView("/fxml/client/impostazioniClient.fxml");
     }
 }

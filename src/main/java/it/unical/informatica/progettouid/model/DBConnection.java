@@ -61,6 +61,21 @@ public class DBConnection {
         }
     }
 
+    public Connection getConnection() {
+        try {
+            if (con == null || con.isClosed()) {
+                // Modifica l'URL per il tuo database
+                String url = "jdbc:sqlite:your-database.db";
+                con = DriverManager.getConnection(url);
+                System.out.println("Connessione al database SQLite aperta.");
+            }
+        } catch (SQLException e) {
+            System.err.println("Errore durante l'apertura della connessione al database:");
+            e.printStackTrace();
+        }
+        return con;
+    }
+
     // Effettua una chiamata asincrona a un thread
     private <T> Task<T> asyncCall(Callable<T> callable) {
         return new Task<>() {
@@ -71,6 +86,32 @@ public class DBConnection {
         };
     }
 
+    public void removeAllUser() throws SQLException {
+        if (isConnected()) {
+            Statement stmt = con.createStatement();
+            stmt.executeUpdate("DELETE from users;");
+            stmt.close();
+        }
+    }
+
+    public Task<Boolean> insertAdmin(String nome, String cognome, String username, String password) {
+        return asyncCall(() -> {
+            if (isConnected()) {
+                System.out.println("Inserimento Admin: " + nome + " " + cognome);
+                String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt());
+                String query = "INSERT INTO Admin (Nome, Cognome, Username, Password) VALUES(?, ?, ?, ?);";
+                try (PreparedStatement stmt = con.prepareStatement(query)) {
+                    stmt.setString(1, nome);
+                    stmt.setString(2, cognome);
+                    stmt.setString(3, username);
+                    stmt.setString(4, hashedPassword);
+                    stmt.execute();
+                    return true;
+                }
+            }
+            return false;
+        });
+    }
 
     public Task<Boolean> insertClient(String nome, String cognome, String datadinascita, String email, String password) {
         return asyncCall(() -> {
@@ -165,7 +206,7 @@ public class DBConnection {
         });
     }
 
-    /*public Task<PersonalTrainer> getInfoPT() {
+    public Task<PersonalTrainer> getInfoPT() {
         return asyncCall(() -> {
             if (isConnected()) {
                 int idClient = ClientSession.getInstance().getCurrentClient().getId();
@@ -190,7 +231,7 @@ public class DBConnection {
             }
             return null;
         });
-    }*/
+    }
 
     public Task<List<Corsi>> getCorsi() {
         return asyncCall(() -> {
@@ -352,6 +393,7 @@ public class DBConnection {
                         "                FROM Schede s" +
                         "                JOIN PersonalTrainer pt ON s.PersonalTrainerID = pt.ID" +
                         "                WHERE s.ClienteID = ?" +
+                        "                AND s.Stato = 'attiva'" +
                         "                AND s.DataFine >= date('now')" +
                         "                LIMIT 1";
                 PreparedStatement stmt = con.prepareStatement(query);
@@ -365,7 +407,8 @@ public class DBConnection {
                             rs.getString("DataFine"),
                             rs.getString("Obiettivi"),
                             rs.getString("NoteGenerali"),
-                            rs.getString("SuggerimentiAlimentari"));
+                            rs.getString("SuggerimentiAlimentari"),
+                            rs.getString("Stato"));
                 }
                 stmt.close();
             }
@@ -425,17 +468,24 @@ public class DBConnection {
         });
     }
 
-    public Task<Admin> authenticateAdmin(String email, String password) {
+    public Task<Admin> authenticateAdmin(String username, String password) {
         return asyncCall(() -> {
             if (isConnected()) {
-                String query = "SELECT * FROM Admin WHERE email = ?;";
+                String query = "SELECT * FROM Admin WHERE username = ?;";
                 try (PreparedStatement stmt = con.prepareStatement(query)) {
-                    stmt.setString(1, email);
+                    stmt.setString(1, username);
                     try (ResultSet rs = stmt.executeQuery()) {
-                        String storedHash = rs.getString("Password");
-                        if (rs.next() && BCrypt.checkpw(password, storedHash)) {
-
-                            return new Admin(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5));
+                        if (rs.next()) {  // First move to the row
+                            String storedHash = rs.getString("Password");
+                            if (BCrypt.checkpw(password, storedHash)) {
+                                return new Admin(
+                                        rs.getInt("ID"),
+                                        rs.getString("Nome"),
+                                        rs.getString("Cognome"),
+                                        rs.getString("Username"),
+                                        rs.getString("Password")
+                                );
+                            }
                         }
                     }
                 }
@@ -528,9 +578,9 @@ public class DBConnection {
                 try (PreparedStatement stmt = con.prepareStatement(query)) {
                     stmt.setInt(1, idScheda);
                     stmt.setInt(2, esercizioId);
-                    stmt.setString(3, esercizioScheda.nSerie());
-                    stmt.setString(4, esercizioScheda.nRipetizioni());
-                    stmt.setString(5, esercizioScheda.tmpRecupero());
+                    stmt.setInt(3, esercizioScheda.nSerie());
+                    stmt.setInt(4, esercizioScheda.nRipetizioni());
+                    stmt.setInt(5, esercizioScheda.tmpRecupero());
                     stmt.setString(6, esercizioScheda.notes());
                     stmt.executeUpdate();
                 }
@@ -545,9 +595,9 @@ public class DBConnection {
             List<PrenotazionePT> prenotazioni = new ArrayList<>();
             if (isConnected()) {
                 int idPT = PTSession.getInstance().getCurrentTrainer().getId();
-                String query = "SELECT c.nome, c.cognome, p.data, p.oraPrenotazione, p.notes " +
+                String query = "SELECT c.nome, c.cognome, p.data, p.oraPrenotazione, p.notes" +
                         "FROM PrenotazioniPT p " +
-                        "JOIN Clienti c ON c.id = p.idClient " +
+                        "JOIN Clienti c ON c.id = p.idClient" +
                         "WHERE p.idPT = ?";
                 PreparedStatement stmt = con.prepareStatement(query);
                 stmt.setInt(1, idPT);
@@ -571,7 +621,7 @@ public class DBConnection {
     public Task<Void> insertNotifyTrainer(int trainerID, String message) {
         return asyncCall(() -> {
             if (isConnected()) {
-                String query = "INSERT INTO NotifichePT (idPT, message, stato) VALUES(?, ?, ?);";
+                String query = "INSERT INTO NotifichePT (trainerId, message, status) VALUES(?, ?, ?);";
                 try (PreparedStatement stmt = con.prepareStatement(query)) {
                     stmt.setInt(1, trainerID);
                     stmt.setString(2, message);
@@ -689,6 +739,7 @@ public class DBConnection {
                     stmt.setString(4, formattedDate);
                     stmt.setString(5, stato);
                     stmt.executeUpdate();
+
                 }
             }
             return null;
@@ -730,91 +781,46 @@ public class DBConnection {
         });
     }
 
-    public Task<Void> insertEsercizioScheda(EsercizioScheda nuovoEsercizio, int idClient) {
-        return asyncCall(()->{
-            if(isConnected()){
-                int schedaId = -1;
-                String id = "SELECT ID FROM Schede WHERE ClienteID = ?";
-                PreparedStatement stmtID = con.prepareStatement(id);
-                stmtID.setInt(1, idClient);
-                try (ResultSet rs = stmtID.executeQuery()) {
-                    if (rs.next()) {
-                        schedaId = rs.getInt("ID");
+    public Task<Boolean> checkIn(String code) {
+        return asyncCall(() -> {
+            if (isConnected()) {
+                String verifyquery = """
+                        SELECT c.Id, a.AccessiRimanenti\s
+                                        FROM Clienti c
+                                        LEFT JOIN Abbonamenti a ON c.Id = a.ClienteID\s
+                                        WHERE c.Id = ?\s
+                                        AND a.Stato = 'attivo'\s
+                                        AND a.DataScadenza >= date('now')
+                                        AND a.AccessiRimanenti > 0 """;
+                try (PreparedStatement stmt = con.prepareStatement(verifyquery)) {
+                    stmt.setString(1, code);
+                    ResultSet rs = stmt.executeQuery();
+
+                    if (!rs.next()) {
+                        throw new IllegalArgumentException("Codice non valido o abbonamento scaduto.");
                     }
-                }
+                    int clientId = rs.getInt("Id");
+                    int accessiRimanenti = rs.getInt("AccessiRimanenti");
 
+                    String insertQuery = "INSERT INTO AccessiPalestra (ClienteID, DataOraIngresso) VALUES (?, datetime('now', 'localtime'))";
+                    try (PreparedStatement stmt2 = con.prepareStatement(insertQuery)) {
+                        stmt2.setInt(1, clientId);
+                        stmt2.executeUpdate();
+                    }
 
+                    String updateQuery = "UPDATE Abbonamenti SET AccessiRimanenti = ? WHERE ClienteID = ? AND Stato = 'attivo'";
+                    try (PreparedStatement stmt3 = con.prepareStatement(updateQuery)) {
+                        stmt3.setInt(1, accessiRimanenti - 1);
+                        stmt3.setInt(2, clientId);
+                        stmt3.executeUpdate();
+                    }
 
-                String query = "INSERT INTO EserciziScheda(SchedaID, GiornoSettimana, NumeroSerie, NumeroRipetizioni, TempoRecupera, Note, NomeEsercizio, GruppoMuscolare) VALUES (?, ?, ?, ?, ?, ?, ? ,? )";
-                try (PreparedStatement stmt = con.prepareStatement(query)) {
-                    stmt.setInt(1, schedaId);
-                    stmt.setString(2, nuovoEsercizio.giorno());
-                    stmt.setString(3, nuovoEsercizio.nSerie());
-                    stmt.setString(4, nuovoEsercizio.nRipetizioni());
-                    stmt.setString(5, nuovoEsercizio.tmpRecupero());
-                    stmt.setString(6, nuovoEsercizio.notes());
-                    stmt.setString(7, nuovoEsercizio.nomeEserc());
-                    stmt.setString(8, nuovoEsercizio.gMuscolare());
-                    stmt.executeUpdate();
-                }
-
-            }
-            return null;
-        });
-
-    }
-
-    public Task<Void> insertSchedaClient(int selectedClientId, LocalDate dataInizio, LocalDate dataFine, String obiettivi, String note, String suggAlimentari) {
-        return asyncCall(()->{
-            int idPT = PTSession.getInstance().getCurrentTrainer().getId();
-            if(isConnected()){
-                DateTimeFormatter formatterIso = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-                String formattedInizio = dataInizio.format(formatterIso);
-                String formattedFine = dataFine.format(formatterIso);
-
-                String query = "INSERT INTO Schede(ClienteID, PersonalTrainerID, DataInizio, DataFine, Obiettivi, NoteGenerali, SuggerimentiAlimentari) VALUES(?, ?, ?, ?, ?, ?, ?)";
-                try(PreparedStatement stmt  = con.prepareStatement(query)) {
-                    stmt.setInt(1, selectedClientId);
-                    stmt.setInt(2, idPT);
-                    stmt.setString(3,formattedInizio );
-                    stmt.setString(4, formattedFine);
-                    stmt.setString(5, obiettivi);
-                    stmt.setString(6, note);
-                    stmt.setString(7, suggAlimentari);
-                    stmt.execute();
+                    return true;
                 }
             }
-            return null;
+            return false;
         });
     }
-
-    public Task<PersonalTrainer> getPersonalFromSchedaClient(){
-        return asyncCall(()->{
-            int idClient = ClientSession.getInstance().getCurrentClient().getId();
-            int idPT = -1;
-            if(isConnected()) {
-                String query = "SELECT PersonalTrainerID FROM Schede WHERE ClienteID = ? ";
-                PreparedStatement stmt = con.prepareStatement(query);
-                stmt.setInt(1, idClient);
-                try (ResultSet rs = stmt.executeQuery()) {
-                    if (rs.next()) {
-                        idPT = rs.getInt("PersonalTrainerID");
-                    }
-                }
-
-                String queryPT = "SELECT * FROM PersonalTrainer WHERE ID = ?";
-                PreparedStatement stmtPT = con.prepareStatement(queryPT);
-                stmtPT.setInt(1, idPT);
-                try (ResultSet rs = stmtPT.executeQuery()) {
-                    if (rs.next()) {
-                        return new PersonalTrainer(idPT, rs.getString("Nome"), rs.getString("Cognome"), rs.getString("DataNascita"), rs.getString("Specializzazione"), rs.getString("Email"), rs.getString("Telefono"));
-                    }
-                }
-            }
-            return null;
-        });
-    }
-
 
     /*public LocalDate getInizioSettimana() {
         LocalDate today = LocalDate.now();

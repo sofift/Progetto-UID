@@ -20,10 +20,10 @@
 <?import javafx.scene.text.Text?>
 <?import org.kordamp.ikonli.javafx.FontIcon?>
 
-<BorderPane stylesheets="@../../styles/home.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unical.informatica.progettouid.controller.Admin.BillingController">
+<BorderPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unical.informatica.progettouid.controller.Admin.BillingController">
 
     <top>
-        <VBox styleClass="top">
+        <VBox styleClass="top" stylesheets="@../../styles/home.css">
             <children>
                 <Label text="Billing">
                     <graphic>
@@ -41,13 +41,13 @@
     </top>
 
     <left>
-        <VBox maxWidth="95" minWidth="95" spacing="10" styleClass="sidebar">
+        <VBox maxWidth="95" minWidth="95" spacing="10" styleClass="sidebar" stylesheets="@../../styles/sidebar.css">
             <padding>
                 <Insets bottom="20" top="20" />
             </padding>
             <Button maxWidth="Infinity" styleClass="sidebar-button">
                 <graphic>
-                    <VBox alignment="CENTER" spacing="5">
+                    <VBox alignment="CENTER" spacing="5" styleClass="sidebar-button">
                         <FontIcon iconLiteral="fas-home" />
                         <Text text="Home">
                             <font>
@@ -59,7 +59,7 @@
             </Button>
             <Button maxWidth="Infinity" styleClass="sidebar-button">
                 <graphic>
-                    <VBox alignment="CENTER" spacing="5">
+                    <VBox alignment="CENTER" spacing="5" styleClass="sidebar-button">
                         <FontIcon iconLiteral="fas-user-check" />
                         <Text text="Check-in">
                             <font>
@@ -71,7 +71,7 @@
             </Button>
             <Button maxWidth="Infinity" styleClass="sidebar-button">
                 <graphic>
-                    <VBox alignment="CENTER" spacing="5">
+                    <VBox alignment="CENTER" spacing="5" styleClass="sidebar-button">
                         <children>
                             <FontIcon iconLiteral="fas-users" />
                             <Text text="Membri">
@@ -85,7 +85,7 @@
             </Button>
             <Button maxWidth="Infinity" styleClass="sidebar-button">
                 <graphic>
-                    <VBox alignment="CENTER" spacing="5">
+                    <VBox alignment="CENTER" spacing="5" styleClass="sidebar-button">
                         <FontIcon iconLiteral="fas-user-plus" />
                         <Text text="Aggiungi cliente">
                             <font>
@@ -97,7 +97,7 @@
             </Button>
             <Button maxWidth="Infinity" styleClass="sidebar-button">
                 <graphic>
-                    <VBox alignment="CENTER" spacing="5">
+                    <VBox alignment="CENTER" spacing="5" styleClass="sidebar-button">
                         <FontIcon iconLiteral="fas-walking" />
                         <Text text="Aggiungi corso">
                             <font>
@@ -109,7 +109,7 @@
             </Button>
             <Button maxWidth="Infinity" styleClass="sidebar-button">
                 <graphic>
-                    <VBox alignment="CENTER" spacing="5">
+                    <VBox alignment="CENTER" spacing="5" styleClass="sidebar-button">
                         <FontIcon iconLiteral="far-credit-card" />
                         <Text text="Billing">
                             <font>
@@ -121,7 +121,7 @@
             </Button>
             <Button maxWidth="Infinity" styleClass="sidebar-button">
                 <graphic>
-                    <VBox alignment="CENTER" spacing="5">
+                    <VBox alignment="CENTER" spacing="5" styleClass="sidebar-button">
                         <FontIcon iconLiteral="far-user" />
                         <Text text="Account">
                             <font>
@@ -133,7 +133,7 @@
             </Button>
             <Button maxWidth="Infinity" styleClass="sidebar-button">
                 <graphic>
-                    <VBox alignment="CENTER" spacing="5">
+                    <VBox alignment="CENTER" spacing="5" styleClass="sidebar-button">
                         <FontIcon iconLiteral="fas-cogs" />
                         <Text text="Impostazioni">
                             <font>
@@ -145,7 +145,7 @@
             </Button>
             <Button maxWidth="Infinity" styleClass="sidebar-button">
                 <graphic>
-                    <VBox alignment="CENTER" spacing="5">
+                    <VBox alignment="CENTER" spacing="5" styleClass="sidebar-button">
                         <FontIcon iconLiteral="far-question-circle" />
                         <Text text="Help">
                             <font>
@@ -160,19 +160,12 @@
 
     <center>
         <VBox spacing="10">
-            <HBox alignment="CENTER_LEFT" styleClass="header">
-                <Label styleClass="title" text="Billing">
-                    <graphic>
-                        <FontIcon iconLiteral="far-credit-card" />
-                    </graphic>
-                </Label>
-            </HBox>
 
-            <TabPane fx:id="billingTabPane" styleClass="billing-tabs">
+            <TabPane fx:id="billingTabPane" stylesheets="@../../styles/admin/billing.css">
                 <Tab closable="false" text="Overview">
-                    <VBox spacing="20">
+                    <VBox spacing="20" stylesheets="@../../styles/admin/billing.css">
                         <!-- Sezione totali -->
-                        <HBox spacing="15" styleClass="totals-section">
+                        <HBox spacing="15">
                             <VBox styleClass="total-card">
                                 <Label styleClass="amount" text="25,712.50" />
                                 <Label styleClass="label" text="Scheduled" />
@@ -190,7 +183,7 @@
                         <!-- Grafico delle entrate -->
                         <VBox styleClass="chart-section">
                             <Label styleClass="section-title" text="Revenue" />
-                            <LineChart fx:id="revenueChart" styleClass="revenue-chart">
+                            <LineChart fx:id="revenueChart" styleClass="revenue-chart" stylesheets="@../../styles/home.css">
                                 <xAxis>
                                     <CategoryAxis label="Month" />
                                 </xAxis>
@@ -288,7 +281,6 @@
                 </Tab>
 
                 <Tab closable="false" text="Recurring" />
-                <Tab closable="false" text="Discounts" />
                 <Tab closable="false" text="Payment Forms" />
                 <Tab closable="false" text="Accounting" />
                 <Tab closable="false" text="Settings" />

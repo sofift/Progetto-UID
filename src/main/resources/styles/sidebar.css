@@ -1,0 +1,26 @@
+/* Sidebar styles */
+.sidebar {
+    -fx-background-color: #1a3246;
+    -fx-padding: 20px 0;
+}
+
+.sidebar-button {
+    -fx-background-color: transparent;
+    -fx-text-fill: #ecF0F1;
+    -fx-padding: 5px 0;
+    -fx-cursor: hand;
+}
+
+.sidebar-button:hover {
+    -fx-background-color: rgb(16, 33, 44);
+}
+
+.sidebar-button .ikonli-font-icon {
+    -fx-icon-color: #ecF0F1;
+    -fx-icon-size: 20px;
+}
+
+.sidebar-button Text {
+    -fx-fill: #ecF0F1;
+}
+

@@ -21,39 +21,6 @@
     -fx-icon-size: 20px;
 }
 
-/* Sidebar styles */
-.sidebar {
-    -fx-background-color: white;
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 2, 0);
-}
-
-.sidebar-button {
-    -fx-background-color: transparent;
-    -fx-padding: 10px 0;
-    -fx-cursor: hand;
-}
-
-.sidebar-button:hover {
-    -fx-background-color: #f8f9fa;
-}
-
-.sidebar-button .ikonli-font-icon {
-    -fx-fill: #6c757d;
-    -fx-icon-size: 18px;
-}
-
-.sidebar-button:hover .ikonli-font-icon {
-    -fx-fill: #3498db;
-}
-
-.sidebar-button .text {
-    -fx-fill: #6c757d;
-}
-
-.sidebar-button:hover .text {
-    -fx-fill: #3498db;
-}
-
 /* Main content styles */
 .main-content {
     -fx-background-color: #f5f6fa;

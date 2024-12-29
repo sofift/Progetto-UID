@@ -10,6 +10,8 @@ import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
+import java.io.IOException;
+
 
 public class SceneHandlerPT {
     private static SceneHandlerPT instance = null;
@@ -28,31 +30,25 @@ public class SceneHandlerPT {
 
     public void init(Stage primaryStage) throws Exception {
         this.stage = primaryStage;
-        FXMLLoader fxmlLoader = new FXMLLoader(FlexFit.class.getResource("/fxml/pt/dashboardTrainer.fxml"));
-        this.scene = new Scene((Parent)fxmlLoader.load(), 1000, 600);
+        this.mainPane = new BorderPane();
+        this.scene = new Scene(mainPane, 1000, 600);
         this.stage.setScene(this.scene);
         this.stage.setTitle("FlexFit");
+        loadView("/fxml/pt/dashboardTrainer.fxml");
         this.stage.show();
     }
 
     private void loadView(String fxmlPath) throws Exception {
-        FXMLLoader loader = new FXMLLoader(FlexFit.class.getResource(fxmlPath));
-        Node view = loader.load();
-        this.mainPane = (BorderPane) view;
-        this.scene = new Scene(mainPane, 1000, 600);
-        this.stage.setScene(scene);
-        /*} else {
-            // Aggiornamento vista esistente
-            if (view instanceof BorderPane) {
-                BorderPane loadedBorderPane = (BorderPane) view;
-                mainPane.setCenter(loadedBorderPane.getCenter());
-                mainPane.setRight(loadedBorderPane.getRight() != null ?
-                        loadedBorderPane.getRight() : null);
-                mainPane.setTop(loadedBorderPane.getTop());
-            } else {
-                mainPane.setCenter(view);
-                mainPane.setRight(null);
-            }*/
+        try{
+            FXMLLoader loader = new FXMLLoader(FlexFit.class.getResource(fxmlPath));
+            BorderPane newView = loader.load();
+            // Sostituisce l'intero contenuto con il nuovo BorderPane
+            this.mainPane.setCenter(newView);
+        } catch (IOException e) {
+            System.err.println(STR."Errore nel caricamento della vista: \{fxmlPath}");
+            throw e;
+
+        }
 
     }
 
@@ -70,10 +66,19 @@ public class SceneHandlerPT {
 
     // Metodo per gestire il logout
     public void logout() throws Exception {
-        // Pulisci la sessione
-        PTSession.getInstance().logout();
-        // Torna alla schermata di login
-        //loadView("/fxml/login.fxml", true);
+        try{
+            PTSession.getInstance().logout();
+
+            if(mainPane!=null){
+                mainPane.getChildren().clear();
+            }
+
+            SceneHandlerPrimaPagina handler = SceneHandlerPrimaPagina.getInstance();
+            handler.init(this.stage);
+        } catch (Exception e) {
+            System.err.println(STR."Errore durante il logout: \{e.getMessage()}");
+            throw new RuntimeException("Impossibile completare il logout", e);
+        }
     }
 
 }

@@ -407,8 +407,7 @@ public class DBConnection {
                             rs.getString("DataFine"),
                             rs.getString("Obiettivi"),
                             rs.getString("NoteGenerali"),
-                            rs.getString("SuggerimentiAlimentari"),
-                            rs.getString("Stato"));
+                            rs.getString("SuggerimentiAlimentari"));
                 }
                 stmt.close();
             }
@@ -578,9 +577,9 @@ public class DBConnection {
                 try (PreparedStatement stmt = con.prepareStatement(query)) {
                     stmt.setInt(1, idScheda);
                     stmt.setInt(2, esercizioId);
-                    stmt.setInt(3, esercizioScheda.nSerie());
-                    stmt.setInt(4, esercizioScheda.nRipetizioni());
-                    stmt.setInt(5, esercizioScheda.tmpRecupero());
+                    stmt.setString(3, esercizioScheda.nSerie());
+                    stmt.setString(4, esercizioScheda.nRipetizioni());
+                    stmt.setString(5, esercizioScheda.tmpRecupero());
                     stmt.setString(6, esercizioScheda.notes());
                     stmt.executeUpdate();
                 }

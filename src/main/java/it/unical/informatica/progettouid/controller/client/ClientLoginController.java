@@ -3,7 +3,6 @@ package it.unical.informatica.progettouid.controller.client;
 import it.unical.informatica.progettouid.model.Client;
 import it.unical.informatica.progettouid.model.ClientSession;
 import it.unical.informatica.progettouid.model.DBConnection;
-import it.unical.informatica.progettouid.model.User;
 import it.unical.informatica.progettouid.view.AlertManager;
 import it.unical.informatica.progettouid.view.SceneHandlerPrimaPagina;
 import it.unical.informatica.progettouid.view.SceneHandlerClient;

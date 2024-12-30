@@ -25,10 +25,10 @@ public class ImpostazioniPTController {
 
     void initialize() {
         client = ClientSession.getInstance().getCurrentClient();
-        nomeLabel.setText("Nome: " + client.getNome() );
-        cognomeLabel.setText("Cognome: " + client.getCognome() );
-        dataNascitaLabel.setText("Data di nascita: " + client.getDataNascita());
-        emailLabel.setText("Email: " + client.getEmail() );
+        nomeLabel.setText(STR."Nome: \{client.nome()}");
+        cognomeLabel.setText(STR."Cognome: \{client.cognome()}");
+        dataNascitaLabel.setText(STR."Data di nascita: \{client.dataNascita()}");
+        emailLabel.setText(STR."Email: \{client.email()}");
     }
 
     @FXML

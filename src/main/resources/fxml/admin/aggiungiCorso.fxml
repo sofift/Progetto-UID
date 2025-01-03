@@ -21,10 +21,10 @@
 <?import javafx.scene.text.Text?>
 <?import org.kordamp.ikonli.javafx.FontIcon?>
 
-<BorderPane prefHeight="400.0" prefWidth="600.0" stylesheets="@../../styles/home.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unical.informatica.progettouid.controller.Admin.AggiungiCorsoController">
+<BorderPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unical.informatica.progettouid.controller.Admin.AggiungiCorsoController">
 
     <top>
-        <VBox fx:id="mainContent" styleClass="top">
+        <VBox fx:id="mainContent" styleClass="top" stylesheets="@../../styles/home.css">
             <Label text="Aggiungi Corso">
                 <graphic>
                     <FontIcon iconLiteral="fas-dumbbell" />
@@ -158,14 +158,14 @@
     </left>
 
     <center>
-        <ScrollPane fitToWidth="true" styleClass="main-content">
-            <VBox spacing="20" stylesheets="@../../styles/form.css">
+        <ScrollPane fitToWidth="true" stylesheets="@../../styles/admin/light/aggiungiCorso.css">
+            <VBox spacing="20" styleClass="background">
                 <padding>
                     <Insets bottom="20" left="20" right="20" top="20" />
                 </padding>
 
                 <VBox styleClass="form-section">
-                    <Label styleClass="section-header" text="Dettagli Corso">
+                    <Label styleClass="mainText" text="Dettagli Corso">
                         <graphic>
                             <FontIcon iconLiteral="fas-dumbbell" />
                         </graphic>
@@ -176,10 +176,10 @@
                             <Insets top="10" />
                         </padding>
 
-                        <Label text="Nome Corso *" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                        <Label styleClass="gridpane-label" text="Nome Corso *" GridPane.columnIndex="0" GridPane.rowIndex="0" />
                         <TextField fx:id="nomeCorso" promptText="Nome del corso" GridPane.columnIndex="1" GridPane.rowIndex="0" />
 
-                        <Label text="Tipo Corso *" GridPane.columnIndex="2" GridPane.rowIndex="0" />
+                        <Label styleClass="gridpane-label" text="Tipo Corso *" GridPane.columnIndex="2" GridPane.rowIndex="0" />
                         <ComboBox fx:id="tipoCorso" promptText="Seleziona tipo" GridPane.columnIndex="3" GridPane.rowIndex="0">
                             <items>
                                 <FXCollections fx:factory="observableArrayList">
@@ -194,16 +194,16 @@
                             </items>
                         </ComboBox>
 
-                        <Label text="Durata (minuti) *" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                        <Label styleClass="gridpane-label" text="Durata (minuti) *" GridPane.columnIndex="0" GridPane.rowIndex="1" />
                         <Spinner fx:id="durata" editable="true" GridPane.columnIndex="1" GridPane.rowIndex="1" />
 
-                        <Label text="Max Partecipanti *" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                        <Label styleClass="gridpane-label" text="Max Partecipanti *" GridPane.columnIndex="2" GridPane.rowIndex="1" />
                         <Spinner fx:id="maxPartecipanti" editable="true" GridPane.columnIndex="3" GridPane.rowIndex="1" />
 
-                        <Label text="Personal Trainer *" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+                        <Label styleClass="gridpane-label" text="Personal Trainer *" GridPane.columnIndex="0" GridPane.rowIndex="2" />
                         <ComboBox fx:id="personalTrainer" promptText="Seleziona trainer" GridPane.columnIndex="1" GridPane.rowIndex="2" />
 
-                        <Label text="Descrizione" GridPane.columnIndex="0" GridPane.rowIndex="3" />
+                        <Label styleClass="gridpane-label" text="Descrizione" GridPane.columnIndex="0" GridPane.rowIndex="3" />
                         <TextArea fx:id="descrizione" prefRowCount="3" promptText="Inserisci una descrizione del corso..." wrapText="true" GridPane.columnIndex="1" GridPane.columnSpan="3" GridPane.rowIndex="3" />
                   <columnConstraints>
                      <ColumnConstraints />
@@ -221,7 +221,7 @@
                 </VBox>
 
                 <VBox styleClass="form-section">
-                    <Label styleClass="section-header" text="Pianificazione">
+                    <Label styleClass="mainText" text="Pianificazione">
                         <graphic>
                             <FontIcon iconLiteral="fas-calendar-alt" />
                         </graphic>
@@ -232,7 +232,7 @@
                             <Insets top="10" />
                         </padding>
 
-                        <Label text="Giorni" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                        <Label styleClass="gridpane-label" text="Giorni" GridPane.columnIndex="0" GridPane.rowIndex="0" />
                         <VBox spacing="5" GridPane.columnIndex="1" GridPane.rowIndex="0">
                             <CheckBox fx:id="lunedi" text="Lunedì" />
                             <CheckBox fx:id="martedi" text="Martedì" />
@@ -243,7 +243,7 @@
                             <CheckBox fx:id="domenica" text="Domenica" />
                         </VBox>
 
-                        <Label text="Orario" GridPane.columnIndex="2" GridPane.rowIndex="0" />
+                        <Label styleClass="gridpane-label" text="Orario" GridPane.columnIndex="2" GridPane.rowIndex="0" />
                         <VBox spacing="10" GridPane.columnIndex="3" GridPane.rowIndex="0">
                             <ComboBox fx:id="orarioInizio" promptText="Ora inizio">
                                 <items>
@@ -278,12 +278,12 @@
                 </VBox>
 
                 <HBox alignment="CENTER_RIGHT" spacing="10">
-                    <Button fx:id="annullaButton" styleClass="button-secondary" text="Annulla">
+                    <Button fx:id="annullaButton" text="Annulla">
                         <graphic>
                             <FontIcon iconLiteral="fas-times" />
                         </graphic>
                     </Button>
-                    <Button fx:id="salvaCorso" styleClass="button-primary" text="Salva Corso">
+                    <Button fx:id="salvaCorso" text="Salva Corso">
                         <graphic>
                             <FontIcon iconLiteral="fas-check" />
                         </graphic>

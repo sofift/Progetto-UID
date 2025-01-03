@@ -15,10 +15,10 @@
 <?import javafx.scene.text.Text?>
 <?import org.kordamp.ikonli.javafx.FontIcon?>
 
-<BorderPane fx:id="root" stylesheets="@../../styles/home.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unical.informatica.progettouid.controller.Admin.AdminDashboardController">
+<BorderPane fx:id="root" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unical.informatica.progettouid.controller.Admin.AdminDashboardController">
 
     <top>
-        <VBox fx:id="mainContent" styleClass="top">
+        <VBox fx:id="mainContent" styleClass="top" stylesheets="@../../styles/home.css">
             <Label text="Dashboard">
                 <graphic>
                     <FontIcon iconLiteral="fas-home" />
@@ -159,12 +159,12 @@
     </left>
 
     <center>
-        <VBox spacing="20" styleClass="main-content">
+        <VBox spacing="20" stylesheets="@../../styles/admin/light/homeAdmin.css">
             <padding>
                 <Insets bottom="20" left="20" right="20" top="20" />
             </padding>
 
-            <HBox spacing="20" styleClass="stats-container" stylesheets="@../../styles/admin/light/homeAdmin.css">
+            <HBox spacing="20" styleClass="stats-container">
                 <StackPane styleClass="stat-card">
                     <VBox alignment="CENTER">
                         <Label styleClass="stat-amount" text="25,687.50" />
@@ -188,7 +188,7 @@
             </HBox>
 
             <VBox styleClass="chart-container">
-                <Label style="-fx-text-fill: grey;" styleClass="section-title" text="Attendance" />
+                <Label styleClass="section-title" text="Attendance" />
                 <BarChart fx:id="attendanceChart">
                     <xAxis>
                         <CategoryAxis label="Day" />
@@ -201,12 +201,12 @@
 
             <HBox spacing="20">
                 <VBox styleClass="section-container" HBox.hgrow="ALWAYS">
-                    <Label style="-fx-text-fill: grey;" styleClass="section-title" text="My Bookings" />
+                    <Label styleClass="section-title" text="My Bookings" />
                     <ListView fx:id="bookingsList" VBox.vgrow="ALWAYS" />
                 </VBox>
 
                 <VBox styleClass="section-container" HBox.hgrow="ALWAYS">
-                    <Label style="-fx-text-fill: grey;" styleClass="section-title" text="Notifications" />
+                    <Label styleClass="section-title" text="Notifications" />
                     <ListView fx:id="notificationsList" VBox.vgrow="ALWAYS" />
                 </VBox>
             </HBox>

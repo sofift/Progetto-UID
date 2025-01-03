@@ -14,6 +14,10 @@ BorderPane > .top{
     -fx-background-color: rgb(16, 33, 44);
 }
 
+.top .ikonli-font-icon{
+    -fx-icon-color: white;
+}
+
 /* Info section styles */
 HBox Text {
     -fx-font-size: 14px;

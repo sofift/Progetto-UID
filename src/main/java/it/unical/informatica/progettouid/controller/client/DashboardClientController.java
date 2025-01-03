@@ -22,7 +22,7 @@ public class DashboardClientController {
 
 
     public void initialize() {
-        bentornatoLabel.setText(STR."Bentornato \{ClientSession.getInstance().getCurrentClient().getNome()}");
+        bentornatoLabel.setText(STR."Bentornato \{ClientSession.getInstance().getCurrentClient().nome()}");
         mostraStatoAbbonamento();
         loadCorsiOggi();
         loadNotifiche();

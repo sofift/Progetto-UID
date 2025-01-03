@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
-<StackPane prefHeight="600.0" prefWidth="1000.0" stylesheets="@../../styles/light/loginLight.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unical.informatica.progettouid.controller.Trainer.TrainerLoginController">
+<StackPane prefHeight="600.0" prefWidth="1000.0" stylesheets="@../../styles/light/login.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unical.informatica.progettouid.controller.Trainer.TrainerLoginController">
 
     <VBox alignment="CENTER" maxWidth="400" spacing="20.0" styleClass="login-container">
         <padding>

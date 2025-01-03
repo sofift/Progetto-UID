@@ -23,10 +23,10 @@
 <?import javafx.scene.text.Text?>
 <?import org.kordamp.ikonli.javafx.FontIcon?>
 
-<BorderPane stylesheets="@../../styles/home.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unical.informatica.progettouid.controller.Admin.AggiungiUtenteController">
+<BorderPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unical.informatica.progettouid.controller.Admin.AggiungiUtenteController">
 
     <top>
-        <VBox styleClass="top">
+        <VBox styleClass="top" stylesheets="@../../styles/home.css">
             <children>
                 <Label text="Aggiungi utente">
                     <graphic>
@@ -162,17 +162,17 @@
     </left>
 
     <center>
-        <ScrollPane fitToWidth="true" styleClass="content-area">
-            <VBox spacing="20" stylesheets="@../../styles/form.css">
+        <ScrollPane fitToWidth="true" styleClass="content-area" stylesheets="@../../styles/admin/light/aggiungiUtente.css">
+            <VBox spacing="20" styleClass="background">
                 <padding>
                     <Insets bottom="20" left="20" right="20" top="20" />
                 </padding>
 
                 <ProgressBar fx:id="formProgress" progress="0.0" />
-                <Label fx:id="progressLabel" text="Completamento form: 0%" />
+                <Label fx:id="progressLabel" styleClass="mainText" text="Completamento form: 0%" />
 
                 <VBox styleClass="form-section">
-                    <Label styleClass="section-header" text="Dettagli Membro">
+                    <Label styleClass="mainText" text="Dettagli Membro">
                         <graphic>
                             <FontIcon iconLiteral="fas-user" />
                         </graphic>
@@ -183,34 +183,34 @@
                             <Insets top="10" />
                         </padding>
 
-                        <Label text="Tipo Iscrizione" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                        <Label styleClass="gridpane-label" text="Tipo Iscrizione" GridPane.columnIndex="0" GridPane.rowIndex="0" />
                         <HBox spacing="10" GridPane.columnIndex="1" GridPane.rowIndex="0">
                             <RadioButton selected="true" text="Visitatore" />
                             <RadioButton text="Membro" />
                         </HBox>
 
-                        <Label text="Nome *" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                        <Label styleClass="gridpane-label" text="Nome *" GridPane.columnIndex="0" GridPane.rowIndex="1" />
                         <TextField promptText="Nome" GridPane.columnIndex="1" GridPane.rowIndex="1" />
 
-                        <Label text="Cognome *" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                        <Label styleClass="gridpane-label" text="Cognome *" GridPane.columnIndex="2" GridPane.rowIndex="1" />
                         <TextField promptText="Cognome" GridPane.columnIndex="3" GridPane.rowIndex="1" />
 
-                        <Label text="Telefono *" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+                        <Label styleClass="gridpane-label" text="Telefono *" GridPane.columnIndex="0" GridPane.rowIndex="2" />
                         <TextField promptText="Numero di telefono" GridPane.columnIndex="1" GridPane.rowIndex="2" />
 
-                        <Label text="Email" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                        <Label styleClass="gridpane-label" text="Email" GridPane.columnIndex="2" GridPane.rowIndex="2" />
                         <TextField promptText="Email" GridPane.columnIndex="3" GridPane.rowIndex="2" />
 
-                        <Label text="Data di Nascita" GridPane.columnIndex="0" GridPane.rowIndex="3" />
+                        <Label styleClass="gridpane-label" text="Data di Nascita" GridPane.columnIndex="0" GridPane.rowIndex="3" />
                         <DatePicker promptText="gg/mm/aaaa" GridPane.columnIndex="1" GridPane.rowIndex="3" />
 
-                        <Label text="Genere" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+                        <Label styleClass="gridpane-label" text="Genere" GridPane.columnIndex="2" GridPane.rowIndex="3" />
                         <ComboBox promptText="Seleziona genere" GridPane.columnIndex="3" GridPane.rowIndex="3" />
 
-                        <Label text="Codice Fiscale" GridPane.columnIndex="0" GridPane.rowIndex="4" />
+                        <Label styleClass="gridpane-label" text="Codice Fiscale" GridPane.columnIndex="0" GridPane.rowIndex="4" />
                         <TextField fx:id="codiceFiscale" promptText="Inserisci codice fiscale" GridPane.columnIndex="1" GridPane.rowIndex="4" />
 
-                        <Label text="Professione" GridPane.columnIndex="2" GridPane.rowIndex="4" />
+                        <Label styleClass="gridpane-label" text="Professione" GridPane.columnIndex="2" GridPane.rowIndex="4" />
                         <TextField fx:id="professione" promptText="Inserisci professione" GridPane.columnIndex="3" GridPane.rowIndex="4" />
                   <columnConstraints>
                      <ColumnConstraints />
@@ -229,7 +229,7 @@
                 </VBox>
 
                 <VBox styleClass="form-section">
-                    <Label styleClass="section-header" text="Indirizzo">
+                    <Label styleClass="mainText" text="Indirizzo">
                         <graphic>
                             <FontIcon iconLiteral="fas-home" />
                         </graphic>
@@ -240,13 +240,13 @@
                             <Insets top="10" />
                         </padding>
 
-                        <Label text="Via *" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                        <Label styleClass="gridpane-label" text="Via *" GridPane.columnIndex="0" GridPane.rowIndex="0" />
                         <TextField promptText="Indirizzo" GridPane.columnIndex="1" GridPane.rowIndex="0" />
 
-                        <Label text="Città *" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                        <Label styleClass="gridpane-label" text="Città *" GridPane.columnIndex="0" GridPane.rowIndex="1" />
                         <TextField promptText="Città" GridPane.columnIndex="1" GridPane.rowIndex="1" />
 
-                        <Label text="CAP *" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                        <Label styleClass="gridpane-label" text="CAP *" GridPane.columnIndex="2" GridPane.rowIndex="1" />
                         <TextField promptText="CAP" GridPane.columnIndex="3" GridPane.rowIndex="1" />
                   <columnConstraints>
                      <ColumnConstraints />
@@ -262,7 +262,7 @@
                 </VBox>
 
                 <VBox styleClass="form-section">
-                    <Label styleClass="section-header" text="Contatto di Emergenza">
+                    <Label styleClass="mainText" text="Contatto di Emergenza">
                         <graphic>
                             <FontIcon iconLiteral="fas-phone" />
                         </graphic>
@@ -273,13 +273,13 @@
                             <Insets top="10" />
                         </padding>
 
-                        <Label text="Nome Contatto" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                        <Label styleClass="gridpane-label" text="Nome Contatto" GridPane.columnIndex="0" GridPane.rowIndex="0" />
                         <TextField promptText="Nome completo" GridPane.columnIndex="1" GridPane.rowIndex="0" />
 
-                        <Label text="Telefono" GridPane.columnIndex="2" GridPane.rowIndex="0" />
+                        <Label styleClass="gridpane-label" text="Telefono" GridPane.columnIndex="2" GridPane.rowIndex="0" />
                         <TextField promptText="Numero di telefono" GridPane.columnIndex="3" GridPane.rowIndex="0" />
 
-                        <Label text="Relazione" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                        <Label styleClass="gridpane-label" text="Relazione" GridPane.columnIndex="0" GridPane.rowIndex="1" />
                         <ComboBox promptText="Seleziona relazione" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                   <columnConstraints>
                      <ColumnConstraints />
@@ -295,7 +295,7 @@
                 </VBox>
 
                 <VBox styleClass="form-section">
-                    <Label styleClass="section-header" text="Abbonamento">
+                    <Label styleClass="mainText" text="Abbonamento">
                         <graphic>
                             <FontIcon iconLiteral="fas-credit-card" />
                         </graphic>
@@ -306,7 +306,7 @@
                             <Insets top="10" />
                         </padding>
 
-                        <Label text="Tipo Abbonamento" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                        <Label styleClass="gridpane-label" text="Tipo Abbonamento" GridPane.columnIndex="0" GridPane.rowIndex="0" />
                         <ComboBox promptText="Seleziona piano" GridPane.columnIndex="1" GridPane.rowIndex="0">
                             <items>
                                 <FXCollections fx:factory="observableArrayList">
@@ -326,7 +326,7 @@
                 </VBox>
 
                 <VBox styleClass="form-section">
-                    <Label styleClass="section-header" text="Liberatoria">
+                    <Label styleClass="mainText" text="Liberatoria">
                         <graphic>
                             <FontIcon iconLiteral="fas-file-alt" />
                         </graphic>
@@ -337,32 +337,32 @@
                 </VBox>
 
                 <HBox alignment="CENTER_RIGHT" spacing="10">
-                    <Button styleClass="button-secondary" text="Annulla" />
-                    <Button styleClass="button-primary" text="Salva" />
+                    <Button text="Annulla" />
+                    <Button text="Salva" />
                 </HBox>
 
                 <VBox styleClass="form-section">
-                    <Label styleClass="section-header" text="Informazioni Mediche">
+                    <Label styleClass="mainText" text="Informazioni Mediche">
                         <graphic>
                             <FontIcon iconLiteral="fas-heartbeat" />
                         </graphic>
                     </Label>
 
                     <GridPane hgap="15" vgap="10">
-                        <Label text="Certificato Medico" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                        <Label styleClass="gridpane-label" text="Certificato Medico" GridPane.columnIndex="0" GridPane.rowIndex="0" />
                         <HBox spacing="10" GridPane.columnIndex="1" GridPane.rowIndex="0">
                             <Button fx:id="loadCertificate" text="Carica Certificato">
                                 <graphic>
                                     <FontIcon iconLiteral="fas-upload" />
                                 </graphic>
                             </Button>
-                            <Label fx:id="certificateStatus" text="Nessun file caricato" />
+                            <Label fx:id="certificateStatus" styleClass="gridpane-label" text="Nessun file caricato" />
                         </HBox>
 
-                        <Label text="Data Scadenza" GridPane.columnIndex="2" GridPane.rowIndex="0" />
+                        <Label styleClass="gridpane-label" text="Data Scadenza" GridPane.columnIndex="2" GridPane.rowIndex="0" />
                         <DatePicker fx:id="certificateExpiry" GridPane.columnIndex="3" GridPane.rowIndex="0" />
 
-                        <Label text="Condizioni Mediche" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                        <Label styleClass="gridpane-label" text="Condizioni Mediche" GridPane.columnIndex="0" GridPane.rowIndex="1" />
                         <TextArea fx:id="medicalConditions" prefRowCount="2" promptText="Inserisci eventuali condizioni mediche rilevanti" wrapText="true" GridPane.columnIndex="1" GridPane.columnSpan="3" GridPane.rowIndex="1" />
                   <columnConstraints>
                      <ColumnConstraints />
@@ -377,15 +377,15 @@
                     </GridPane>
                 </VBox>
 
-                <VBox styleClass="form-section">
-                    <Label styleClass="section-header" text="Obiettivi Fitness">
+                <VBox>
+                    <Label styleClass="mainText" text="Obiettivi Fitness">
                         <graphic>
                             <FontIcon iconLiteral="fas-bullseye" />
                         </graphic>
                     </Label>
 
                     <GridPane hgap="15" vgap="10">
-                        <Label text="Obiettivo Principale" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                        <Label styleClass="gridpane-label" text="Obiettivo Principale" GridPane.columnIndex="0" GridPane.rowIndex="0" />
                         <ComboBox fx:id="mainGoal" promptText="Seleziona obiettivo" GridPane.columnIndex="1" GridPane.rowIndex="0">
                             <items>
                                 <FXCollections fx:factory="observableArrayList">
@@ -398,7 +398,7 @@
                             </items>
                         </ComboBox>
 
-                        <Label text="Livello Esperienza" GridPane.columnIndex="2" GridPane.rowIndex="0" />
+                        <Label styleClass="gridpane-label" text="Livello Esperienza" GridPane.columnIndex="2" GridPane.rowIndex="0" />
                         <ComboBox fx:id="experienceLevel" promptText="Seleziona livello" GridPane.columnIndex="3" GridPane.rowIndex="0">
                             <items>
                                 <FXCollections fx:factory="observableArrayList">
@@ -409,7 +409,7 @@
                             </items>
                         </ComboBox>
 
-                        <Label text="Note Aggiuntive" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                        <Label styleClass="gridpane-label" text="Note Aggiuntive" GridPane.columnIndex="0" GridPane.rowIndex="1" />
                         <TextArea fx:id="fitnessNotes" prefRowCount="2" promptText="Inserisci eventuali note sugli obiettivi" wrapText="true" GridPane.columnIndex="1" GridPane.columnSpan="3" GridPane.rowIndex="1" />
                   <columnConstraints>
                      <ColumnConstraints />
@@ -425,7 +425,7 @@
                 </VBox>
 
                 <VBox styleClass="form-section">
-                    <Label styleClass="section-header" text="Servizi Aggiuntivi">
+                    <Label styleClass="mainText" text="Servizi Aggiuntivi">
                         <graphic>
                             <FontIcon iconLiteral="fas-plus-circle" />
                         </graphic>
@@ -441,17 +441,17 @@
 
 
                 <HBox alignment="CENTER_RIGHT" spacing="10">
-                    <Button styleClass="button-secondary" text="Stampa iscizione">
+                    <Button text="Stampa iscizione">
                         <graphic>
                             <FontIcon iconLiteral="fas-print" />
                         </graphic>
                     </Button>
-                    <Button fx:id="cancelButton" styleClass="button-secondary" text="Annulla">
+                    <Button fx:id="cancelButton" text="Annulla">
                         <graphic>
                             <FontIcon iconLiteral="fas-times" />
                         </graphic>
                     </Button>
-                    <Button fx:id="registraNuovoUtente" styleClass="button-primary" text="Registra">
+                    <Button fx:id="registraNuovoUtente" text="Registra">
                         <graphic>
                             <FontIcon iconLiteral="fas-check" />
                         </graphic>

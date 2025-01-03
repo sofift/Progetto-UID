@@ -163,7 +163,7 @@ public class CreaSchedaController {
     }
 
     private void verificaSchedaClient() {
-        Task<Boolean> task = DBConnection.getInstance().clientHaUnaScheda(selectedClient.getId());
+        Task<Boolean> task = DBConnection.getInstance().clientHaUnaScheda(selectedClient.id());
         Thread thread = new Thread(task);
         thread.setDaemon(true);
         thread.start();
@@ -187,7 +187,7 @@ public class CreaSchedaController {
 
     private void creaSchedaClient() {
         info.getChildren().clear();
-        Label nota = new Label(STR."\{selectedClient.getNome()} non ha ancora una scheda, creala subito");
+        Label nota = new Label(STR."\{selectedClient.nome()} non ha ancora una scheda, creala subito");
         Button creaScheda = new Button("Crea scheda");
         info.getChildren().addAll(nota, creaScheda);
         vboxCenter.getChildren().addAll(info);
@@ -209,7 +209,7 @@ public class CreaSchedaController {
                     return;
                 }
 
-                Task<Void> taskCreazione = DBConnection.getInstance().insertSchedaClient(selectedClient.getId(), dataInizioPicker.getValue(), dataFinePicker.getValue(), obiettivi.getText(), noteGenerali.getText(), suggerimentiAlimentari.getText());
+                Task<Void> taskCreazione = DBConnection.getInstance().insertSchedaClient(selectedClient.id(), dataInizioPicker.getValue(), dataFinePicker.getValue(), obiettivi.getText(), noteGenerali.getText(), suggerimentiAlimentari.getText());
 
                 Thread thread = new Thread(taskCreazione);
                 thread.setDaemon(true);
@@ -238,7 +238,7 @@ public class CreaSchedaController {
     }
 
     private void loadEserciziScheda(String selectedDay, TableView<Esercizio> esercizioTableView) {
-        Task<ObservableList<Esercizio> > task = DBConnection.getInstance().getEserciziGiorno(selectedClient.getId(), selectedDay);
+        Task<ObservableList<Esercizio> > task = DBConnection.getInstance().getEserciziGiorno(selectedClient.id(), selectedDay);
 
         task.setOnSucceeded(event -> {
             ObservableList<Esercizio> esercizi = task.getValue();
@@ -287,7 +287,7 @@ public class CreaSchedaController {
             return;
         }
 
-        Task<Void> task = DBConnection.getInstance().insertEsercizioScheda(nuovoEsercizio, selectedClient.getId());
+        Task<Void> task = DBConnection.getInstance().insertEsercizioScheda(nuovoEsercizio, selectedClient.id());
 
 
 

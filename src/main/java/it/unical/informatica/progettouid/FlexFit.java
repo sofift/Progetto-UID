@@ -1,11 +1,12 @@
 package it.unical.informatica.progettouid;
 
 import it.unical.informatica.progettouid.model.AdminInitializer;
+import it.unical.informatica.progettouid.util.ThemeManager;
 import it.unical.informatica.progettouid.view.SceneHandlerClient;
 import it.unical.informatica.progettouid.view.SceneHandlerPrimaPagina;
 import javafx.application.Application;
 import javafx.stage.Stage;
-
+import it.unical.informatica.progettouid.controller.client.ImpostazioniController;
 
 public class FlexFit extends Application {
     @Override
@@ -25,6 +26,8 @@ public class FlexFit extends Application {
     public static void main(String[] args) {
         AdminInitializer adminInitializer = new AdminInitializer();
         adminInitializer.initializeAdmins();
+        // String theme = ThemeManager.getCurrentTheme();
+        // updateTheme(theme);
         launch(args);
     }
 }

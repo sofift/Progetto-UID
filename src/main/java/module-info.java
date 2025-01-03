@@ -9,6 +9,7 @@ module it.unical.informatica.progettouid {
     requires java.desktop;
     requires spring.security.core;
     requires java.management;
+    requires java.prefs;
 
     opens it.unical.informatica.progettouid.controller to javafx.fxml;
     opens it.unical.informatica.progettouid to javafx.fxml;

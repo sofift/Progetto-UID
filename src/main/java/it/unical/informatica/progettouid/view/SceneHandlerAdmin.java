@@ -27,65 +27,40 @@ public class SceneHandlerAdmin {
     public void init(Stage primaryStage) throws Exception {
         this.stage = primaryStage;
         FXMLLoader loader = new FXMLLoader(FlexFit.class.getResource("/fxml/admin/dashboardAdmin.fxml"));
-        Parent root = loader.load();
-        this.mainPane = (BorderPane) root;
-        this.scene = new Scene(root, 1000, 600);
-        this.stage.setScene(scene);
-        this.stage.setWidth(1000);
-        this.stage.setHeight(600);
+        this.scene = new Scene((Parent)loader.load(), 1000, 600);
+        this.stage.setScene(this.scene);
+        this.stage.setTitle("FlexFit");
         this.stage.show();
     }
 
-    public void loadDashboard(String username) throws Exception{
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/admin/dashboardAdmin.fxml"));
+    private void loadView(String fxmlPath) throws Exception{
+        FXMLLoader loader = new FXMLLoader(FlexFit.class.getResource(fxmlPath));
         Node view = loader.load();
-        mainPane.setCenter(view);
+        this.mainPane = (BorderPane) view;
+        this.scene = new Scene(mainPane, 1000, 600);
+        this.stage.setScene(scene);
     }
 
     public void setDashboardView() throws Exception {
-        FXMLLoader loader = new FXMLLoader(FlexFit.class.getResource("/fxml/admin/dashboardAdmin.fxml"));
-        Node view = loader.load();
-        mainPane.setCenter(view);
+        loadView("/fxml/admin/dashboardAdmin.fxml");
     }
 
     public void setCheckIn() throws Exception {
-        FXMLLoader loader = new FXMLLoader(FlexFit.class.getResource("/fxml/admin/checkin.fxml"));
-        Node view = loader.load();
-        mainPane.setCenter(view);
+        loadView("/fxml/admin/checkin.fxml");
     }
     public void setClient() throws Exception {
-        FXMLLoader loader = new FXMLLoader(FlexFit.class.getResource("/fxml/admin/membri.fxml"));
-        Node view = loader.load();
-        mainPane.setCenter(view);
-    }
-    // da modificare con personal trainer fxml
-    public void setPersonalTrainer() throws Exception {
-        FXMLLoader loader = new FXMLLoader(FlexFit.class.getResource("/fxml/admin/checkin.fxml"));
-        Node view = loader.load();
-        mainPane.setCenter(view);
+        loadView("/fxml/admin/membri.fxml");
     }
     public void setAddUser() throws Exception {
-        FXMLLoader loader = new FXMLLoader(FlexFit.class.getResource("/fxml/admin/aggiungiUtente.fxml"));
-        Node view = loader.load();
-        mainPane.setCenter(view);
+        loadView("/fxml/admin/aggiungiUtente.fxml");
     }
 
     // da modificare con aggiungi corso FXML
     public void setAddCourse() throws Exception {
-        FXMLLoader loader = new FXMLLoader(FlexFit.class.getResource("/fxml/admin/aggiungiUtente.fxml"));
-        Node view = loader.load();
-        mainPane.setCenter(view);
-    }
-    // da modificare con aggiunti PT fxml
-    public void setAddPersonalTrainer() throws Exception {
-        FXMLLoader loader = new FXMLLoader(FlexFit.class.getResource("/fxml/admin/dashboardAdmin.fxml"));
-        Node view = loader.load();
-        mainPane.setCenter(view);
+        loadView("/fxml/admin/aggiungiCorso.fxml");
     }
     public void setBilling() throws Exception {
-        FXMLLoader loader = new FXMLLoader(FlexFit.class.getResource("/fxml/admin/billing.fxml"));
-        Node view = loader.load();
-        mainPane.setCenter(view);
+        loadView("/fxml/admin/billing.fxml");
     }
 
     // da aggiungere con account

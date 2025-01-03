@@ -2,33 +2,43 @@
     -fx-opacity: 0;
 }
 
-.tab-pane
-{
+.tab-pane {
     -fx-tab-min-width:90px;
 }
 
 .tab{
     -fx-background-insets: 0 1 0 1,0,0;
 }
-.tab-pane .tab
-{
+.tab-pane .tab {
     -fx-background-color: #e6e6e6;
-
 }
 
-.tab-pane .tab:selected
-{
+.tab-pane .tab:selected{
     -fx-background-color: #3c3c3c;
 }
 
 .tab .tab-label {
     -fx-alignment: CENTER;
-    -fx-text-fill: #828282;
     -fx-font-size: 12px;
     -fx-font-weight: bold;
 }
 
 .tab:selected .tab-label {
     -fx-alignment: CENTER;
-    -fx-text-fill: #96b946;
+}
+
+.payments .button {
+    -fx-background-color: #1a3246;
+}
+
+.payments .ikonli-font-icon{
+    -fx-icon-color: white;
+}
+
+.payments {
+    -fx-text-fill: white;
+}
+
+.payments .tab-header-area .tab-label{
+    -fx-text-fill: #1a3246;
 }

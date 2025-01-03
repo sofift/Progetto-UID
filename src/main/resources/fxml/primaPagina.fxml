@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
-<StackPane prefHeight="600.0" prefWidth="1000.0" styleClass="background" stylesheets="@../styles/firstPageDark.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unical.informatica.progettouid.controller.PrimaPaginaController">
+<StackPane prefHeight="600.0" prefWidth="1000.0" styleClass="background" stylesheets="@../styles/dark/firstPageDark.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unical.informatica.progettouid.controller.PrimaPaginaController">
 
     <VBox alignment="CENTER" spacing="20.0">
         <padding>

@@ -1,0 +1,86 @@
+.check-in-container {
+    -fx-background-color: #eaeaea;
+    -fx-background-radius: 10;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 0);
+}
+
+.check-in-container .label{
+    -fx-text-fill: #1a3246;
+}
+
+.check-in-container .ikonli-font-icon {
+    -fx-icon-color: #1a3246;
+}
+
+
+.display-field {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #1a3246;
+    -fx-border-radius: 5;
+    -fx-background-radius: 5;
+    -fx-padding: 10;
+    -fx-pref-width: 200;
+    -fx-pref-height: 50;
+    -fx-alignment: CENTER;
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #1a3246;
+}
+
+.display-field:hover{
+    -fx-border-color: #8ebce3;
+}
+
+.tastierino {
+    -fx-padding: 10;
+    -fx-hgap: 10;
+    -fx-vgap: 10;
+}
+
+.tastierino-btn {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #dee2e6;
+    -fx-border-radius: 5;
+    -fx-background-radius: 5;
+    -fx-min-width: 60;
+    -fx-min-height: 60;
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 0);
+    -fx-text-fill: #1a3246;
+}
+
+.tastierino-btn:hover {
+    -fx-background-color: #e9ecef;
+    -fx-cursor: hand;
+}
+
+.tastierino-btn:pressed {
+    -fx-background-color: #dee2e6;
+}
+
+#btnEnter {
+    -fx-background-color: #28a745;
+    -fx-text-fill: #1a3246;
+    -fx-border-color: #28a745;
+}
+
+#btnEnter:hover {
+    -fx-background-color: #218838;
+    -fx-border-color: #218838;
+}
+
+#btnClear {
+    -fx-background-color: #dc3545;
+    -fx-text-fill: white;
+    -fx-border-color: #dc3545;
+}
+
+#btnClear:hover {
+    -fx-background-color: #c82333;
+    -fx-border-color: #c82333;
+}
+
+.list-view{
+    -fx-text-fill: #1a3246;
+}

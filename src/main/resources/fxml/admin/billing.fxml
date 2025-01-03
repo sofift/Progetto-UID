@@ -161,9 +161,9 @@
     <center>
         <VBox spacing="10">
 
-            <TabPane fx:id="billingTabPane" stylesheets="@../../styles/admin/billing.css">
+            <TabPane fx:id="billingTabPane" stylesheets="@../../styles/admin/light/billing.css">
                 <Tab closable="false" text="Overview">
-                    <VBox spacing="20" stylesheets="@../../styles/admin/billing.css">
+                    <VBox spacing="20" stylesheets="@../../styles/admin/light/billing.css">
                         <!-- Sezione totali -->
                         <HBox spacing="15">
                             <VBox styleClass="total-card">
@@ -224,7 +224,7 @@
                 </Tab>
 
                 <Tab closable="false" text="Payments">
-                    <VBox spacing="10">
+                    <VBox spacing="10" styleClass="payments">
                         <!-- Barra di ricerca e filtri -->
                         <HBox alignment="CENTER_LEFT" spacing="10" styleClass="search-bar">
                             <TextField fx:id="searchField" promptText="Search first or last name..." styleClass="search-field" />
@@ -237,7 +237,7 @@
                             <Button styleClass="action-button" text="PRINT" />
                             <Button styleClass="action-button" text="EXPORT" />
                         </HBox>
-                  <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE">
+                  <TabPane prefHeight="200.0" prefWidth="200.0" styleClass="payments" tabClosingPolicy="UNAVAILABLE">
                     <tabs>
                       <Tab text="Pagati">
                         <content>

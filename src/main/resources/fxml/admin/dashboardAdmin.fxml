@@ -164,7 +164,7 @@
                 <Insets bottom="20" left="20" right="20" top="20" />
             </padding>
 
-            <HBox spacing="20" styleClass="stats-container" stylesheets="@../../styles/homeAdmin.css">
+            <HBox spacing="20" styleClass="stats-container" stylesheets="@../../styles/admin/light/homeAdmin.css">
                 <StackPane styleClass="stat-card">
                     <VBox alignment="CENTER">
                         <Label styleClass="stat-amount" text="25,687.50" />

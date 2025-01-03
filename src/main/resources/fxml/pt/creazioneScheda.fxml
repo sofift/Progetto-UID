@@ -6,7 +6,6 @@
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.control.Spinner?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.BorderPane?>
@@ -43,11 +42,11 @@
             <padding>
                 <Insets bottom="20" top="20" />
             </padding>
-            <Button maxWidth="Infinity" styleClass="sidebar-button">
+            <Button fx:id="dashboardTrainer" maxWidth="Infinity" onAction="#onNavigationButtonClick" styleClass="sidebar-button">
                 <graphic>
                     <VBox alignment="CENTER" spacing="5">
-                        <FontIcon iconLiteral="fas-home" />
-                        <Text text="Home">
+                        <FontIcon iconLiteral="fab-cuttlefish" />
+                        <Text text="Dashboard">
                             <font>
                                 <Font size="9.0" />
                             </font>
@@ -55,7 +54,7 @@
                     </VBox>
                 </graphic>
             </Button>
-            <Button maxWidth="Infinity" styleClass="sidebar-button">
+            <Button fx:id="attivitaPT" maxWidth="Infinity" onAction="#onNavigationButtonClick" styleClass="sidebar-button">
                 <graphic>
                     <VBox alignment="CENTER" spacing="5">
                         <FontIcon iconLiteral="fas-calendar-alt" />
@@ -67,23 +66,11 @@
                     </VBox>
                 </graphic>
             </Button>
-            <Button maxWidth="Infinity" styleClass="sidebar-button">
-                <graphic>
-                    <VBox alignment="CENTER" spacing="5">
-                        <FontIcon iconLiteral="fas-dumbbell" />
-                        <Text text="Personal trainer">
-                            <font>
-                                <Font size="9.0" />
-                            </font>
-                        </Text>
-                    </VBox>
-                </graphic>
-            </Button>
-            <Button maxWidth="Infinity" styleClass="sidebar-button">
+            <Button fx:id="creazioneScheda" maxWidth="Infinity" onAction="#onNavigationButtonClick" styleClass="sidebar-button">
                 <graphic>
                     <VBox alignment="CENTER" spacing="5">
                         <FontIcon iconLiteral="far-clipboard" />
-                        <Text text="Scheda">
+                        <Text text="Crea scheda">
                             <font>
                                 <Font size="9.0" />
                             </font>
@@ -91,19 +78,7 @@
                     </VBox>
                 </graphic>
             </Button>
-            <Button maxWidth="Infinity" styleClass="sidebar-button">
-                <graphic>
-                    <VBox alignment="CENTER" spacing="5">
-                        <FontIcon iconLiteral="far-credit-card" />
-                        <Text text="Il tuo abbonamento">
-                            <font>
-                                <Font size="9.0" />
-                            </font>
-                        </Text>
-                    </VBox>
-                </graphic>
-            </Button>
-            <Button maxWidth="Infinity" styleClass="sidebar-button">
+            <Button fx:id="accountPT" maxWidth="Infinity" onAction="#onNavigationButtonClick" styleClass="sidebar-button">
                 <graphic>
                     <VBox alignment="CENTER" spacing="5">
                         <FontIcon iconLiteral="far-user" />
@@ -115,7 +90,7 @@
                     </VBox>
                 </graphic>
             </Button>
-            <Button maxWidth="Infinity" styleClass="sidebar-button">
+            <Button maxWidth="Infinity" onAction="#onNavigationButtonClick" styleClass="sidebar-button">
                 <graphic>
                     <VBox alignment="CENTER" spacing="5">
                         <FontIcon iconLiteral="fas-cogs" />
@@ -127,7 +102,7 @@
                     </VBox>
                 </graphic>
             </Button>
-            <Button maxWidth="Infinity" styleClass="sidebar-button">
+            <Button maxWidth="Infinity" onAction="#onNavigationButtonClick" styleClass="sidebar-button">
                 <graphic>
                     <VBox alignment="CENTER" spacing="5">
                         <FontIcon iconLiteral="far-question-circle" />
@@ -147,18 +122,17 @@
             <padding>
                 <Insets bottom="20" left="20" right="20" top="20" />
             </padding>
-         <FlowPane hgap="10.0" vgap="20.0">
-            <children>
-                   <Label styleClass="form-label" text="Cliente:" />
-                   <ComboBox fx:id="clienteComboBox" prefWidth="200" />
-                   <Label styleClass="form-label" text="Data inizio:" />
-                   <DatePicker fx:id="dataInizioPicker" />
-               <Label styleClass="form-label" text="Scadenza:" />
-               <DatePicker fx:id="dataFinePicker" />
-                   <Label styleClass="form-label" text="Durata (settimane):" />
-               <TextField fx:id="durataField" prefWidth="100.0" />
-            </children>
-         </FlowPane>
+            <FlowPane fx:id="flowpaneScheda" hgap="10.0" vgap="20.0">
+                <children>
+                    <Label styleClass="form-label" text="Cliente:" />
+                    <ComboBox fx:id="clienteComboBox" prefWidth="200" />
+                    <Label styleClass="form-label" text="Data inizio:" />
+                    <DatePicker fx:id="dataInizioPicker" />
+                    <Label styleClass="form-label" text="Scadenza:" />
+                    <DatePicker fx:id="dataFinePicker" />
+                </children>
+            </FlowPane>
+         <VBox fx:id="info" spacing="20.0" />
         </VBox>
     </center>
 
@@ -199,11 +173,6 @@
                 </VBox>
 
                 <HBox alignment="CENTER" spacing="10">
-                    <Button onAction="#salvaScheda" styleClass="primary-button" text="Salva Scheda">
-                        <graphic>
-                            <FontIcon iconLiteral="fas-save" />
-                        </graphic>
-                    </Button>
                     <Button onAction="#anteprimaPDF" styleClass="secondary-button" text="Anteprima PDF">
                         <graphic>
                             <FontIcon iconLiteral="fas-file-pdf" />
@@ -211,75 +180,76 @@
                     </Button>
                 </HBox>
             </VBox>
-         <ScrollPane fx:id="aggiungiEsercizioPanel" maxWidth="410.0" prefHeight="603.0" prefWidth="263.0" visible="false">
-            <content>
-      
-                  <!-- Pannello per l'aggiunta di esercizi -->
-                  <VBox alignment="TOP_CENTER" maxWidth="410.0" prefWidth="253.0" spacing="15" styleClass="right-sidebar">
-      
-                      <Label styleClass="section-header" text="Aggiungi Esercizio">
-                          <graphic>
-                              <FontIcon iconLiteral="fas-dumbbell" />
-                          </graphic>
-                      </Label>
-                  <VBox prefHeight="58.0" prefWidth="255.0" spacing="10">
-                     <children>
-                        <Label styleClass="form-label" text="Giorno della settimana" />
-                        <TextField fx:id="giornoField" maxWidth="210.0" />
-                     </children>
-                  </VBox>
-      
-                      <VBox spacing="10">
-                          <Label styleClass="form-label" text="Nome Esercizio:" />
-                          <ComboBox fx:id="esercizioComboBox" editable="true" maxWidth="210.0" />
-                      </VBox>
-      
-                      <VBox spacing="10">
-                          <Label styleClass="form-label" text="Serie:" />
-                          <Spinner fx:id="serieSpinner" maxWidth="210.0">
-                    </Spinner>
-                      </VBox>
-      
-                      <VBox spacing="10">
-                          <Label styleClass="form-label" text="Ripetizioni:" />
-                          <Spinner fx:id="ripetizioniSpinner" maxWidth="210.0">
+            <ScrollPane fx:id="aggiungiEsercizioPanel" maxWidth="410.0" prefHeight="603.0" prefWidth="263.0" visible="false">
+                <content>
 
-                    </Spinner>
-                      </VBox>
-      
-                      <VBox spacing="10">
-                          <Label styleClass="form-label" text="Recupero (sec):" />
-                          <Spinner fx:id="recuperoSpinner" maxWidth="210.0">
+                    <!-- Pannello per l'aggiunta di esercizi -->
+                    <VBox alignment="TOP_CENTER" maxWidth="410.0" prefWidth="253.0" spacing="15" styleClass="right-sidebar">
 
-                    </Spinner>
-                      </VBox>
-      
-                      <VBox spacing="5">
-                          <Label styleClass="form-label" text="Note:" />
-                          <TextArea fx:id="noteEsercizioTextArea" maxWidth="210.0" prefHeight="68.0" prefRowCount="3" prefWidth="223.0" wrapText="true" />
-                      </VBox>
-      
-                      <HBox alignment="CENTER" spacing="10">
-                          <Button onAction="#aggiungiEsercizio" styleClass="primary-button" text="Aggiungi">
-                              <graphic>
-                                  <FontIcon iconLiteral="fas-plus" />
-                              </graphic>
-                          </Button>
-                          <Button onAction="#annullaAggiuntaEsercizio" styleClass="secondary-button" text="Annulla">
-                              <graphic>
-                                  <FontIcon iconLiteral="fas-times" />
-                              </graphic>
-                          </Button>
-                      </HBox>
-                  <padding>
-                     <Insets bottom="20.0" />
-                  </padding>
-                  </VBox>
-            </content>
-            <padding>
-               <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
-            </padding>
-         </ScrollPane>
+                        <Label styleClass="section-header" text="Aggiungi Esercizio">
+                            <graphic>
+                                <FontIcon iconLiteral="fas-dumbbell" />
+                            </graphic>
+                        </Label>
+                        <VBox prefHeight="58.0" prefWidth="255.0" spacing="10">
+                            <children>
+                                <Label styleClass="form-label" text="Giorno della settimana" />
+                                <TextField fx:id="giornoField" maxWidth="210.0" />
+                            </children>
+                        </VBox>
+
+                        <VBox spacing="10">
+                            <Label styleClass="form-label" text="Nome Esercizio:" />
+                            <TextField fx:id="esercizioTextField" />
+                        </VBox>
+
+                        <VBox spacing="10">
+                            <Label styleClass="form-label" text="Serie:" />
+                            <TextField fx:id="serieField" />
+                        </VBox>
+
+                        <VBox spacing="10">
+                            <Label styleClass="form-label" text="Ripetizioni:" />
+                            <TextField fx:id="ripetizioniField" />
+                        </VBox>
+
+                        <VBox spacing="10">
+                            <Label styleClass="form-label" text="Recupero (sec):" />
+                            <TextField fx:id="recuperoField" />
+                        </VBox>
+                        <VBox spacing="10">
+                            <children>
+                                <Label styleClass="form-label" text="Gruppo muscolare:" />
+                                <TextField fx:id="gruppoMuscTextfield" />
+                            </children>
+                        </VBox>
+
+                        <VBox spacing="5">
+                            <Label styleClass="form-label" text="Note:" />
+                            <TextArea fx:id="noteEsercizioTextArea" maxWidth="210.0" prefHeight="68.0" prefRowCount="3" prefWidth="223.0" wrapText="true" />
+                        </VBox>
+
+                        <HBox alignment="CENTER" spacing="10">
+                            <Button onAction="#aggiungiEsercizio" styleClass="primary-button" text="Aggiungi">
+                                <graphic>
+                                    <FontIcon iconLiteral="fas-plus" />
+                                </graphic>
+                            </Button>
+                            <Button onAction="#annullaAggiuntaEsercizio" styleClass="secondary-button" text="Annulla">
+                                <graphic>
+                                    <FontIcon iconLiteral="fas-times" />
+                                </graphic>
+                            </Button>
+                        </HBox>
+                        <padding>
+                            <Insets bottom="20.0" />
+                        </padding>
+                    </VBox>
+                </content>
+                <padding>
+                    <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                </padding>
+            </ScrollPane>
         </StackPane>
     </right>
 

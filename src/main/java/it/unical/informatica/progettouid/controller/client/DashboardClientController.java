@@ -1,6 +1,7 @@
 package it.unical.informatica.progettouid.controller.client;
 
 import it.unical.informatica.progettouid.model.*;
+import it.unical.informatica.progettouid.view.AlertManager;
 import it.unical.informatica.progettouid.view.SceneHandlerClient;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
@@ -17,6 +18,7 @@ public class DashboardClientController {
     public Label bentornatoLabel;
     @FXML public VBox vboxCenter;
     @FXML public ListView<HBox> notificationListView;
+    @FXML public VBox vboxAccessi;
 
 
     public void initialize() {
@@ -29,8 +31,12 @@ public class DashboardClientController {
     private void mostraStatoAbbonamento() {
         Task<InfoAccessiAbbonamento> task = DBConnection.getInstance().getAccessiRimanenti();
 
+        Thread thread = new Thread(task);
+        thread.start();
+
         task.setOnSucceeded(event -> {
             InfoAccessiAbbonamento abbonamento= task.getValue();
+
             if(abbonamento == null){
                 Label nessunAbbonamento = new Label("Non è abbonato, scopri i piani disponibili e adatti a lei: ");
                 Button piani = new Button("Scopri");
@@ -41,7 +47,8 @@ public class DashboardClientController {
                         throw new RuntimeException(ex);
                     }
                 });
-                vboxCenter.getChildren().addAll(nessunAbbonamento, piani);
+                vboxAccessi.getChildren().addAll(nessunAbbonamento, piani);
+
             }
             else{
                 HBox accessi = new HBox(10);
@@ -59,10 +66,8 @@ public class DashboardClientController {
         });
 
         task.setOnFailed(event -> {
-            System.out.println("Errore durante il caricamento dei dati del client: " + task.getException().getMessage());
+            System.out.println(STR."Errore durante il caricamento dei dati del client: \{task.getException().getMessage()}");
         });
-
-        new Thread(task).start();
 
     }
 
@@ -113,11 +118,8 @@ public class DashboardClientController {
 
             Button prenota = new Button("Prenota");
             prenota.setOnAction(e -> {
-                Alert confirmDialog = new Alert(Alert.AlertType.CONFIRMATION);
-                confirmDialog.setTitle("Conferma prenotazione");
-                confirmDialog.setHeaderText(null);
-                confirmDialog.setContentText("Confermi la prenotazione per il corso " + c.nome() + "?");
-
+                AlertManager conf = new AlertManager(Alert.AlertType.CONFIRMATION, "Conferma prenotazione", null, STR."Confermi la prenotazione per il corso \{c.nome()}?");
+                conf.display();
             });
 
             content.getChildren().addAll(nomeCorso /*orario*/, trainer /*posti*/, prenota);
@@ -183,9 +185,12 @@ public class DashboardClientController {
                 case "abbonamentoClient":
                     SceneHandlerClient.getInstance().setAbbonamentoView();
                     break;
+                case "impostazioniClient":
+                    SceneHandlerClient.getInstance().setImpostazioniView();
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
 }

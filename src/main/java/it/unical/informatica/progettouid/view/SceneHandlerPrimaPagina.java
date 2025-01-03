@@ -38,14 +38,12 @@ public class SceneHandlerPrimaPagina {
         this.stage = primaryStage;
         this.stage.setTitle("FlexFit Gym");
 
-        // Inizializza il BorderPane se non esiste
-        if (this.mainPane == null) {
-            this.mainPane = new BorderPane();
-            this.scene = new Scene(mainPane, WINDOW_WIDTH, WINDOW_HEIGHT);
-            this.stage.setScene(scene);
-            this.stage.setWidth(WINDOW_WIDTH);
-            this.stage.setHeight(WINDOW_HEIGHT);
-        }
+        this.mainPane = new BorderPane();
+        this.scene = new Scene(mainPane, WINDOW_WIDTH, WINDOW_HEIGHT);
+        this.stage.setScene(scene);
+        this.stage.setWidth(WINDOW_WIDTH);
+        this.stage.setHeight(WINDOW_HEIGHT);
+
 
         loadPrimaPagina();
         this.stage.show();
@@ -55,10 +53,11 @@ public class SceneHandlerPrimaPagina {
         try {
             FXMLLoader loader = new FXMLLoader(FlexFit.class.getResource("/fxml/primaPagina.fxml"));
             Parent root = loader.load();
+            mainPane.getChildren().clear();
             mainPane.setCenter(root);
             stage.setTitle("FlexFit Gym");
         } catch (Exception e) {
-            System.err.println("Errore nel caricamento della prima pagina: " + e.getMessage());
+            System.err.println(STR."Errore nel caricamento della prima pagina: \{e.getMessage()}");
             throw e;
         }
     }
@@ -73,6 +72,7 @@ public class SceneHandlerPrimaPagina {
         try {
             FXMLLoader loader = new FXMLLoader(FlexFit.class.getResource(fxmlPath));
             Parent view = loader.load();
+            mainPane.getChildren().clear();
             mainPane.setCenter(view);
             stage.setTitle("Login " + getUserTypeTitle(userType));
         } catch (Exception e) {

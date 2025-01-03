@@ -3,6 +3,7 @@ package it.unical.informatica.progettouid.controller.client;
 import it.unical.informatica.progettouid.model.Corsi;
 import it.unical.informatica.progettouid.model.DBConnection;
 import it.unical.informatica.progettouid.model.OrariCorsi;
+import it.unical.informatica.progettouid.view.AlertManager;
 import it.unical.informatica.progettouid.view.SceneHandlerClient;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
@@ -79,11 +80,8 @@ public class AttivitaClientController {
             Task<Void> task = DBConnection.getInstance().insertPrenotazioneCorso(corso.idCorso(), corso.giorno());
 
             task.setOnSucceeded(e->{
-                Alert successDialog = new Alert(Alert.AlertType.INFORMATION);
-                successDialog.setTitle("Successo");
-                successDialog.setHeaderText(null);
-                successDialog.setContentText("Prenotazione effettuata con successo!");
-                successDialog.showAndWait();
+                AlertManager alert = new AlertManager(Alert.AlertType.CONFIRMATION, "Successo", null, "Prenotazione avvenuta con successo");
+                alert.display();
             });
 
             task.setOnFailed(e->{
@@ -114,6 +112,8 @@ public class AttivitaClientController {
                 case "abbonamentoClient":
                     SceneHandlerClient.getInstance().setAbbonamentoView();
                     break;
+                case "impostazioniClient":
+                    SceneHandlerClient.getInstance().setImpostazioniView();
             }
         } catch (Exception e) {
             e.printStackTrace();

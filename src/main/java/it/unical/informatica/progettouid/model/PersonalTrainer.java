@@ -1,20 +1,38 @@
 package it.unical.informatica.progettouid.model;
 
-public class PersonalTrainer extends User{
-    private String specializzazione;
-    private String telefono;
-
-    public PersonalTrainer(int id, String nome, String cognome, String dataNascita, String specializzazione, String email,  String telefono) {
-        super(id, nome, cognome, dataNascita, email);
-        this.specializzazione = specializzazione;
-        this.telefono = telefono;
+public record PersonalTrainer(int id, String nome, String cognome, String dataNascita, String specializzazione, String email, String telefono) {
+    @Override
+    public int id() {
+        return id;
     }
 
-    public String getSpecializzazione() {
+    @Override
+    public String nome() {
+        return nome;
+    }
+
+    @Override
+    public String cognome() {
+        return cognome;
+    }
+
+    @Override
+    public String dataNascita() {
+        return dataNascita;
+    }
+
+    @Override
+    public String specializzazione() {
         return specializzazione;
     }
 
-    public String getTelefono() {
+    @Override
+    public String email() {
+        return email;
+    }
+
+    @Override
+    public String telefono() {
         return telefono;
     }
 }

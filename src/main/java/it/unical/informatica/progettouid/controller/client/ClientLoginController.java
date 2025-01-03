@@ -3,7 +3,7 @@ package it.unical.informatica.progettouid.controller.client;
 import it.unical.informatica.progettouid.model.Client;
 import it.unical.informatica.progettouid.model.ClientSession;
 import it.unical.informatica.progettouid.model.DBConnection;
-import it.unical.informatica.progettouid.model.User;
+import it.unical.informatica.progettouid.view.AlertManager;
 import it.unical.informatica.progettouid.view.SceneHandlerPrimaPagina;
 import it.unical.informatica.progettouid.view.SceneHandlerClient;
 import javafx.application.Platform;
@@ -78,10 +78,8 @@ public class ClientLoginController {
         try {
             SceneHandlerPrimaPagina.getInstance().init(SceneHandlerPrimaPagina.getInstance().getStage());
         } catch (Exception e) {
-            showAlert(AlertType.ERROR,
-                    "Errore di Navigazione",
-                    "Impossibile tornare indietro",
-                    "Si è verificato un errore: " + e.getMessage());
+            AlertManager errore = new AlertManager(AlertType.ERROR, "Errore di navigazione","Impossibile tornare indietro", STR."Si è verificato un errore: \{e.getMessage()}");
+            errore.display();
             e.printStackTrace();
         }
     }
@@ -90,18 +88,9 @@ public class ClientLoginController {
     public void handleRegister() throws Exception {
         SceneHandlerClient.getInstance().setRegistrazioneView();
 
-        /*showAlert(AlertType.INFORMATION,
-                "Registrazione",
-                "Funzionalità in arrivo",
-                "La registrazione sarà disponibile a breve.");*/
+
     }
 
 
-    private void showAlert(AlertType type, String title, String header, String content) {
-        Alert alert = new Alert(type);
-        alert.setTitle(title);
-        alert.setHeaderText(header);
-        alert.setContentText(content);
-        alert.showAndWait();
-    }
+
 }

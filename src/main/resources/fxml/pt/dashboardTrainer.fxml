@@ -44,11 +44,11 @@
             <padding>
                 <Insets bottom="20" top="20" />
             </padding>
-            <Button maxWidth="Infinity" styleClass="sidebar-button">
+            <Button fx:id="dashboardTrainer" maxWidth="Infinity" onAction="#onNavigationButtonClick" styleClass="sidebar-button">
                 <graphic>
                     <VBox alignment="CENTER" spacing="5">
-                        <FontIcon iconLiteral="fas-home" />
-                        <Text text="Home">
+                        <FontIcon iconLiteral="fab-cuttlefish" />
+                        <Text text="Dashboard">
                             <font>
                                 <Font size="9.0" />
                             </font>
@@ -56,7 +56,7 @@
                     </VBox>
                 </graphic>
             </Button>
-            <Button maxWidth="Infinity" styleClass="sidebar-button">
+            <Button fx:id="attivitaPT" maxWidth="Infinity" onAction="#onNavigationButtonClick" styleClass="sidebar-button">
                 <graphic>
                     <VBox alignment="CENTER" spacing="5">
                         <FontIcon iconLiteral="fas-calendar-alt" />
@@ -68,7 +68,7 @@
                     </VBox>
                 </graphic>
             </Button>
-            <Button maxWidth="Infinity" styleClass="sidebar-button">
+            <Button fx:id="creazioneScheda" maxWidth="Infinity" onAction="#onNavigationButtonClick" styleClass="sidebar-button">
                 <graphic>
                     <VBox alignment="CENTER" spacing="5">
                         <FontIcon iconLiteral="far-clipboard" />
@@ -80,7 +80,7 @@
                     </VBox>
                 </graphic>
             </Button>
-            <Button maxWidth="Infinity" styleClass="sidebar-button">
+            <Button fx:id="accountPT" maxWidth="Infinity" onAction="#onNavigationButtonClick" styleClass="sidebar-button">
                 <graphic>
                     <VBox alignment="CENTER" spacing="5">
                         <FontIcon iconLiteral="far-user" />
@@ -92,7 +92,7 @@
                     </VBox>
                 </graphic>
             </Button>
-            <Button maxWidth="Infinity" styleClass="sidebar-button">
+            <Button maxWidth="Infinity" onAction="#onNavigationButtonClick" styleClass="sidebar-button">
                 <graphic>
                     <VBox alignment="CENTER" spacing="5">
                         <FontIcon iconLiteral="fas-cogs" />
@@ -104,7 +104,7 @@
                     </VBox>
                 </graphic>
             </Button>
-            <Button maxWidth="Infinity" styleClass="sidebar-button">
+            <Button maxWidth="Infinity" onAction="#onNavigationButtonClick" styleClass="sidebar-button">
                 <graphic>
                     <VBox alignment="CENTER" spacing="5">
                         <FontIcon iconLiteral="far-question-circle" />

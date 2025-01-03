@@ -1,6 +1,7 @@
 package it.unical.informatica.progettouid.controller.client;
 
 import it.unical.informatica.progettouid.model.*;
+import it.unical.informatica.progettouid.view.AlertManager;
 import it.unical.informatica.progettouid.view.SceneHandlerClient;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
@@ -13,6 +14,7 @@ import javafx.scene.text.Text;
 import org.kordamp.ikonli.javafx.FontIcon;
 
 import java.time.LocalDate;
+import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.List;
@@ -161,6 +163,7 @@ public class AbbonamentoClientController {
         hboxButton.setSpacing(20);
         Button confermaButton = new Button("Conferma pagamento");
         Button annulla = new Button("Annulla");
+        annulla.setOnAction(e->loadInformazioniCliente());
         hboxButton.getChildren().addAll(confermaButton, annulla);
         confermaButton.setOnAction(e -> processaPagamento(numeroCartaField.getText(), scadenzaField.getText(), cvvField.getText(), abbonamento.id(), abbonamento.prezzo()));
 
@@ -171,9 +174,20 @@ public class AbbonamentoClientController {
     }
 
     private void processaPagamento(String numeroCarta, String scadenzaLabel, String cvv, int idAbbonamento, int importo) {
-        if(!numeroCarta.matches("\\d{13,19}") || !cvv.matches("\\d{3}") || !isDateValid(scadenzaLabel)){
+        numeroCarta = numeroCarta.replaceAll("\\s+", "");
+        if (!numeroCarta.matches("\\d{13,19}")) {
+            AlertManager al = new AlertManager(Alert.AlertType.ERROR, "Attenzione", null, "Il numero di carta non è valido");
+            al.showAndWait();
             registraPagamento(idAbbonamento, importo, "fallito");
-        } else{
+        } else if (!cvv.matches("\\d{3}")) {
+            AlertManager al = new AlertManager(Alert.AlertType.ERROR, "Attenzione", null, "Il CVV non è valido");
+            al.showAndWait();
+            registraPagamento(idAbbonamento, importo, "fallito");
+        } else if (!isDateValid(scadenzaLabel)) {
+            AlertManager al = new AlertManager(Alert.AlertType.ERROR, "Attenzione", null, "La data non è valida");
+            al.showAndWait();
+            registraPagamento(idAbbonamento, importo, "fallito");
+        } else {
             registraPagamento(idAbbonamento, importo, "avvenuto");
         }
     }
@@ -186,19 +200,14 @@ public class AbbonamentoClientController {
         thread.start();
 
         task.setOnSucceeded(e->{
-            Alert confirmDialog = new Alert(Alert.AlertType.INFORMATION);
             if(stato.equals("avvenuto")){
-                confirmDialog.setTitle("Pagamento avvenuto con successo");
-                confirmDialog.setContentText("Pagamento andato a buonfine");
-
+                AlertManager conferma  = new AlertManager(Alert.AlertType.CONFIRMATION, "Pagamento avvenuto con successo", null, "Pagamento andato a buon fine");
+                conferma.display();
             }
             else if(stato.equals("fallito")){
-                confirmDialog.setTitle("Pagamento fallito");
-                confirmDialog.setContentText("Pagamento non andato a buonfine");
-
+                AlertManager fal  = new AlertManager(Alert.AlertType.ERROR, "Pagamento fallito", null, "Pagamento non andato a buonfine");
+                fal.display();
             }
-
-            confirmDialog.setHeaderText(null);
         });
 
         task.setOnFailed(e->{
@@ -207,17 +216,16 @@ public class AbbonamentoClientController {
     }
 
     private static boolean isDateValid(String dataScadenza) {
-        // Definisce il formato della data di scadenza
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/yyyy");
         try {
-            // Converte la stringa di scadenza in un oggetto LocalDate
-            LocalDate expirationDate = LocalDate.parse("01/" + dataScadenza, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
-            // Ottiene la data attuale
-            LocalDate currentDate = LocalDate.now();
-            // Controlla se la data di scadenza è prima della data attuale
-            return !expirationDate.withDayOfMonth(expirationDate.lengthOfMonth()).isBefore(currentDate);
+            // Converte la stringa di scadenza in un oggetto YearMonth
+            YearMonth expirationDate = YearMonth.parse(dataScadenza, formatter);
+            // Ottiene il YearMonth corrente
+            YearMonth currentMonth = YearMonth.now();
+            // Controlla se la data di scadenza è prima del mese corrente
+            return !expirationDate.isBefore(currentMonth);
         } catch (DateTimeParseException e) {
-            return false;  //errore nel parsing della data
+            return false;  // Errore nel parsing della data
         }
     }
 
@@ -241,9 +249,13 @@ public class AbbonamentoClientController {
                 case "abbonamentoClient":
                     SceneHandlerClient.getInstance().setAbbonamentoView();
                     break;
+                case "impostazioniClient":
+                    SceneHandlerClient.getInstance().setImpostazioniView();
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
+
 }

@@ -132,10 +132,10 @@ public class AbbonamentoClientController {
         Label title = new Label("Acquisto abbonamento");
         Client loggedClient = ClientSession.getInstance().getCurrentClient();
 
-        Label nomeLabel = new Label(STR."Nome: \{loggedClient.getNome()}");
+        Label nomeLabel = new Label(STR."Nome: \{loggedClient.nome()}");
         nomeLabel.setDisable(true);
 
-        Label cognomeLabel = new Label(STR."Cognome: \{loggedClient.getCognome()}");
+        Label cognomeLabel = new Label(STR."Cognome: \{loggedClient.cognome()}");
         cognomeLabel.setDisable(true);
 
         Label numeroCartaLabel = new Label("Numero Carta:");

@@ -66,10 +66,10 @@ public class PrenotazionePTController{
 //        card.setPadding(new Insets(15));
 //        card.setSpacing(5);
 
-        Label nameLabel = new Label(STR."\{trainer.getNome()} \{trainer.getNome()}");
+        Label nameLabel = new Label(STR."\{trainer.nome()} \{trainer.nome()}");
 //        nameLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 14px;");
 
-        Text specLabel = new Text(trainer.getSpecializzazione());
+        Text specLabel = new Text(trainer.specializzazione());
 
         Button bookButton = new Button("Prenota sessione");
 //        bookButton.setStyle("-fx-background-color: #4CAF50; -fx-text-fill: white;");
@@ -84,7 +84,7 @@ public class PrenotazionePTController{
     private void showBookingForm(PersonalTrainer trainer) {
         bookingFormContainer.getChildren().clear();         // pulisce la aprte destra del border pane ogni votla che si preme sul button prenotazione
 
-        Label title = new Label("Prenota sessione con " + trainer.getNome());
+        Label title = new Label("Prenota sessione con " + trainer.nome());
         //title.setStyle("-fx-font-size: 16px; -fx-font-weight: bold;");
 
         DatePicker datePicker = new DatePicker(LocalDate.now());
@@ -104,7 +104,7 @@ public class PrenotazionePTController{
         Button confirmButton = new Button("Conferma Prenotazione");
         confirmButton.setMaxWidth(Double.MAX_VALUE);
 //        confirmButton.setStyle("-fx-background-color: #4CAF50; -fx-text-fill: white;");
-        confirmButton.setOnAction(e -> handleBooking(trainer.getId(), datePicker.getValue(),
+        confirmButton.setOnAction(e -> handleBooking(trainer.id(), datePicker.getValue(),
                 timeComboBox.getValue(), notes.getText()));
 
         bookingFormContainer.getChildren().addAll(
@@ -136,7 +136,7 @@ public class PrenotazionePTController{
 
         task.setOnSucceeded(event -> {
             if(task.getValue()){
-                String message = STR."Hai una nuova prenotazione dal cliente\{currentClient.getNome()}\{currentClient.getCognome()}.";
+                String message = STR."Hai una nuova prenotazione dal cliente\{currentClient.nome()}\{currentClient.cognome()}.";
                 if(!notes.isEmpty()) {
                     message += STR."""
                     Richiesta:\{notes}""";

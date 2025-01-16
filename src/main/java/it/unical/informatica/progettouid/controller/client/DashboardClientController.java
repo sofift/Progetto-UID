@@ -116,6 +116,7 @@ public class DashboardClientController {
 
             //Label posti = new Label(String.valueOf(c.maxPartecipanti()));
 
+            // TODO : LOGICA PER SALVARE LA PRENOTAZIONE
             Button prenota = new Button("Prenota");
             prenota.setOnAction(e -> {
                 AlertManager conf = new AlertManager(Alert.AlertType.CONFIRMATION, "Conferma prenotazione", null, STR."Confermi la prenotazione per il corso \{c.nome()}?");

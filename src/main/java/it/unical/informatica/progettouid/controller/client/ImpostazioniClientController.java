@@ -23,10 +23,10 @@ public class ImpostazioniClientController {
 
     public void initialize() {
         client = ClientSession.getInstance().getCurrentClient();
-        nomeLabel.setText("Nome: " + client.getNome() );
-        cognomeLabel.setText("Cognome: " + client.getCognome() );
-        dataNascitaLabel.setText("Data di nascita: " + client.getDataNascita());
-        emailLabel.setText("Email: " + client.getEmail() );
+        nomeLabel.setText("Nome: " + client.nome() );
+        cognomeLabel.setText("Cognome: " + client.cognome() );
+        dataNascitaLabel.setText("Data di nascita: " + client.dataNascita());
+        emailLabel.setText("Email: " + client.email() );
     }
 
     @FXML

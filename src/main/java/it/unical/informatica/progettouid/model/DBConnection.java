@@ -209,7 +209,7 @@ public class DBConnection {
     public Task<PersonalTrainer> getInfoPT() {
         return asyncCall(() -> {
             if (isConnected()) {
-                int idClient = ClientSession.getInstance().getCurrentClient().getId();
+                int idClient = ClientSession.getInstance().getCurrentClient().id();
                 String query = "SELECT pt.nome, pt.cognome, pt.DataNascita, pt.specializzazione, pt.email, pt.telefono" +
                         " FROM PersonalTrainer pt, Schede s " +
                         "WHERE s.ClienteID = ?;";
@@ -314,7 +314,7 @@ public class DBConnection {
     public Task<InfoAccessiAbbonamento> getAccessiRimanenti(){
         return asyncCall(() -> {
             if (isConnected()) {
-                int idClient = ClientSession.getInstance().getCurrentClient().getId();
+                int idClient = ClientSession.getInstance().getCurrentClient().id();
                 String query = "SELECT a.AccessiRimanenti, ta.NumeroAccessiTotali, a.DataScadenza, ta.Nome as TipoAbbonamento " +
                         "FROM Abbonamenti a " +
                         "JOIN TipiAbbonamento ta ON a.TipoAbbonamentoID = ta.ID " +
@@ -344,7 +344,7 @@ public class DBConnection {
     public Task<InfoBaseAbbonamento> getInfoAbbonamento(){
         return asyncCall(() -> {
             if (isConnected()) {
-                int idClient = ClientSession.getInstance().getCurrentClient().getId();
+                int idClient = ClientSession.getInstance().getCurrentClient().id();
                 String query = "SELECT ta.Nome, a.dataInizio, a.dataScadenza, a.stato, ta.descrizione " +
                         "FROM Abbonamenti a " +
                         "JOIN TipiAbbonamento ta ON a.TipoAbbonamentoID = ta.ID " +
@@ -388,7 +388,7 @@ public class DBConnection {
     public Task<SchedaAllenamento> getInfoSchedaClient() {
         return asyncCall(() -> {
             if (isConnected()) {
-                int idClient = ClientSession.getInstance().getCurrentClient().getId();
+                int idClient = ClientSession.getInstance().getCurrentClient().id();
                 String query = "SELECT s.*, pt.Nome, pt.Cognome" +
                         "                FROM Schede s" +
                         "                JOIN PersonalTrainer pt ON s.PersonalTrainerID = pt.ID" +
@@ -525,7 +525,7 @@ public class DBConnection {
     public Task<Boolean> insertPrenotazionePT(int trainerId, String data, String oraPrenotazione, String notes) {
         return asyncCall(() -> {
             if (isConnected()) {
-                int idClient = ClientSession.getInstance().getCurrentClient().getId();
+                int idClient = ClientSession.getInstance().getCurrentClient().id();
                 String query = "INSERT INTO PrenotazioniPT (idPT, idClient, data, oraPrenotazione, notes) VALUES(?, ?, ?, ?, ?);";
                 try (PreparedStatement stmt = con.prepareStatement(query)) {
                     stmt.setInt(1, trainerId);
@@ -571,7 +571,7 @@ public class DBConnection {
     }
     public Task<Void> insertSchedaClient(int selectedClientId, LocalDate dataInizio, LocalDate dataFine, String obiettivi, String note, String suggAlimentari) {
         return asyncCall(()->{
-            int idPT = PTSession.getInstance().getCurrentTrainer().getId();
+            int idPT = PTSession.getInstance().getCurrentTrainer().id();
             if(isConnected()){
                 DateTimeFormatter formatterIso = DateTimeFormatter.ofPattern("yyyy-MM-dd");
                 String formattedInizio = dataInizio.format(formatterIso);
@@ -597,7 +597,7 @@ public class DBConnection {
         return asyncCall(() -> {
             List<PrenotazionePT> prenotazioni = new ArrayList<>();
             if (isConnected()) {
-                int idPT = PTSession.getInstance().getCurrentTrainer().getId();
+                int idPT = PTSession.getInstance().getCurrentTrainer().id();
                 String query = "SELECT c.nome, c.cognome, p.data, p.oraPrenotazione, p.notes" +
                         "FROM PrenotazioniPT p " +
                         "JOIN Clienti c ON c.id = p.idClient" +
@@ -623,7 +623,7 @@ public class DBConnection {
 
     public Task<PersonalTrainer> getPersonalFromSchedaClient(){
         return asyncCall(()->{
-            int idClient = ClientSession.getInstance().getCurrentClient().getId();
+            int idClient = ClientSession.getInstance().getCurrentClient().id();
             int idPT = -1;
             if(isConnected()) {
                 String query = "SELECT PersonalTrainerID FROM Schede WHERE ClienteID = ? ";
@@ -682,7 +682,7 @@ public class DBConnection {
         return asyncCall(() -> {
             List<Notifica> notifiche = new ArrayList<>();
             if (isConnected()) {
-                int trainerID = PTSession.getInstance().getCurrentTrainer().getId();
+                int trainerID = PTSession.getInstance().getCurrentTrainer().id();
                 String query = "SELECT * FROM Notifiche WHERE trainerId = ? AND stato = 'non letta'";
                 PreparedStatement stmt = con.prepareStatement(query);
                 stmt.setInt(1, trainerID);
@@ -756,7 +756,7 @@ public class DBConnection {
     public Task<Void> insertPagamento(int idAbbonamento, int importo, String stato) {
         return asyncCall(() -> {
             if (isConnected()) {
-                int idClient = ClientSession.getInstance().getCurrentClient().getId();
+                int idClient = ClientSession.getInstance().getCurrentClient().id();
                 LocalDate today = LocalDate.now();
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM-dd-yyyy");
                 String formattedDate = today.format(formatter);
@@ -797,7 +797,7 @@ public class DBConnection {
         return asyncCall(() -> {
             if (isConnected()) {
                 String dataCorso = getDataDaGiorno(giorno);
-                int idClient = ClientSession.getInstance().getCurrentClient().getId();
+                int idClient = ClientSession.getInstance().getCurrentClient().id();
                 String query = "INSERT INTO PrenotazioniCorsi (idCorso, idClient, dataPrenotazione) VALUES (?, ?, ?);";
                 try (PreparedStatement stmt = con.prepareStatement(query)) {
                     stmt.setInt(1, idCorso);

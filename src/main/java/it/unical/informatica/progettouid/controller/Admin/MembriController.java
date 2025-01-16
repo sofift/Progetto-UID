@@ -116,8 +116,8 @@ public class MembriController implements Initializable{
                 }
 
                 String lowerCaseFilter = newValue.toLowerCase();
-                return client.getNome().toLowerCase().contains(lowerCaseFilter) ||
-                        client.getEmail().toLowerCase().contains(lowerCaseFilter);
+                return client.nome().toLowerCase().contains(lowerCaseFilter) ||
+                        client.email().toLowerCase().contains(lowerCaseFilter);
             });
             tableView.setItems(filteredData);
         });
@@ -155,7 +155,7 @@ public class MembriController implements Initializable{
         if (client != null) {
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setTitle("Conferma eliminazione");
-            alert.setHeaderText("Stai per eliminare il membro: " + client.getNome() + client.getCognome());
+            alert.setHeaderText("Stai per eliminare il membro: " + client.nome() + client.cognome());
             alert.setContentText("Sei sicuro di voler procedere?");
 
             alert.showAndWait().ifPresent(result -> {

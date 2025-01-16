@@ -73,7 +73,7 @@ public class SchedaClientController {
             Button invia = new Button("Invia");
             invia.setOnAction(e ->{
                 invia.setDisable(true);
-                Task<Void> task = DBConnection.getInstance().insertNotifyTrainer(diplayPt.getValue().getId(), STR."Il/La signore/a \{ClientSession.getInstance().getCurrentClient().getNome()} ha richiesto una scheda di allenamento");
+                Task<Void> task = DBConnection.getInstance().insertNotifyTrainer(diplayPt.getValue().id(), STR."Il/La signore/a \{ClientSession.getInstance().getCurrentClient().nome()} ha richiesto una scheda di allenamento");
                 Thread thread = new Thread(task);
                 thread.start();
 
@@ -145,7 +145,7 @@ public class SchedaClientController {
         weekdayTabs.getSelectionModel().selectedItemProperty().addListener((observable, oldTab, newTab) -> {
             if (newTab != null) {
                 String selectedDay = newTab.getText();
-                loadEserciziScheda(ClientSession.getInstance().getCurrentClient().getId(), selectedDay, (TableView<Esercizio>) ((VBox) newTab.getContent()).getChildren().get(0));
+                loadEserciziScheda(ClientSession.getInstance().getCurrentClient().id(), selectedDay, (TableView<Esercizio>) ((VBox) newTab.getContent()).getChildren().get(0));
             }
         });
 
@@ -245,16 +245,16 @@ public class SchedaClientController {
             VBox ptCard = new VBox(10);
             //ptCard.getStyleClass().add("pt-card");
 
-            Label nameLabel = new Label(PTInfo.getNome());
+            Label nameLabel = new Label(PTInfo.nome());
             //nameLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 14px;");
 
-            Label specializzazioneLabel = new Label(PTInfo.getSpecializzazione());
-            Label emailLabel = new Label(PTInfo.getEmail());
-            Label phoneLabel = new Label(PTInfo.getTelefono());
+            Label specializzazioneLabel = new Label(PTInfo.specializzazione());
+            Label emailLabel = new Label(PTInfo.email());
+            Label phoneLabel = new Label(PTInfo.telefono());
 
             Button contactButton = new Button("Contatta PT");
             contactButton.setMaxWidth(Double.MAX_VALUE);
-            contactButton.setOnAction(e -> contactPT(PTInfo.getId()));
+            contactButton.setOnAction(e -> contactPT(PTInfo.id()));
 
             ptCard.getChildren().addAll(nameLabel, specializzazioneLabel, emailLabel, phoneLabel, contactButton);
             ptInfoContainer.getChildren().add(ptCard);

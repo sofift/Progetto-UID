@@ -149,6 +149,20 @@
       </VBox>
    </center>
    <top>
-      <VBox BorderPane.alignment="CENTER" />
+      <VBox>
+         <children>
+            <Label alignment="CENTER" maxWidth="Infinity" text="Impostazioni">
+               <graphic>
+                  <FontIcon iconLiteral="fas-cogs" />
+               </graphic>
+               <padding>
+                  <Insets bottom="10" top="10" />
+               </padding>
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+         </children>
+      </VBox>
    </top>
 </BorderPane>

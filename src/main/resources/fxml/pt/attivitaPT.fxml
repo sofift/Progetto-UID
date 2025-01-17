@@ -104,7 +104,7 @@
 
     <top>
         <VBox>
-            <Label text="Attività in programma" alignment="CENTER" maxWidth="Infinity">
+            <Label text="Attività" alignment="CENTER" maxWidth="Infinity">
                 <graphic>
                     <FontIcon iconLiteral="fas-calendar-alt"/>
                 </graphic>

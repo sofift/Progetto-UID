@@ -24,7 +24,7 @@
             <children>
                 <Label text="Crea scheda">
                     <graphic>
-                        <FontIcon iconLiteral="fas-home" />
+                        <FontIcon iconLiteral="far-clipboard" />
                     </graphic>
                     <padding>
                         <Insets bottom="10" top="10" />

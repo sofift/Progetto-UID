@@ -16,16 +16,8 @@ import java.util.List;
 
 // TODO: cambiare il compobox con i nomi dei personal, stessa cosa dei client nel trainer
 public class SchedaClientController {
-    @FXML public TextArea sugAlimentari;
-    @FXML private GridPane infoGrid;
-    @FXML private TabPane weekdayTabs;
-    @FXML private TextArea notesArea;
     @FXML private VBox ptInfoContainer;
-    @FXML private VBox statsContainer;
-
-    // VBox per ogni giorno della settimana
     @FXML private VBox vboxCenter;
-
     private int idScheda;
 
     @FXML
@@ -283,9 +275,19 @@ public class SchedaClientController {
         new Thread(task).start();
     }
 
+    @FXML
+    private void stampaScheda(){
+        AlertManager al = new AlertManager(Alert.AlertType.INFORMATION, "Funzionalità in arrivo", null, "Presto sarà possibile visualizzare la scheda in formato pdf");
+        al.display();
+    }
+
+    @FXML
+    private void condividiScheda(){
+        AlertManager al = new AlertManager(Alert.AlertType.INFORMATION, "Funzionalità in arrivo", null, "Presto sarà possibile visualizzare la scheda in formato pdf");
+        al.display();
+    }
 
     private void contactPT(int id) {
-        // Implementa la logica per contattare il PT
         TextInputDialog dialog = new TextInputDialog();
         dialog.setTitle("Contatta PT");
         dialog.setHeaderText(null);
@@ -296,6 +298,7 @@ public class SchedaClientController {
 
                 task.setOnSucceeded(event->{
                     AlertManager conferma = new AlertManager(Alert.AlertType.CONFIRMATION, "Conferma", null, "Il tuo messagio è stato appena inviato");
+                    conferma.display();
                 });
 
                 task.setOnFailed(event -> {
@@ -332,6 +335,7 @@ public class SchedaClientController {
             e.printStackTrace();
         }
     }
+
 
 
 }

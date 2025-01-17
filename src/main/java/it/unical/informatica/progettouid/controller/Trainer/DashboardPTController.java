@@ -2,6 +2,7 @@ package it.unical.informatica.progettouid.controller.Trainer;
 
 import it.unical.informatica.progettouid.model.DBConnection;
 import it.unical.informatica.progettouid.model.Notifica;
+import it.unical.informatica.progettouid.model.PTSession;
 import it.unical.informatica.progettouid.model.PrenotazionePT;
 import it.unical.informatica.progettouid.view.SceneHandlerPT;
 import javafx.concurrent.Task;
@@ -15,8 +16,11 @@ import java.util.List;
 public class DashboardPTController {
     @FXML private ListView<HBox> prenotazioniList;
     @FXML private ListView<HBox> notificationsList;
+    @FXML private Label benvenutoLabel;
 
     public void initialize() {
+        String nomePT = PTSession.getInstance().getCurrentTrainer().nome();
+        benvenutoLabel.setText(STR."Benvenuto \{nomePT}");
         loadPrenotazioni();
         loadNotifiche();
     }

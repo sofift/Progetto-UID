@@ -35,10 +35,11 @@ public class DashboardClientController {
         thread.start();
 
         task.setOnSucceeded(event -> {
+            vboxAccessi.getChildren().clear();
             InfoAccessiAbbonamento abbonamento= task.getValue();
 
             if(abbonamento == null){
-                Label nessunAbbonamento = new Label("Non è abbonato, scopri i piani disponibili e adatti a lei: ");
+                Label nessunAbbonamento = new Label("Non è abbonato, scopri i piani disponibili e adatti a te: ");
                 Button piani = new Button("Scopri");
                 piani.setOnAction(e-> {
                     try {

@@ -14,11 +14,13 @@ import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class CreaSchedaController {
     @FXML private VBox vboxCenter;
-    @FXML private ComboBox<Client> clienteComboBox;
+    @FXML private ComboBox<String> clienteComboBox;
     @FXML private VBox schedaInfoPanel;
     @FXML private ScrollPane aggiungiEsercizioPanel;
     @FXML private TextField esercizioTextField;
@@ -32,6 +34,7 @@ public class CreaSchedaController {
     @FXML private TextField gruppoMuscTextfield;
     @FXML private FlowPane flowpaneScheda;
     @FXML private VBox info;
+    private Map<String, Client> clientMap = new HashMap<>();
     private Client selectedClient = null;
 
     // TODO: implementare la logica di visualizzazione delle tabelle se il client ha una scheda o meno
@@ -41,8 +44,11 @@ public class CreaSchedaController {
         mostraClienti();
         clienteComboBox.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
             if (newSelection != null) {
-                selectedClient = newSelection;
-                verificaSchedaClient();
+                Client client = clientMap.get(newSelection);
+                if (client != null) {
+                    selectedClient = client;
+                    verificaSchedaClient();
+                }
             }
         });
 
@@ -193,7 +199,6 @@ public class CreaSchedaController {
         vboxCenter.getChildren().addAll(info);
 
         creaScheda.setOnAction(event-> {
-            creaScheda.setDisable(true);
             showFormModificaScheda();
             Label ob = new Label("Obiettivi");
             TextField obiettivi = new TextField();
@@ -220,7 +225,7 @@ public class CreaSchedaController {
                     System.out.println("Scheda creata con successo");
                     Platform.runLater(() -> {
                         info.getChildren().clear();
-                        loadSchedaCliente(); // Aggiungi la TableView aggiornata
+                        loadSchedaCliente();
                     });
 
                 });
@@ -231,7 +236,7 @@ public class CreaSchedaController {
                 });
 
             });
-
+            creaScheda.setDisable(true);
 
         });
 
@@ -264,7 +269,9 @@ public class CreaSchedaController {
                 AlertManager errore = new AlertManager(Alert.AlertType.ERROR, "Errore", null, "Errore nel caricamento dei client");
             } else {
                 for (Client client : clients) {
-                    clienteComboBox.getItems().add(client);
+                    String clientName = STR."\{client.nome()} \{client.cognome()}";
+                    clienteComboBox.getItems().add(clientName);
+                    clientMap.put(clientName, client);
                 }
             }
         });
@@ -277,7 +284,6 @@ public class CreaSchedaController {
     }
 
 
-    // TODO: logica per inserire i nuovi esercizi al database, devo collegare gli esercizi delle scheda con i dettagli della tab Esercizi
     @FXML
     private void aggiungiEsercizio() {
         EsercizioScheda nuovoEsercizio = new EsercizioScheda(serieField.getText(), ripetizioniField.getText(), recuperoField.getText(), noteEsercizioTextArea.getText(), esercizioTextField.getText(), gruppoMuscTextfield.getText(), giornoField.getText());
@@ -289,19 +295,22 @@ public class CreaSchedaController {
 
         Task<Void> task = DBConnection.getInstance().insertEsercizioScheda(nuovoEsercizio, selectedClient.id());
 
+        task.setOnSucceeded(e ->{
+            AlertManager al = new AlertManager(Alert.AlertType.CONFIRMATION, "Esercizio aggiunto", null, "Esercizio aggiunto");
+            al.display();
+            pulisciFormEsercizio();
+        }
+        );
 
 
-        /*
-
-        eserciziTable.getItems().add(nuovoEsercizio);
-        pulisciFormEsercizio();
-        mostraPannelloPrincipale();*/
+        mostraPannelloPrincipale();
     }
 
 
     @FXML
     private void anteprimaPDF() {
-        // Generare anteprima PDF della scheda
+        AlertManager al = new AlertManager(Alert.AlertType.INFORMATION, "Funzionalità in arrivo", null, "Presto sarà possibile visualizzare la scheda in formato pdf");
+        al.display();
     }
 
 

@@ -163,10 +163,10 @@ public class DashboardPTController {
                     break;
                 /*case "accountPT":
                     SceneHandlerPT.getInstance().setCreazioneSchedaView();
-                    break;
-                case "abbonamentoClient":
-                    SceneHandlerPT.getInstance().setAbbonamentoView();
                     break;*/
+                case "impostazioniPT":
+                    SceneHandlerPT.getInstance().setImpostazioniView();
+                    break;
             }
         } catch (Exception e) {
             e.printStackTrace();

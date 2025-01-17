@@ -35,7 +35,6 @@ public class DashboardClientController {
         thread.start();
 
         task.setOnSucceeded(event -> {
-            vboxAccessi.getChildren().clear();
             InfoAccessiAbbonamento abbonamento= task.getValue();
 
             if(abbonamento == null){

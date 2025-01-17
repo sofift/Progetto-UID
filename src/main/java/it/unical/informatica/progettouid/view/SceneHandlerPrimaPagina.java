@@ -5,13 +5,11 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import javafx.scene.layout.BorderPane;
 
 public class SceneHandlerPrimaPagina {
     private static SceneHandlerPrimaPagina instance = null;
     private Scene scene;
     private Stage stage;
-    private BorderPane mainPane;
     private static final double WINDOW_WIDTH = 1000;
     private static final double WINDOW_HEIGHT = 600;
 
@@ -37,25 +35,18 @@ public class SceneHandlerPrimaPagina {
     public void init(Stage primaryStage) throws Exception {
         this.stage = primaryStage;
         this.stage.setTitle("FlexFit Gym");
-
-        this.mainPane = new BorderPane();
-        this.scene = new Scene(mainPane, WINDOW_WIDTH, WINDOW_HEIGHT);
-        this.stage.setScene(scene);
+        this.scene = new Scene(loadView("/fxml/primaPagina.fxml"), WINDOW_WIDTH, WINDOW_HEIGHT);
+        this.stage.setScene(this.scene);
         this.stage.setWidth(WINDOW_WIDTH);
         this.stage.setHeight(WINDOW_HEIGHT);
 
-
-        loadPrimaPagina();
         this.stage.show();
     }
 
-    public void loadPrimaPagina() throws Exception {
+    public <T> T loadView(String fxmlPath) throws Exception {
         try {
-            FXMLLoader loader = new FXMLLoader(FlexFit.class.getResource("/fxml/primaPagina.fxml"));
-            Parent root = loader.load();
-            mainPane.getChildren().clear();
-            mainPane.setCenter(root);
-            stage.setTitle("FlexFit Gym");
+            FXMLLoader loader = new FXMLLoader(FlexFit.class.getResource(fxmlPath));
+            return loader.load();
         } catch (Exception e) {
             System.err.println(STR."Errore nel caricamento della prima pagina: \{e.getMessage()}");
             throw e;
@@ -70,10 +61,8 @@ public class SceneHandlerPrimaPagina {
         };
 
         try {
-            FXMLLoader loader = new FXMLLoader(FlexFit.class.getResource(fxmlPath));
-            Parent view = loader.load();
-            mainPane.getChildren().clear();
-            mainPane.setCenter(view);
+            if(this.scene != null)
+                this.scene.setRoot(loadView(fxmlPath));
             stage.setTitle("Login " + getUserTypeTitle(userType));
         } catch (Exception e) {
             System.err.println("Errore nel caricamento della pagina di login: " + e.getMessage());
@@ -90,9 +79,8 @@ public class SceneHandlerPrimaPagina {
         };
 
         try {
-            FXMLLoader loader = new FXMLLoader(FlexFit.class.getResource(fxmlPath));
-            Parent view = loader.load();
-            mainPane.setCenter(view);
+            if(this.scene != null)
+                this.scene.setRoot(loadView(fxmlPath));
             stage.setTitle("Dashboard " + getUserTypeTitle(userType));
         } catch (Exception e) {
             System.err.println("Errore nel caricamento della dashboard: " + e.getMessage());

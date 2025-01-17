@@ -16,11 +16,16 @@ import javafx.scene.control.PasswordField;
 public class ImpostazioniPTController {
     @FXML
     private Label cognomeLabel;
-    @FXML private Label dataNascitaLabel;
-    @FXML private Label emailLabel;
-    @FXML private Button logoutButton;
-    @FXML private Label nomeLabel;
-    @FXML private PasswordField passwordField;
+    @FXML
+    private Label dataNascitaLabel;
+    @FXML
+    private Label emailLabel;
+    @FXML
+    private Button logoutButton;
+    @FXML
+    private Label nomeLabel;
+    @FXML
+    private PasswordField passwordField;
     private Client client = null;
 
     void initialize() {
@@ -31,10 +36,6 @@ public class ImpostazioniPTController {
         emailLabel.setText(STR."Email: \{client.email()}");
     }
 
-    @FXML
-    void onNavigationButtonClick(ActionEvent event) {
-
-    }
 
     @FXML
     public void logout(ActionEvent actionEvent) throws Exception {
@@ -43,5 +44,32 @@ public class ImpostazioniPTController {
         } catch (Exception e) {
             AlertManager al = new AlertManager(Alert.AlertType.ERROR, "Errore", "Errore durante il logout", "Si è verificato un errore durante il logout. Riprova");
             al.showAndWait();
-        }}
+        }
+    }
+
+    @FXML
+    public void onNavigationButtonClick(ActionEvent event) {
+        Button button = (Button) event.getSource();
+        try {
+            switch (button.getId()) {
+                case "dashboardTrainer":
+                    SceneHandlerPT.getInstance().setDashboardView();
+                    break;
+                case "attivitaPT":
+                    SceneHandlerPT.getInstance().setAttivitaPTView();
+                    break;
+                case "creazioneScheda":
+                    SceneHandlerPT.getInstance().setCreazioneSchedaView();
+                    break;
+                /*case "accountPT":
+                    SceneHandlerPT.getInstance().setCreazioneSchedaView();
+                    break;*/
+                case "impostazioniPT":
+                    SceneHandlerPT.getInstance().setImpostazioniView();
+                    break;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }

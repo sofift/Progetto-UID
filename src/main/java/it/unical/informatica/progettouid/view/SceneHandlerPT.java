@@ -30,20 +30,16 @@ public class SceneHandlerPT {
 
     public void init(Stage primaryStage) throws Exception {
         this.stage = primaryStage;
-        this.mainPane = new BorderPane();
-        this.scene = new Scene(mainPane, 1000, 600);
+        this.scene = new Scene(loadView("/fxml/pt/dashboardTrainer.fxml"), 1000, 600);
         this.stage.setScene(this.scene);
         this.stage.setTitle("FlexFit");
-        loadView("/fxml/pt/dashboardTrainer.fxml");
         this.stage.show();
     }
 
-    private void loadView(String fxmlPath) throws Exception {
+    private <T> T loadView(String fxmlPath) throws Exception {
         try{
             FXMLLoader loader = new FXMLLoader(FlexFit.class.getResource(fxmlPath));
-            BorderPane newView = loader.load();
-            // Sostituisce l'intero contenuto con il nuovo BorderPane
-            this.mainPane.setCenter(newView);
+            return loader.load();
         } catch (IOException e) {
             System.err.println(STR."Errore nel caricamento della vista: \{fxmlPath}");
             throw e;
@@ -53,15 +49,18 @@ public class SceneHandlerPT {
     }
 
     public void setDashboardView() throws Exception {
-        loadView("/fxml/pt/dashboardTrainer.fxml");
+        if(this.scene != null)
+            this.scene.setRoot(loadView("/fxml/pt/dashboardTrainer.fxml"));
     }
 
     public void setAttivitaPTView() throws Exception {
-        loadView("/fxml/pt/attivitaPT.fxml");
+        if(this.scene != null)
+            this.scene.setRoot(loadView("/fxml/pt/attivitaPT.fxml"));
     }
 
     public void setCreazioneSchedaView() throws Exception {
-        loadView("/fxml/pt/creazioneScheda.fxml");
+        if(this.scene != null)
+            this.scene.setRoot(loadView("/fxml/pt/creazioneScheda.fxml"));
     }
 
     // Metodo per gestire il logout
@@ -69,16 +68,17 @@ public class SceneHandlerPT {
         try{
             PTSession.getInstance().logout();
 
-            if(mainPane!=null){
-                mainPane.getChildren().clear();
-            }
-
             SceneHandlerPrimaPagina handler = SceneHandlerPrimaPagina.getInstance();
             handler.init(this.stage);
         } catch (Exception e) {
             System.err.println(STR."Errore durante il logout: \{e.getMessage()}");
             throw new RuntimeException("Impossibile completare il logout", e);
         }
+    }
+
+    public void setImpostazioniView() throws Exception {
+        if(this.scene != null)
+            this.scene.setRoot(loadView("/fxml/client/impostazioniClient.fxml"));
     }
 
 }

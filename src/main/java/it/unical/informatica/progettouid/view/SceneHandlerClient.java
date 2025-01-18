@@ -30,54 +30,60 @@ public class SceneHandlerClient {
     }
 
     public void init(Stage primaryStage) throws Exception {
-        this.stage = primaryStage;
+        /*this.stage = primaryStage;
         this.scene = new Scene(loadView("/fxml/client/dashboardClient.fxml"), 1000, 600);
         this.stage.setScene(this.scene);
         this.stage.setTitle("FlexFit");
-        this.stage.show();
+        this.stage.show();*/
+        if (this.stage == null) {
+            this.stage = primaryStage;
+            this.scene = new Scene(loadFXML("/fxml/client/dashboardClient.fxml"), 1000, 400);
+            this.stage.setTitle("CoWork Manager");
+            this.stage.setScene(scene);
+            this.stage.show();
+        }
     }
 
-    private <T> T loadView(String fxmlPath) throws Exception {
-        try{
-            FXMLLoader loader = new FXMLLoader(FlexFit.class.getResource(fxmlPath));
+    public <T> T loadFXML(String fxmlFile) {
+        FXMLLoader loader = new FXMLLoader(FlexFit.class.getResource(fxmlFile));
+        try {
             return loader.load();
-        } catch (IOException e) {
-            System.err.println(STR."Errore nel caricamento della vista: \{fxmlPath}");
-            throw e;
-
+        } catch (Exception e) {
+            System.err.println("Errore nel caricamento del file FXML: " + e.getMessage());
+            e.printStackTrace();
         }
-
+        return null;
     }
 
     public void setRegistrazioneView() throws Exception {
-        Stage registrazioneStage = new Stage(); // Crea un nuovo Stage
+        Stage registrazioneStage = new Stage();
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/registrazione.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 600, 400);
         registrazioneStage.setScene(scene);
         registrazioneStage.setTitle("Registrazione");
-        registrazioneStage.initOwner(stage); // Imposta il proprietario per evitare problemi di focus
-        registrazioneStage.initModality(Modality.APPLICATION_MODAL); // Impedisce interazioni con la finestra principale finché è aperta
+        registrazioneStage.initOwner(stage);
+        registrazioneStage.initModality(Modality.APPLICATION_MODAL);
         registrazioneStage.show();
     }
 
     public void setDashboardView() throws Exception {
         if(this.scene != null)
-            this.scene.setRoot(loadView("/fxml/client/dashboardClient.fxml"));
+            this.scene.setRoot(loadFXML("/fxml/client/dashboardClient.fxml"));
     }
 
     public void setAttivitaView() throws Exception {
         if(this.scene != null)
-            this.scene.setRoot(loadView("/fxml/client/attivitaClient.fxml"));
+            this.scene.setRoot(loadFXML("/fxml/client/attivitaClient.fxml"));
     }
 
     public void setPrenotazioniView() throws Exception {
         if(this.scene != null)
-            this.scene.setRoot(loadView("/fxml/client/prenotazionePT.fxml"));
+            this.scene.setRoot(loadFXML("/fxml/client/prenotazionePT.fxml"));
     }
 
     public void setSchedaView() throws Exception {
         if(this.scene != null)
-            this.scene.setRoot(loadView("/fxml/client/schedaClient.fxml"));
+            this.scene.setRoot(loadFXML("/fxml/client/schedaClient.fxml"));
     }
 
     // Metodo per gestire il logout
@@ -95,11 +101,11 @@ public class SceneHandlerClient {
 
     public void setAbbonamentoView() throws Exception {
         if(this.scene != null)
-            this.scene.setRoot(loadView("/fxml/client/abbonamentoClient.fxml"));
+            this.scene.setRoot(loadFXML("/fxml/client/abbonamentoClient.fxml"));
     }
 
     public void setImpostazioniView() throws Exception {
         if(this.scene != null)
-            this.scene.setRoot(loadView("/fxml/client/impostazioniClient.fxml"));
+            this.scene.setRoot(loadFXML("/fxml/client/impostazioniClient.fxml"));
     }
 }

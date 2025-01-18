@@ -182,7 +182,6 @@ public class DBConnection {
         });
     }
 
-    // get personal trainer
     public Task<List<PersonalTrainer>> getAllPt() {
         return asyncCall(() -> {
             List<PersonalTrainer> trainers = FXCollections.observableArrayList();
@@ -199,6 +198,25 @@ public class DBConnection {
                             rs.getString("Specializzazione"),
                             rs.getString("Email"),
                             rs.getString("Telefono")));
+                }
+                stmt.close();
+            }
+            return trainers;
+        });
+    }
+
+    public Task<List<String>> getNomeAllPT() {
+        return asyncCall(() -> {
+            List<String> trainers = FXCollections.observableArrayList();
+            if (isConnected()) {
+                String query = "SELECT Nome, Cognome FROM PersonalTrainer ;";
+                PreparedStatement stmt = con.prepareStatement(query);
+                ResultSet rs = stmt.executeQuery();
+                while (rs.next()) {
+                    String nome = rs.getString("Nome");
+                    String cognome = rs.getString("Cognome");
+                    String nomeCognome = nome + " " + cognome;
+                    trainers.add(nomeCognome);
                 }
                 stmt.close();
             }
@@ -389,20 +407,19 @@ public class DBConnection {
         return asyncCall(() -> {
             if (isConnected()) {
                 int idClient = ClientSession.getInstance().getCurrentClient().id();
-                String query = "SELECT s.*, pt.Nome, pt.Cognome" +
-                        "                FROM Schede s" +
-                        "                JOIN PersonalTrainer pt ON s.PersonalTrainerID = pt.ID" +
-                        "                WHERE s.ClienteID = ?" +
-                        "                AND s.Stato = 'attiva'" +
-                        "                AND s.DataFine >= date('now')" +
-                        "                LIMIT 1";
+                String query = "SELECT s.* " +
+                        "        FROM Schede s " +
+                        "        WHERE s.ClienteID = ? " +
+                        "          AND s.Stato = 'attiva' " +
+                        "          AND s.DataFine >= date('now') " +
+                        "           LIMIT 1; ";
                 PreparedStatement stmt = con.prepareStatement(query);
+                stmt.setInt(1, idClient);
+
                 ResultSet rs = stmt.executeQuery();
                 if (rs.next()) {
                     return new SchedaAllenamento(
-                            rs.getInt("id"),
-                            rs.getString("Nome"),
-                            rs.getString("Cognome"),
+                            rs.getInt("ID"),
                             rs.getString("DataInizio"),
                             rs.getString("DataFine"),
                             rs.getString("Obiettivi"),
@@ -419,26 +436,23 @@ public class DBConnection {
         return asyncCall(() -> {
             ObservableList<Esercizio> esercizi = FXCollections.observableArrayList();
             if (isConnected()) {
-                String query = " SELECT es.*, e.Nome, e.Descrizione, e.GruppoMuscolare, e.LivelloDifficolta " +
+                String query = " SELECT es.* " +
                         "FROM EserciziScheda es " +
-                        "JOIN Esercizi e ON es.EsercizioID = e.ID " +
                         "JOIN Schede s ON s.ID = es.SchedaID " +
-                        "WHERE s.clientID = ? AND es.GiornoSettimana = ? AND " +
-                        "ORDER BY es.OrdineEsecuzione ";
+                        "WHERE s.ClienteID = ? AND es.GiornoSettimana = ?  ";
                 try (PreparedStatement stmt = con.prepareStatement(query)) {
                     stmt.setInt(1, clientID);
                     stmt.setString(2, giorno);
                     try (ResultSet rs = stmt.executeQuery()) {
                         while(rs.next()) {
                             esercizi.add( new Esercizio(
+                                    rs.getString("NomeEsercizio"),
                                     rs.getInt("NumeroSerie"),
                                     rs.getInt("NumeroRipetizioni"),
                                     rs.getInt("TempoRecupero"),
-                                    rs.getString("Note"),
-                                    rs.getString("Nome"),
-                                    rs.getString("Descrizione"),
                                     rs.getString("GruppoMuscolare"),
-                                    rs.getString("LivelloDifficolta")));
+                                    rs.getString("Note")
+                                    ));
                         }
                     }
                 }
@@ -650,7 +664,7 @@ public class DBConnection {
     public Task<Void> insertNotifyTrainer(int trainerID, String message) {
         return asyncCall(() -> {
             if (isConnected()) {
-                String query = "INSERT INTO NotifichePT (trainerId, message, status) VALUES(?, ?, ?);";
+                String query = "INSERT INTO NotifichePT (idPT, message, stato) VALUES(?, ?, ?);";
                 try (PreparedStatement stmt = con.prepareStatement(query)) {
                     stmt.setInt(1, trainerID);
                     stmt.setString(2, message);
@@ -739,12 +753,14 @@ public class DBConnection {
     public Task<Boolean> clientHaUnaScheda(int idClient) {
         return asyncCall(() -> {
             if (isConnected()) {
+                System.out.println("ID Cliente passato: " + idClient);
 
                 String query = "SELECT COUNT(*) FROM Schede WHERE ClienteID = ?";
                 PreparedStatement stmt = con.prepareStatement(query);
                 stmt.setInt(1, idClient);
                 ResultSet rs = stmt.executeQuery();
                 if (rs.next()) {
+                    System.out.println(rs.getInt(1));
                     return rs.getInt(1) > 0;
                 }
                 stmt.close();

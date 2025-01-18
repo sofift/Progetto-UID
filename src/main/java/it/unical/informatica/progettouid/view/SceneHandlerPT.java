@@ -29,38 +29,39 @@ public class SceneHandlerPT {
     }
 
     public void init(Stage primaryStage) throws Exception {
-        this.stage = primaryStage;
-        this.scene = new Scene(loadView("/fxml/pt/dashboardTrainer.fxml"), 1000, 600);
-        this.stage.setScene(this.scene);
-        this.stage.setTitle("FlexFit");
-        this.stage.show();
+        if (this.stage == null) {
+            this.stage = primaryStage;
+            this.scene = new Scene(loadFXML("/fxml/pt/dashboardTrainer.fxml"), 1000, 400);
+            this.stage.setTitle("CoWork Manager");
+            this.stage.setScene(scene);
+            this.stage.show();
+        }
     }
 
-    private <T> T loadView(String fxmlPath) throws Exception {
-        try{
-            FXMLLoader loader = new FXMLLoader(FlexFit.class.getResource(fxmlPath));
+    public <T> T loadFXML(String fxmlFile) {
+        FXMLLoader loader = new FXMLLoader(FlexFit.class.getResource(fxmlFile));
+        try {
             return loader.load();
-        } catch (IOException e) {
-            System.err.println(STR."Errore nel caricamento della vista: \{fxmlPath}");
-            throw e;
-
+        } catch (Exception e) {
+            System.err.println("Errore nel caricamento del file FXML: " + e.getMessage());
+            e.printStackTrace();
         }
-
+        return null;
     }
 
     public void setDashboardView() throws Exception {
         if(this.scene != null)
-            this.scene.setRoot(loadView("/fxml/pt/dashboardTrainer.fxml"));
+            this.scene.setRoot(loadFXML("/fxml/pt/dashboardTrainer.fxml"));
     }
 
     public void setAttivitaPTView() throws Exception {
         if(this.scene != null)
-            this.scene.setRoot(loadView("/fxml/pt/attivitaPT.fxml"));
+            this.scene.setRoot(loadFXML("/fxml/pt/attivitaPT.fxml"));
     }
 
     public void setCreazioneSchedaView() throws Exception {
         if(this.scene != null)
-            this.scene.setRoot(loadView("/fxml/pt/creazioneScheda.fxml"));
+            this.scene.setRoot(loadFXML("/fxml/pt/creazioneScheda.fxml"));
     }
 
     // Metodo per gestire il logout
@@ -78,7 +79,7 @@ public class SceneHandlerPT {
 
     public void setImpostazioniView() throws Exception {
         if(this.scene != null)
-            this.scene.setRoot(loadView("/fxml/client/impostazioniClient.fxml"));
+            this.scene.setRoot(loadFXML("/fxml/client/impostazioniClient.fxml"));
     }
 
 }

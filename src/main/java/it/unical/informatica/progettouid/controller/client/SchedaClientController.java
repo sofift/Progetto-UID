@@ -12,31 +12,60 @@ import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 
+import javax.swing.*;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 // TODO: cambiare il compobox con i nomi dei personal, stessa cosa dei client nel trainer
 public class SchedaClientController {
     @FXML private VBox ptInfoContainer;
     @FXML private VBox vboxCenter;
     private int idScheda;
+    private Map<String, Integer> ptMap = new HashMap<>();
+
 
     @FXML
     public void initialize() {
+        verificaSchedaClient();
         loadSchedaInfo();
-
         loadPTInfo();
+    }
+
+    private void verificaSchedaClient() {
+        int idClient = ClientSession.getInstance().getCurrentClient().id();
+        Task<Boolean> task = DBConnection.getInstance().clientHaUnaScheda(idClient);
+        Thread thread = new Thread(task);
+        thread.setDaemon(true);
+        thread.start();
+
+        task.setOnSucceeded(e -> {
+            Boolean result = task.getValue();
+            System.out.println(result);
+            if(result){
+                loadSchedaInfo();
+            }
+            else{
+                displayRichiestaScheda();
+            }
+        });
+
+        task.setOnFailed(e -> {
+            System.out.println(task.getException());
+        });
+
     }
 
     private void loadSchedaInfo() {
         Task<SchedaAllenamento> task = DBConnection.getInstance().getInfoSchedaClient();
-
+        Thread thread = new Thread(task);
+        thread.setDaemon(true);
+        thread.start();
         task.setOnSucceeded(event -> {
             SchedaAllenamento info = task.getValue();
             if (info != null) {
                 idScheda = info.idScheda();
                 displaySchedaInfo(info);
-            } else {
-                displayRichiestaScheda();
             }
 
         });
@@ -56,7 +85,7 @@ public class SchedaClientController {
             buttonRichiedi.setDisable(true);
             VBox inserisciInfo = new VBox();
             Label pt = new Label("Con quale personal trainer vuoi richiedere la tua scheda?");
-            ComboBox<PersonalTrainer> diplayPt = new ComboBox<>();
+            ComboBox<String> diplayPt = new ComboBox<>();
             mostraPT(diplayPt);
             Label ob = new Label("Qual è il tuo obiettivo?");
             TextField obiettivo = new TextField();
@@ -65,7 +94,16 @@ public class SchedaClientController {
             Button invia = new Button("Invia");
             invia.setOnAction(e ->{
                 invia.setDisable(true);
-                Task<Void> task = DBConnection.getInstance().insertNotifyTrainer(diplayPt.getValue().id(), STR."Il/La signore/a \{ClientSession.getInstance().getCurrentClient().nome()} ha richiesto una scheda di allenamento");
+                String selectedPt = diplayPt.getValue();
+                if (selectedPt == null || !ptMap.containsKey(selectedPt)) {
+                    AlertManager errorAlert = new AlertManager(Alert.AlertType.ERROR, "Errore", null, "Seleziona un personal trainer valido.");
+                    errorAlert.display();
+                    invia.setDisable(false);
+                    return;
+                }
+                int selectedId = ptMap.get(selectedPt);
+
+                Task<Void> task = DBConnection.getInstance().insertNotifyTrainer(selectedId, STR."Il/La signore/a \{ClientSession.getInstance().getCurrentClient().nome()} ha richiesto una scheda di allenamento");
                 Thread thread = new Thread(task);
                 thread.start();
 
@@ -84,29 +122,43 @@ public class SchedaClientController {
         vboxCenter.getChildren().addAll(richiediScheda, buttonRichiedi);
     }
 
-    private void mostraPT(ComboBox<PersonalTrainer> diplayPt) {
+    private void mostraPT(ComboBox<String> diplayPt) {
        Task<List<PersonalTrainer>> task = DBConnection.getInstance().getAllPt();
 
        task.setOnSucceeded(event -> {
            diplayPt.getItems().clear();
+           ptMap.clear();
            List<PersonalTrainer> pt = task.getValue();
            if (pt.isEmpty()) {
                AlertManager alert = new AlertManager(Alert.AlertType.ERROR,"Errore" ,null, "Erorre nel caricamento dei client");
                alert.display();
            } else {
                for (PersonalTrainer PT : pt) {
-                   diplayPt.getItems().add(PT);
+                   String nomecognome = STR."\{PT.nome()} \{PT.cognome()}";
+                   ptMap.put(nomecognome, PT.id());
+                   diplayPt.getItems().add(nomecognome);
                }
            }
+
+           diplayPt.setOnAction(e -> {
+               String selectedPt = diplayPt.getValue();
+               if (selectedPt != null && ptMap.containsKey(selectedPt)) {
+                   int selectedId = ptMap.get(selectedPt);
+                   System.out.println(STR."ID del personal trainer selezionato: \{selectedId}");
+               }
+           });
        });
-       task.setOnFailed(event -> {
-                System.out.println("Errore durante il caricamento dei personal(listVirw): " + task.getException().getMessage());
-            });
-            new Thread(task).start();
+
+       task.setOnFailed(ev -> {
+                System.out.println(STR."Errore durante il caricamento dei personal(listVirw): \{task.getException().getMessage()}");
+       });
+       new Thread(task).start();
     }
 
 
     private void displaySchedaInfo(SchedaAllenamento info) {
+        System.out.println(info); // Debug
+        vboxCenter.getChildren().clear();
         Label infoGen = new Label("Informazioni generali");
         Label dataInizio = new Label(STR."Data inizio: \{info.dataInizio()}");
         Label dataFine = new Label(STR."Data fine: \{info.dataFine()}");
@@ -141,11 +193,25 @@ public class SchedaClientController {
             }
         });
 
+        if (!weekdayTabs.getTabs().isEmpty()) {
+            weekdayTabs.getSelectionModel().selectFirst();
+            String selectedDay = weekdayTabs.getTabs().get(0).getText();
+            loadEserciziScheda(ClientSession.getInstance().getCurrentClient().id(), selectedDay, (TableView<Esercizio>) ((VBox) weekdayTabs.getTabs().get(0).getContent()).getChildren().get(0));
+        }
+
         Label notERac = new Label("Note e Raccomandazioni");
-        HBox cont = new HBox();
-        TextArea notes = new TextArea(info.notes());
+        VBox cont = new VBox();
+        Label note = new Label("Note");
+        Text notes = new Text(info.notes());
+        Label sugAl = new Label("Raccomandazioni");
+        Text sugAlimentari = new Text(info.suggerimentiAlimentari());
+        /*TextArea notes = new TextArea();
         TextArea sugAlimentari = new TextArea(info.suggerimentiAlimentari());
-        cont.getChildren().addAll(notes, sugAlimentari);
+        notes.setEditable(false);
+        sugAlimentari.setEditable(false);
+        notes.setWrapText(true);
+        sugAlimentari.setWrapText(true);*/
+        cont.getChildren().addAll(note, notes, sugAl, sugAlimentari);
         vboxCenter.getChildren().addAll(weekdayTabs, notERac, cont);
     }
 
@@ -156,37 +222,27 @@ public class SchedaClientController {
         tableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         VBox.setVgrow(tableView, Priority.ALWAYS);
 
-        // Definizione colonne con larghezze relative
         TableColumn<Esercizio, String> nomeEsercizioColumn = new TableColumn<>("Esercizio");
         TableColumn<Esercizio, Number> serieColumn = new TableColumn<>("Serie");
         TableColumn<Esercizio, Number> ripetizioniColumn = new TableColumn<>("Ripetizioni");
         TableColumn<Esercizio, Number> tempoRecuperoColumn = new TableColumn<>("Recupero");
         TableColumn<Esercizio, String> gMuscolareColumn = new TableColumn<>("Gruppo Muscolare");
-        TableColumn<Esercizio, String> difficoltaColumn = new TableColumn<>("Difficoltà");
         TableColumn<Esercizio, String> noteColumn = new TableColumn<>("Note");
-        TableColumn<Esercizio, String> descrizioneColumn = new TableColumn<>("Descrizione");
 
-        // Imposta le percentuali di larghezza delle colonne
         nomeEsercizioColumn.prefWidthProperty().bind(tableView.widthProperty().multiply(0.15));
         serieColumn.prefWidthProperty().bind(tableView.widthProperty().multiply(0.08));
         ripetizioniColumn.prefWidthProperty().bind(tableView.widthProperty().multiply(0.10));
         tempoRecuperoColumn.prefWidthProperty().bind(tableView.widthProperty().multiply(0.10));
         gMuscolareColumn.prefWidthProperty().bind(tableView.widthProperty().multiply(0.15));
-        difficoltaColumn.prefWidthProperty().bind(tableView.widthProperty().multiply(0.10));
         noteColumn.prefWidthProperty().bind(tableView.widthProperty().multiply(0.15));
-        descrizioneColumn.prefWidthProperty().bind(tableView.widthProperty().multiply(0.17));
 
-        // Imposta i cell value factories
         nomeEsercizioColumn.setCellValueFactory(cellData -> cellData.getValue().nomeEsercProperty());
         serieColumn.setCellValueFactory(cellData -> cellData.getValue().nSerieProperty());
         ripetizioniColumn.setCellValueFactory(cellData -> cellData.getValue().nRipetizioniProperty());
         tempoRecuperoColumn.setCellValueFactory(cellData -> cellData.getValue().tmpRecuperoProperty());
         gMuscolareColumn.setCellValueFactory(cellData -> cellData.getValue().gMuscolareProperty());
-        difficoltaColumn.setCellValueFactory(cellData -> cellData.getValue().diffProperty());
         noteColumn.setCellValueFactory(cellData -> cellData.getValue().notesProperty());
-        descrizioneColumn.setCellValueFactory(cellData -> cellData.getValue().descrizioneProperty());
 
-        // Abilita il wrap del testo per le colonne con testo lungo
         noteColumn.setCellFactory(tc -> {
             TableCell<Esercizio, String> cell = new TableCell<>() {
                 private Text text = new Text();
@@ -208,8 +264,8 @@ public class SchedaClientController {
         // Aggiungi le colonne alla TableView
         tableView.getColumns().addAll(
                 nomeEsercizioColumn, serieColumn, ripetizioniColumn,
-                tempoRecuperoColumn, gMuscolareColumn, difficoltaColumn,
-                noteColumn, descrizioneColumn
+                tempoRecuperoColumn, gMuscolareColumn,
+                noteColumn
         );
 
         return tableView;
@@ -260,10 +316,18 @@ public class SchedaClientController {
     private void loadEserciziScheda(int clientId, String selectedDay, TableView<Esercizio> esercizioTableView) {
 
         Task<ObservableList<Esercizio> > task = DBConnection.getInstance().getEserciziGiorno(clientId, selectedDay);
+        Thread thread = new Thread(task);
+        thread.setDaemon(true);
+        thread.start();
 
         task.setOnSucceeded(event -> {
             ObservableList<Esercizio> esercizi = task.getValue();
-
+            if (esercizi == null || esercizi.isEmpty()) {
+                System.out.println("Nessun esercizio trovato per il giorno: " + selectedDay);
+            } else {
+                System.out.println("Esercizi caricati per il giorno: " + selectedDay);
+                esercizi.forEach(e -> System.out.println(e));
+            }
             esercizioTableView.setItems(esercizi);
 
         });
@@ -272,7 +336,6 @@ public class SchedaClientController {
             System.out.println("Errore durante il caricamento delle informazioni: " + task.getException().getMessage());
         });
 
-        new Thread(task).start();
     }
 
     @FXML

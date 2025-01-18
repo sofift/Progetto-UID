@@ -4,12 +4,17 @@ import it.unical.informatica.progettouid.FlexFit;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
+
+import java.io.IOException;
+import java.net.URL;
 
 public class SceneHandlerPrimaPagina {
     private static SceneHandlerPrimaPagina instance = null;
     private Scene scene;
     private Stage stage;
+    private BorderPane mainPane;
     private static final double WINDOW_WIDTH = 1000;
     private static final double WINDOW_HEIGHT = 600;
 
@@ -33,23 +38,29 @@ public class SceneHandlerPrimaPagina {
     }
 
     public void init(Stage primaryStage) throws Exception {
-        this.stage = primaryStage;
-        this.stage.setTitle("FlexFit Gym");
-        this.scene = new Scene(loadView("/fxml/primaPagina.fxml"), WINDOW_WIDTH, WINDOW_HEIGHT);
-        this.stage.setScene(this.scene);
-        this.stage.setWidth(WINDOW_WIDTH);
-        this.stage.setHeight(WINDOW_HEIGHT);
-
-        this.stage.show();
+        if (this.stage == null) {
+            this.stage = primaryStage;
+            this.scene = new Scene(loadFXML("/fxml/primaPagina.fxml"), WINDOW_WIDTH, WINDOW_HEIGHT);
+            this.stage.setTitle("Flexfit");
+            this.stage.setScene(scene);
+            this.stage.show();
+        }
     }
 
-    public <T> T loadView(String fxmlPath) throws Exception {
+    public <T> T loadFXML(String fxmlFile) {
+        FXMLLoader loader = new FXMLLoader(FlexFit.class.getResource(fxmlFile));
         try {
-            FXMLLoader loader = new FXMLLoader(FlexFit.class.getResource(fxmlPath));
             return loader.load();
         } catch (Exception e) {
-            System.err.println(STR."Errore nel caricamento della prima pagina: \{e.getMessage()}");
-            throw e;
+            System.err.println("Errore nel caricamento del file FXML: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public void loadPrimaPagina() throws Exception {
+        if(this.scene != null){
+            this.scene.setRoot(loadFXML("/fxml/primaPagina.fxml"));
         }
     }
 
@@ -59,35 +70,32 @@ public class SceneHandlerPrimaPagina {
             case ADMIN -> "/fxml/admin/adminLogin.fxml";
             case TRAINER -> "/fxml/pt/trainerLogin.fxml";
         };
-
+        if (this.scene != null) {
+            this.scene.setRoot(loadFXML(fxmlPath));
+        }
+/*
         try {
-            if(this.scene != null)
-                this.scene.setRoot(loadView(fxmlPath));
+            System.out.println("Tentativo di caricamento del file FXML: " + fxmlPath);
+            URL resource = FlexFit.class.getResource(fxmlPath);
+
+            if (resource == null) {
+                throw new IllegalStateException("File FXML non trovato: " + fxmlPath);
+            }
+
+            FXMLLoader loader = new FXMLLoader(resource);
+
+            Parent view = loader.load();
+            mainPane.getChildren().clear();
+            mainPane.setCenter(view);
             stage.setTitle("Login " + getUserTypeTitle(userType));
         } catch (Exception e) {
             System.err.println("Errore nel caricamento della pagina di login: " + e.getMessage());
             System.err.println("Path tentato: " + fxmlPath);
             throw e;
-        }
+        }*/
     }
 
-    public void loadMainInterface(UserType userType) throws Exception {
-        String fxmlPath = switch (userType) {
-            case CLIENT -> "/fxml/client/dashboardClient.fxml";
-            case ADMIN -> "/fxml/admin/dashboardAdmin.fxml";
-            case TRAINER -> "/fxml/pt/dashboardTrainer.fxml";
-        };
 
-        try {
-            if(this.scene != null)
-                this.scene.setRoot(loadView(fxmlPath));
-            stage.setTitle("Dashboard " + getUserTypeTitle(userType));
-        } catch (Exception e) {
-            System.err.println("Errore nel caricamento della dashboard: " + e.getMessage());
-            System.err.println("Path tentato: " + fxmlPath);
-            throw e;
-        }
-    }
 
     public void switchToAdminView() throws Exception {
         SceneHandlerAdmin.getInstance().init(stage);

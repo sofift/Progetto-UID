@@ -115,9 +115,7 @@ public class CreaSchedaController {
         TableColumn<Esercizio, Number> ripetizioniColumn = new TableColumn<>("Ripetizioni");
         TableColumn<Esercizio, Number> tempoRecuperoColumn = new TableColumn<>("Recupero");
         TableColumn<Esercizio, String> gMuscolareColumn = new TableColumn<>("Gruppo Muscolare");
-        TableColumn<Esercizio, String> difficoltaColumn = new TableColumn<>("Difficoltà");
         TableColumn<Esercizio, String> noteColumn = new TableColumn<>("Note");
-        TableColumn<Esercizio, String> descrizioneColumn = new TableColumn<>("Descrizione");
 
         // Imposta le percentuali di larghezza delle colonne
         nomeEsercizioColumn.prefWidthProperty().bind(tableView.widthProperty().multiply(0.15));
@@ -125,9 +123,7 @@ public class CreaSchedaController {
         ripetizioniColumn.prefWidthProperty().bind(tableView.widthProperty().multiply(0.10));
         tempoRecuperoColumn.prefWidthProperty().bind(tableView.widthProperty().multiply(0.10));
         gMuscolareColumn.prefWidthProperty().bind(tableView.widthProperty().multiply(0.15));
-        difficoltaColumn.prefWidthProperty().bind(tableView.widthProperty().multiply(0.10));
         noteColumn.prefWidthProperty().bind(tableView.widthProperty().multiply(0.15));
-        descrizioneColumn.prefWidthProperty().bind(tableView.widthProperty().multiply(0.17));
 
         // Imposta i cell value factories
         nomeEsercizioColumn.setCellValueFactory(cellData -> cellData.getValue().nomeEsercProperty());
@@ -135,9 +131,7 @@ public class CreaSchedaController {
         ripetizioniColumn.setCellValueFactory(cellData -> cellData.getValue().nRipetizioniProperty());
         tempoRecuperoColumn.setCellValueFactory(cellData -> cellData.getValue().tmpRecuperoProperty());
         gMuscolareColumn.setCellValueFactory(cellData -> cellData.getValue().gMuscolareProperty());
-        difficoltaColumn.setCellValueFactory(cellData -> cellData.getValue().diffProperty());
         noteColumn.setCellValueFactory(cellData -> cellData.getValue().notesProperty());
-        descrizioneColumn.setCellValueFactory(cellData -> cellData.getValue().descrizioneProperty());
 
         // Abilita il wrap del testo per le colonne con testo lungo
         noteColumn.setCellFactory(tc -> {
@@ -161,8 +155,8 @@ public class CreaSchedaController {
         // Aggiungi le colonne alla TableView
         tableView.getColumns().addAll(
                 nomeEsercizioColumn, serieColumn, ripetizioniColumn,
-                tempoRecuperoColumn, gMuscolareColumn, difficoltaColumn,
-                noteColumn, descrizioneColumn
+                tempoRecuperoColumn, gMuscolareColumn,
+                noteColumn
         );
 
         return tableView;

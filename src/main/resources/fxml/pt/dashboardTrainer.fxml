@@ -19,7 +19,7 @@
     <top>
         <VBox>
             <children>
-                <Label alignment="CENTER" maxWidth="Infinity" text="Dashboard">
+                <Label alignment="CENTER" maxWidth="Infinity" text="Home">
                     <graphic>
                         <FontIcon iconLiteral="fas-home" />
                     </graphic>
@@ -45,7 +45,7 @@
                 <graphic>
                     <VBox alignment="CENTER" spacing="5">
                         <FontIcon iconLiteral="fas-home" />
-                        <Text text="Dashboard">
+                        <Text text="Home">
                             <font>
                                 <Font size="9.0" />
                             </font>
@@ -77,19 +77,7 @@
                     </VBox>
                 </graphic>
             </Button>
-            <Button fx:id="accountPT" maxWidth="Infinity" onAction="#onNavigationButtonClick" styleClass="sidebar-button">
-                <graphic>
-                    <VBox alignment="CENTER" spacing="5">
-                        <FontIcon iconLiteral="far-user" />
-                        <Text text="Account">
-                            <font>
-                                <Font size="9.0" />
-                            </font>
-                        </Text>
-                    </VBox>
-                </graphic>
-            </Button>
-            <Button maxWidth="Infinity" onAction="#onNavigationButtonClick" styleClass="sidebar-button">
+            <Button fx:id="impostazioniPT" maxWidth="Infinity" onAction="#onNavigationButtonClick" styleClass="sidebar-button">
                 <graphic>
                     <VBox alignment="CENTER" spacing="5">
                         <FontIcon iconLiteral="fas-cogs" />

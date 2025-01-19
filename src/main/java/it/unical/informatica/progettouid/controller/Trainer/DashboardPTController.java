@@ -4,6 +4,7 @@ import it.unical.informatica.progettouid.model.DBConnection;
 import it.unical.informatica.progettouid.model.Notifica;
 import it.unical.informatica.progettouid.model.PTSession;
 import it.unical.informatica.progettouid.model.PrenotazionePT;
+import it.unical.informatica.progettouid.view.AlertManager;
 import it.unical.informatica.progettouid.view.SceneHandlerPT;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
@@ -19,6 +20,8 @@ public class DashboardPTController {
     @FXML private Label benvenutoLabel;
 
     public void initialize() {
+        prenotazioniList.setFixedCellSize(60);
+        notificationsList.setFixedCellSize(60);// Altezza fissa per ogni cella (in pixel)
         String nomePT = PTSession.getInstance().getCurrentTrainer().nome();
         benvenutoLabel.setText(STR."Benvenuto \{nomePT}");
         loadPrenotazioni();
@@ -55,7 +58,7 @@ public class DashboardPTController {
         if (prenotazioni.isEmpty()) {
             HBox emptyContent = new HBox();
             emptyContent.setAlignment(Pos.CENTER);
-            Label emptyMessage = new Label("Nessuna notifica");
+            Label emptyMessage = new Label("Nessuna prenotazione");
             emptyContent.getChildren().add(emptyMessage);
             prenotazioniList.getItems().clear();
             prenotazioniList.getItems().add(emptyContent);
@@ -80,23 +83,27 @@ public class DashboardPTController {
 
             content.getChildren().addAll(nomeClient, cognomeClient, data, orario, notes);
             prenotazioniList.getItems().add(content);
+            prenotazioniList.setPrefHeight(prenotazioni.size() * prenotazioniList.getFixedCellSize());
         }
     }
 
     private void loadNotifiche() {
         Task<List<Notifica>> task = DBConnection.getInstance().getNotificheNonLette();
-
         Thread thread = new Thread(task);
         thread.setDaemon(true);
         thread.start();
 
         task.setOnSucceeded(event -> {
             List<Notifica> notifiche = task.getValue();
+            System.out.println(STR."Notifiche caricate: \{notifiche.size()}"); // Debug
+            if (notifiche.isEmpty()) {
+                System.out.println("Nessuna notifica da visualizzare."); // Debug
+            }
             displayNotifiche(notifiche);
         });
 
         task.setOnFailed(event -> {
-
+            System.out.println(STR."Errore durante il caricamento delle notifiche\{task.getException()}");
         });
     }
 
@@ -117,12 +124,23 @@ public class DashboardPTController {
             Button accetta = new Button("Accetta");
             Button rifiuta = new Button("Rifiuta");
 
-            accetta.setOnAction(event -> {modificaRichiesta(notifica.id(), "accetta");});
-            rifiuta.setOnAction(event -> {modificaRichiesta(notifica.id(), "rifiuta");});
+            accetta.setOnAction(event -> {
+                modificaRichiesta(notifica.id(), "accettata");
+                accetta.setDisable(true);
+                rifiuta.setDisable(true);
+            });
+
+            rifiuta.setOnAction(event -> {
+                modificaRichiesta(notifica.id(), "rifiutata");
+                rifiuta.setDisable(true);
+                accetta.setDisable(true);
+            });
 
 
             content.getChildren().addAll(message, accetta, rifiuta);
             notificationsList.getItems().add(content);
+            notificationsList.setPrefHeight(notifiche.size() * notificationsList.getFixedCellSize());
+
         }
     }
 
@@ -132,7 +150,18 @@ public class DashboardPTController {
         thread.setDaemon(true);
         thread.start();
         task.setOnSucceeded(event -> {
+            if(stato == "accetta"){
+                AlertManager al = new AlertManager(Alert.AlertType.CONFIRMATION, "Accettata", null, "Richiesta accettata");
+                al.display();
+            }else if(stato == "rifiuta"){
+                AlertManager al = new AlertManager(Alert.AlertType.CONFIRMATION, "Rifiutata", null, "Richiesta rifiutata");
+                al.display();
+            }
 
+        });
+
+        task.setOnFailed(event->{
+            System.out.println(STR."Errore durante la modifica della richiesta: \{task.getException()}");
         });
 
     }
@@ -161,9 +190,6 @@ public class DashboardPTController {
                 case "creazioneScheda":
                     SceneHandlerPT.getInstance().setCreazioneSchedaView();
                     break;
-                /*case "accountPT":
-                    SceneHandlerPT.getInstance().setCreazioneSchedaView();
-                    break;*/
                 case "impostazioniPT":
                     SceneHandlerPT.getInstance().setImpostazioniView();
                     break;

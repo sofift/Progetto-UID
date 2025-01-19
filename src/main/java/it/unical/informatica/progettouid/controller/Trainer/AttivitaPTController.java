@@ -22,9 +22,6 @@ public class AttivitaPTController {
                 case "creazioneScheda":
                     SceneHandlerPT.getInstance().setCreazioneSchedaView();
                     break;
-                /*case "accountPT":
-                    SceneHandlerPT.getInstance().setCreazioneSchedaView();
-                    break;*/
                 case "impostazioniPT":
                     SceneHandlerPT.getInstance().setImpostazioniView();
                     break;

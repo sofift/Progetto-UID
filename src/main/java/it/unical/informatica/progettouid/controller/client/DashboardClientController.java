@@ -11,6 +11,7 @@ import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import java.util.List;
+import java.util.Optional;
 
 
 public class DashboardClientController {
@@ -120,13 +121,33 @@ public class DashboardClientController {
             Button prenota = new Button("Prenota");
             prenota.setOnAction(e -> {
                 AlertManager conf = new AlertManager(Alert.AlertType.CONFIRMATION, "Conferma prenotazione", null, STR."Confermi la prenotazione per il corso \{c.nome()}?");
-                conf.display();
+                Optional<ButtonType> result = conf.showAndWait();
+                if (result.isPresent() && result.get() == ButtonType.OK) {
+                    salvaPrenotazioneCorso(c.id());
+                } else {
+                    System.out.println("Cancellazione annullata.");
+                }
             });
 
             content.getChildren().addAll(nomeCorso /*orario*/, trainer /*posti*/, prenota);
             corsiListView.getItems().add(content);
 
         }
+    }
+
+    private void salvaPrenotazioneCorso(int idCorso) {
+        Task<Boolean> task = DBConnection.getInstance().insertPrenotazioneDashboard(idCorso);
+        Thread thread = new Thread(task);
+        thread.setDaemon(true);
+        thread.start();
+
+        task.setOnSucceeded(e->{
+            AlertManager al = new AlertManager(Alert.AlertType.CONFIRMATION, "Conferma", null, "Prenotazione confermata");
+            al.display();
+        });
+        task.setOnFailed(e->{
+            System.out.println(STR."Errore durante l'inserimento della prenotazione: \{task.getException()}");
+        });
     }
 
     private void loadNotifiche() {

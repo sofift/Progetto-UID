@@ -13,13 +13,15 @@ import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
+import org.kordamp.ikonli.javafx.FontIcon;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class CreaSchedaController {
-    @FXML private VBox vboxCenter;
     @FXML private ComboBox<String> clienteComboBox;
     @FXML private VBox schedaInfoPanel;
     @FXML private ScrollPane aggiungiEsercizioPanel;
@@ -29,6 +31,9 @@ public class CreaSchedaController {
     @FXML private TextField ripetizioniField;
     @FXML private TextField recuperoField;
     @FXML private TextArea noteEsercizioTextArea;
+    @FXML private TextArea obiettiviTextArea;
+    @FXML private TextArea noteGeneraliTextArea;
+    @FXML private TextArea suggerimentiAlimentariTextArea;
     @FXML private DatePicker dataInizioPicker;
     @FXML private DatePicker dataFinePicker;
     @FXML private TextField gruppoMuscTextfield;
@@ -36,6 +41,7 @@ public class CreaSchedaController {
     @FXML private VBox info;
     private Map<String, Client> clientMap = new HashMap<>();
     private Client selectedClient = null;
+    private int idScheda;
 
     // TODO: implementare la logica di visualizzazione delle tabelle se il client ha una scheda o meno
 
@@ -57,13 +63,92 @@ public class CreaSchedaController {
 
     }
 
-    private void loadSchedaCliente() {
+    private void loadInfoSchedaClient() {
+        Task<SchedaAllenamento> task = DBConnection.getInstance().getInfoSchedaClient(selectedClient.id());
+        Thread thread = new Thread(task);
+        thread.setDaemon(true);
+        thread.start();
+
+        task.setOnSucceeded(event -> {
+            SchedaAllenamento infoScheda = task.getValue();
+            if (infoScheda != null) {
+                idScheda = infoScheda.idScheda();
+                displaySchedaClient(infoScheda);
+            }
+
+        });
+
+        task.setOnFailed(event -> {
+            task.getException().printStackTrace();
+        });
+
+        new Thread(task).start();
+
+    }
+
+    private void modificaDataPicker(String dataInizio, String dataFine){
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        try {
+            LocalDate dataI = LocalDate.parse(dataInizio, formatter);
+            dataInizioPicker.setValue(dataI);
+            LocalDate dataF = LocalDate.parse(dataFine, formatter);
+            dataFinePicker.setValue(dataF);
+        } catch (Exception e) {
+            System.out.println(STR."Errore nella modifica dei datapicker: \{e.getMessage()}");
+        }
+
+    }
+
+    private void displaySchedaClient(SchedaAllenamento infoScheda) {
         info.getChildren().clear();
-        HBox buttons = new HBox();
+        modificaDataPicker(infoScheda.dataInizio(), infoScheda.dataFine());
+
+        HBox buttons = new HBox(10);
         Button modifica = new Button("Modifica scheda");
-        buttons.getChildren().add(modifica);
+        modifica.setGraphic(new FontIcon("fas-edit"));
+        Button aggEsercizio = new Button("Aggiungi esercizio");
+        aggEsercizio.setGraphic(new FontIcon("fas-plus-square"));
+        Button creaNuovaScheda = new Button("Crea nuova scheda");
+        creaNuovaScheda.setGraphic(new FontIcon("fas-file"));
+        Button salva = new Button("Salva modifiche");
+        salva.setGraphic(new FontIcon("fas-save"));
+        salva.setVisible(false);
+        buttons.getChildren().addAll(modifica, aggEsercizio, creaNuovaScheda, salva);
         buttons.setAlignment(Pos.CENTER);
-        modifica.setOnAction(event -> showFormModificaScheda());
+        modifica.setOnAction(event -> {
+            salva.setVisible(true);
+            obiettiviTextArea.setEditable(true);
+            noteGeneraliTextArea.setEditable(true);
+            suggerimentiAlimentariTextArea.setEditable(true);
+
+            salva.setOnAction(e->{
+                String ob = obiettiviTextArea.getText();
+                String notes = noteGeneraliTextArea.getText();
+                String sugg = suggerimentiAlimentariTextArea.getText();
+
+                Task<Boolean> salvaModifiche = DBConnection.getInstance().insertModificheScheda(selectedClient.id(), ob, notes, sugg);
+                Thread thread = new Thread(salvaModifiche);
+                thread.setDaemon(true);
+                thread.start();
+                salvaModifiche.setOnSucceeded(ev->{
+                    AlertManager al = new AlertManager(Alert.AlertType.CONFIRMATION, "Successo", null, "Modifiche salvate con successo");
+                    al.display();
+                    salva.setVisible(false);
+                    obiettiviTextArea.setEditable(true);
+                    noteGeneraliTextArea.setEditable(true);
+                    suggerimentiAlimentariTextArea.setEditable(true);
+                });
+                salvaModifiche.setOnFailed(ev->{
+                    System.out.println(STR."Errore durante il salvataggio: \{salvaModifiche.getException()}");
+                });
+            });
+        });
+        aggEsercizio.setOnAction(ev-> showFormModificaScheda());
+        creaNuovaScheda.setOnAction(event->{
+            creaSchedaClient();
+        });
+
+        info.getChildren().add(buttons);
 
         TabPane weekdayTabs = new TabPane();
         weekdayTabs.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
@@ -73,7 +158,7 @@ public class CreaSchedaController {
 
         for (String day : giorniSet) {
             Tab tab = new Tab(day);
-            VBox vbox = new VBox(10); // spacing di 10
+            VBox vbox = new VBox(10);
             vbox.setPadding(new Insets(10));
             VBox.setVgrow(vbox, Priority.ALWAYS);
 
@@ -91,13 +176,17 @@ public class CreaSchedaController {
                 loadEserciziScheda(selectedDay, (TableView<Esercizio>) ((VBox) newTab.getContent()).getChildren().get(0));
             }
         });
-        Button aggEsercizio = new Button("Aggiungi esercizio");
-        info.getChildren().addAll(aggEsercizio, weekdayTabs);
+
+        if (!weekdayTabs.getTabs().isEmpty()) {
+            weekdayTabs.getSelectionModel().selectFirst();
+            String selectedDay = weekdayTabs.getTabs().get(0).getText();
+            loadEserciziScheda(selectedDay, (TableView<Esercizio>) ((VBox) weekdayTabs.getTabs().get(0).getContent()).getChildren().get(0));
+        }
+
+        info.getChildren().addAll(weekdayTabs);
     }
 
     private void showFormModificaScheda() {
-        dataInizioPicker.setEditable(true);
-        dataFinePicker.setEditable(true);
         schedaInfoPanel.setVisible(false);
         aggiungiEsercizioPanel.setVisible(true);
     }
@@ -172,7 +261,7 @@ public class CreaSchedaController {
             Boolean result = task.getValue();
             System.out.println(result);
             if(result){
-                loadSchedaCliente();
+                loadInfoSchedaClient();
             }
             else{
                 creaSchedaClient();
@@ -190,10 +279,14 @@ public class CreaSchedaController {
         Label nota = new Label(STR."\{selectedClient.nome()} non ha ancora una scheda, creala subito");
         Button creaScheda = new Button("Crea scheda");
         info.getChildren().addAll(nota, creaScheda);
-        vboxCenter.getChildren().addAll(info);
 
         creaScheda.setOnAction(event-> {
-            showFormModificaScheda();
+            ScrollPane scrollPane = new ScrollPane();
+            scrollPane.setFitToWidth(true);
+            scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
+            scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+
+            VBox cont = new VBox(10);
             Label ob = new Label("Obiettivi");
             TextField obiettivi = new TextField();
             Label ng = new Label("Note generali:");
@@ -201,39 +294,39 @@ public class CreaSchedaController {
             Label SuggAl = new Label("Suggerimenti alimentari");
             TextField suggerimentiAlimentari = new TextField();
             Button crea = new Button("Crea");
-            info.getChildren().addAll(ob, obiettivi, ng, noteGenerali, SuggAl, suggerimentiAlimentari, crea);
             crea.setOnAction(ev -> {
+                dataInizioPicker.setEditable(true);
+                dataFinePicker.setEditable(true);
                 if(dataFinePicker.getValue() == null || dataInizioPicker.getValue() == null){
                     AlertManager info = new AlertManager(Alert.AlertType.INFORMATION, "Attenzione", null, "Inserisci la data di inizio e di fine validità");
-                    return;
-                }
+                    info.display();
+                } else {
+                    Task<Void> taskCreazione = DBConnection.getInstance().insertSchedaClient(selectedClient.id(), dataInizioPicker.getValue(), dataFinePicker.getValue(), obiettivi.getText(), noteGenerali.getText(), suggerimentiAlimentari.getText());
+                    Thread thread = new Thread(taskCreazione);
+                    thread.setDaemon(true);
+                    thread.start();
 
-                Task<Void> taskCreazione = DBConnection.getInstance().insertSchedaClient(selectedClient.id(), dataInizioPicker.getValue(), dataFinePicker.getValue(), obiettivi.getText(), noteGenerali.getText(), suggerimentiAlimentari.getText());
-
-                Thread thread = new Thread(taskCreazione);
-                thread.setDaemon(true);
-                thread.start();
-
-                taskCreazione.setOnSucceeded(suc->{
-                    System.out.println(taskCreazione.getValue());
-                    System.out.println("Scheda creata con successo");
-                    Platform.runLater(() -> {
+                    taskCreazione.setOnSucceeded(suc -> {
+                        System.out.println(taskCreazione.getValue());
+                        System.out.println("Scheda creata con successo");
                         info.getChildren().clear();
-                        loadSchedaCliente();
+                        loadInfoSchedaClient();
+
+
                     });
 
-                });
-
-                taskCreazione.setOnFailed(fal->{
-                    System.err.println("Errore durante la creazione della scheda");
-                    System.out.println(taskCreazione.getException());
-                });
-
+                    taskCreazione.setOnFailed(fal -> {
+                        System.err.println("Errore durante la creazione della scheda");
+                        System.out.println(taskCreazione.getException());
+                    });
+                }
             });
+
             creaScheda.setDisable(true);
-
+            cont.getChildren().addAll(ob, obiettivi, ng, noteGenerali, SuggAl, suggerimentiAlimentari, crea);
+            scrollPane.setContent(cont);
+            info.getChildren().add(scrollPane);
         });
-
     }
 
     private void loadEserciziScheda(String selectedDay, TableView<Esercizio> esercizioTableView) {
@@ -241,6 +334,14 @@ public class CreaSchedaController {
 
         task.setOnSucceeded(event -> {
             ObservableList<Esercizio> esercizi = task.getValue();
+
+            // debug
+            if (esercizi == null || esercizi.isEmpty()) {
+                System.out.println("Nessun esercizio trovato per il giorno: " + selectedDay);
+            } else {
+                System.out.println("Esercizi caricati per il giorno: " + selectedDay);
+                esercizi.forEach(e -> System.out.println(e));
+            }
 
             esercizioTableView.setItems(esercizi);
 
@@ -340,9 +441,6 @@ public class CreaSchedaController {
                 case "creazioneScheda":
                     SceneHandlerPT.getInstance().setCreazioneSchedaView();
                     break;
-                /*case "accountPT":
-                    SceneHandlerPT.getInstance().setCreazioneSchedaView();
-                    break;*/
                 case "impostazioniPT":
                     SceneHandlerPT.getInstance().setImpostazioniView();
                     break;

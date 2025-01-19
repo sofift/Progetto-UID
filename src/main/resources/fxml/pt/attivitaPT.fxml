@@ -22,6 +22,26 @@
 <BorderPane xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="it.unical.informatica.progettouid.controller.Trainer.AttivitaPTController"
             stylesheets="@../../styles/calendar.css">
+    <top>
+        <VBox>
+            <children>
+                <Label alignment="CENTER" maxWidth="Infinity" text="Attività">
+                    <graphic>
+                        <FontIcon iconLiteral="fas-calendar-alt" />
+                    </graphic>
+                    <padding>
+                        <Insets bottom="10" top="10" />
+                    </padding>
+                    <font>
+                        <Font size="18.0" />
+                    </font>
+                </Label>
+            </children>
+        </VBox>
+    </top>
+
+
+
     <left>
         <VBox maxWidth="95" minWidth="95" spacing="10" styleClass="sidebar">
             <padding>
@@ -30,8 +50,8 @@
             <Button fx:id="dashboardTrainer" maxWidth="Infinity" onAction="#onNavigationButtonClick" styleClass="sidebar-button">
                 <graphic>
                     <VBox alignment="CENTER" spacing="5">
-                        <FontIcon iconLiteral="fab-cuttlefish" />
-                        <Text text="Dashboard">
+                        <FontIcon iconLiteral="fas-home" />
+                        <Text text="Home">
                             <font>
                                 <Font size="9.0" />
                             </font>
@@ -55,7 +75,7 @@
                 <graphic>
                     <VBox alignment="CENTER" spacing="5">
                         <FontIcon iconLiteral="far-clipboard" />
-                        <Text text="Crea scheda">
+                        <Text text="Schede">
                             <font>
                                 <Font size="9.0" />
                             </font>
@@ -63,19 +83,7 @@
                     </VBox>
                 </graphic>
             </Button>
-            <Button fx:id="accountPT" maxWidth="Infinity" onAction="#onNavigationButtonClick" styleClass="sidebar-button">
-                <graphic>
-                    <VBox alignment="CENTER" spacing="5">
-                        <FontIcon iconLiteral="far-user" />
-                        <Text text="Account">
-                            <font>
-                                <Font size="9.0" />
-                            </font>
-                        </Text>
-                    </VBox>
-                </graphic>
-            </Button>
-            <Button maxWidth="Infinity" onAction="#onNavigationButtonClick" styleClass="sidebar-button">
+            <Button fx:id="impostazioniPT" maxWidth="Infinity" onAction="#onNavigationButtonClick" styleClass="sidebar-button">
                 <graphic>
                     <VBox alignment="CENTER" spacing="5">
                         <FontIcon iconLiteral="fas-cogs" />
@@ -101,19 +109,6 @@
             </Button>
         </VBox>
     </left>
-
-    <top>
-        <VBox>
-            <Label text="Attività" alignment="CENTER" maxWidth="Infinity">
-                <graphic>
-                    <FontIcon iconLiteral="fas-calendar-alt"/>
-                </graphic>
-                <padding>
-                    <Insets top="10" bottom="10"/>
-                </padding>
-            </Label>
-        </VBox>
-    </top>
 
     <center>
         <VBox spacing="10">

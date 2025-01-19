@@ -57,7 +57,8 @@ public class SchedaClientController {
     }
 
     private void loadSchedaInfo() {
-        Task<SchedaAllenamento> task = DBConnection.getInstance().getInfoSchedaClient();
+        int idClient = ClientSession.getInstance().getCurrentClient().id();
+        Task<SchedaAllenamento> task = DBConnection.getInstance().getInfoSchedaClient(idClient);
         Thread thread = new Thread(task);
         thread.setDaemon(true);
         thread.start();
@@ -314,7 +315,6 @@ public class SchedaClientController {
 
 
     private void loadEserciziScheda(int clientId, String selectedDay, TableView<Esercizio> esercizioTableView) {
-
         Task<ObservableList<Esercizio> > task = DBConnection.getInstance().getEserciziGiorno(clientId, selectedDay);
         Thread thread = new Thread(task);
         thread.setDaemon(true);
@@ -322,6 +322,7 @@ public class SchedaClientController {
 
         task.setOnSucceeded(event -> {
             ObservableList<Esercizio> esercizi = task.getValue();
+            //debug
             if (esercizi == null || esercizi.isEmpty()) {
                 System.out.println("Nessun esercizio trovato per il giorno: " + selectedDay);
             } else {

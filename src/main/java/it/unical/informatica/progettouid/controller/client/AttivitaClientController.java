@@ -73,7 +73,7 @@ public class AttivitaClientController {
         Alert confirmDialog = new Alert(Alert.AlertType.CONFIRMATION);
         confirmDialog.setTitle("Conferma prenotazione");
         confirmDialog.setHeaderText(null);
-        confirmDialog.setContentText("Confermi la prenotazione per il corso " + corso.nomeCorso() + "?");
+        confirmDialog.setContentText(STR."Confermi la prenotazione per il corso \{corso.nomeCorso()}?");
 
         Optional<ButtonType> result = confirmDialog.showAndWait();
         if (result.isPresent() && result.get() == ButtonType.OK) {

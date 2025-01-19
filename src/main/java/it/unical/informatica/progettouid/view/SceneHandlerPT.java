@@ -79,7 +79,7 @@ public class SceneHandlerPT {
 
     public void setImpostazioniView() throws Exception {
         if(this.scene != null)
-            this.scene.setRoot(loadFXML("/fxml/client/impostazioniClient.fxml"));
+            this.scene.setRoot(loadFXML("/fxml/pt/impostazioniPT.fxml"));
     }
 
 }

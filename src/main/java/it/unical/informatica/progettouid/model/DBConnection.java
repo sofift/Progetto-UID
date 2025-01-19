@@ -275,7 +275,7 @@ public class DBConnection {
         });
     }
 
-    public Task<List<Corsi>> getCorsiDiOggi() {
+    public Task<List<Corsi>> getCorsiDiOggi(){
         return asyncCall(() -> {
             String today = LocalDate.now().getDayOfWeek().getDisplayName(TextStyle.FULL, Locale.ITALIAN).toLowerCase();
             List<Corsi> corsi = FXCollections.observableArrayList();
@@ -403,10 +403,9 @@ public class DBConnection {
         });
     }
 
-    public Task<SchedaAllenamento> getInfoSchedaClient() {
+    public Task<SchedaAllenamento> getInfoSchedaClient(int idClient) {
         return asyncCall(() -> {
             if (isConnected()) {
-                int idClient = ClientSession.getInstance().getCurrentClient().id();
                 String query = "SELECT s.* " +
                         "        FROM Schede s " +
                         "        WHERE s.ClienteID = ? " +
@@ -612,10 +611,10 @@ public class DBConnection {
             List<PrenotazionePT> prenotazioni = new ArrayList<>();
             if (isConnected()) {
                 int idPT = PTSession.getInstance().getCurrentTrainer().id();
-                String query = "SELECT c.nome, c.cognome, p.data, p.oraPrenotazione, p.notes" +
+                String query = "SELECT c.nome, c.cognome, p.data, p.oraPrenotazione, p.notes " +
                         "FROM PrenotazioniPT p " +
-                        "JOIN Clienti c ON c.id = p.idClient" +
-                        "WHERE p.idPT = ?";
+                        "JOIN Clienti c ON c.id = p.idClient " +
+                        "WHERE p.idPT = ?;";
                 PreparedStatement stmt = con.prepareStatement(query);
                 stmt.setInt(1, idPT);
                 try (ResultSet rs = stmt.executeQuery()) {
@@ -697,7 +696,7 @@ public class DBConnection {
             List<Notifica> notifiche = new ArrayList<>();
             if (isConnected()) {
                 int trainerID = PTSession.getInstance().getCurrentTrainer().id();
-                String query = "SELECT * FROM Notifiche WHERE trainerId = ? AND stato = 'non letta'";
+                String query = "SELECT * FROM NotifichePT WHERE idPT = ? AND stato = 'non letta'";
                 PreparedStatement stmt = con.prepareStatement(query);
                 stmt.setInt(1, trainerID);
                 try (ResultSet rs = stmt.executeQuery()) {
@@ -739,7 +738,7 @@ public class DBConnection {
     public Task<Void> updateNotifyPT(int idNotify, String stato) {
         return asyncCall(() -> {
             if (isConnected()) {
-                String query = "UPDATE Notifiche SET stato = ? WHERE id = ?";
+                String query = "UPDATE NotifichePT SET stato = ? WHERE id = ?";
                 try (PreparedStatement stmt = con.prepareStatement(query)) {
                     stmt.setString(1, stato);
                     stmt.setInt(2, idNotify);
@@ -774,7 +773,7 @@ public class DBConnection {
             if (isConnected()) {
                 int idClient = ClientSession.getInstance().getCurrentClient().id();
                 LocalDate today = LocalDate.now();
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM-dd-yyyy");
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
                 String formattedDate = today.format(formatter);
                 String query = "INSERT INTO Pagamenti (idClient, idAbbonamento, importo, data, stato) VALUES(?, ?, ?, ?, ?);";
                 try (PreparedStatement stmt = con.prepareStatement(query)) {
@@ -794,13 +793,13 @@ public class DBConnection {
     // far modificare il giorno relativo al giorno della settimana in data effettiva
     private String getDataDaGiorno(String giorno) {
         Map<String, DayOfWeek> giorni = Map.of(
-                "lunedì", DayOfWeek.MONDAY,
-                "martedì", DayOfWeek.TUESDAY,
-                "mercoledì", DayOfWeek.WEDNESDAY,
-                "giovedì", DayOfWeek.THURSDAY,
-                "venerdì", DayOfWeek.FRIDAY,
-                "sabato", DayOfWeek.SATURDAY,
-                "domenica", DayOfWeek.SUNDAY
+                "Lunedì", DayOfWeek.MONDAY,
+                "Martedì", DayOfWeek.TUESDAY,
+                "Mercoledì", DayOfWeek.WEDNESDAY,
+                "Giovedì", DayOfWeek.THURSDAY,
+                "Venerdì", DayOfWeek.FRIDAY,
+                "Sabato", DayOfWeek.SATURDAY,
+                "Domenica", DayOfWeek.SUNDAY
         );
         LocalDate today = LocalDate.now();
         LocalDate startOfWeek = today.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
@@ -818,13 +817,34 @@ public class DBConnection {
                 try (PreparedStatement stmt = con.prepareStatement(query)) {
                     stmt.setInt(1, idCorso);
                     stmt.setInt(2, idClient);
-                    stmt.setDate(3, Date.valueOf(dataCorso));
+                    stmt.setString(3, dataCorso);
                     stmt.executeUpdate();
                 }
             }
             return null;
         });
     }
+
+    public Task<Boolean> insertPrenotazioneDashboard(int idCorso) {
+        return asyncCall(() -> {
+            if (isConnected()) {
+                int idClient = ClientSession.getInstance().getCurrentClient().id();
+                LocalDate today = LocalDate.now();
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                String formattedDate = today.format(formatter);
+                String query = "INSERT INTO PrenotazioniCorsi (idCorso, idClient, dataPrenotazione) VALUES (?, ?, ?);";
+                try (PreparedStatement stmt = con.prepareStatement(query)) {
+                    stmt.setInt(1, idCorso);
+                    stmt.setInt(2, idClient);
+                    stmt.setString(3, formattedDate);
+                    stmt.executeUpdate();
+                }
+                return true;
+            }
+            return false;
+        });
+    }
+
 
     public Task<Boolean> checkIn(String code) {
         return asyncCall(() -> {
@@ -864,6 +884,22 @@ public class DBConnection {
                 }
             }
             return false;
+        });
+    }
+
+    public Task<Boolean> insertModificheScheda(int id, String ob, String notes, String sugg) {
+        return asyncCall(() -> {
+            if (isConnected()) {
+                String query = "UPDATE INTO Schede (ClienteID, Obiettivi, NoteGenerali, SuggerimentiAlimentari) VALUES (?, ?, ?, ?);";
+                try (PreparedStatement stmt = con.prepareStatement(query)) {
+                    stmt.setInt(1, id);
+                    stmt.setString(2, ob);
+                    stmt.setString(3, notes);
+                    stmt.setString(4, sugg);
+                    stmt.executeUpdate();
+                }
+            }
+            return null;
         });
     }
 

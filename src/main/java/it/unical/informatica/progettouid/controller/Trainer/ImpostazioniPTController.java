@@ -2,6 +2,8 @@ package it.unical.informatica.progettouid.controller.Trainer;
 
 import it.unical.informatica.progettouid.model.Client;
 import it.unical.informatica.progettouid.model.ClientSession;
+import it.unical.informatica.progettouid.model.PTSession;
+import it.unical.informatica.progettouid.model.PersonalTrainer;
 import it.unical.informatica.progettouid.view.AlertManager;
 import it.unical.informatica.progettouid.view.SceneHandlerClient;
 import it.unical.informatica.progettouid.view.SceneHandlerPT;
@@ -26,14 +28,14 @@ public class ImpostazioniPTController {
     private Label nomeLabel;
     @FXML
     private PasswordField passwordField;
-    private Client client = null;
+    private PersonalTrainer personal = null;
 
     void initialize() {
-        client = ClientSession.getInstance().getCurrentClient();
-        nomeLabel.setText(STR."Nome: \{client.nome()}");
-        cognomeLabel.setText(STR."Cognome: \{client.cognome()}");
-        dataNascitaLabel.setText(STR."Data di nascita: \{client.dataNascita()}");
-        emailLabel.setText(STR."Email: \{client.email()}");
+        personal = PTSession.getInstance().getCurrentTrainer();
+        nomeLabel.setText(STR."Nome: \{personal.nome()}");
+        cognomeLabel.setText(STR."Cognome: \{personal.cognome()}");
+        dataNascitaLabel.setText(STR."Data di nascita: \{personal.dataNascita()}");
+        emailLabel.setText(STR."Email: \{personal.email()}");
     }
 
 
@@ -61,9 +63,6 @@ public class ImpostazioniPTController {
                 case "creazioneScheda":
                     SceneHandlerPT.getInstance().setCreazioneSchedaView();
                     break;
-                /*case "accountPT":
-                    SceneHandlerPT.getInstance().setCreazioneSchedaView();
-                    break;*/
                 case "impostazioniPT":
                     SceneHandlerPT.getInstance().setImpostazioniView();
                     break;

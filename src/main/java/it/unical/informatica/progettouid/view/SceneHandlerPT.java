@@ -1,16 +1,11 @@
 package it.unical.informatica.progettouid.view;
 
 import it.unical.informatica.progettouid.FlexFit;
-import it.unical.informatica.progettouid.model.ClientSession;
 import it.unical.informatica.progettouid.model.PTSession;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
-
-import java.io.IOException;
 
 
 public class SceneHandlerPT {
@@ -54,9 +49,9 @@ public class SceneHandlerPT {
             this.scene.setRoot(loadFXML("/fxml/pt/dashboardTrainer.fxml"));
     }
 
-    public void setAttivitaPTView() throws Exception {
+    public void setArticoliView() throws Exception {
         if(this.scene != null)
-            this.scene.setRoot(loadFXML("/fxml/pt/attivitaPT.fxml"));
+            this.scene.setRoot(loadFXML("/fxml/pt/articoli.fxml"));
     }
 
     public void setCreazioneSchedaView() throws Exception {

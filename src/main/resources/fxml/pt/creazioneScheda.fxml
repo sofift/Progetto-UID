@@ -56,11 +56,11 @@
                     </VBox>
                 </graphic>
             </Button>
-            <Button fx:id="attivitaPT" maxWidth="Infinity" onAction="#onNavigationButtonClick" styleClass="sidebar-button">
+            <Button fx:id="articoli" maxWidth="Infinity" onAction="#onNavigationButtonClick" styleClass="sidebar-button">
                 <graphic>
                     <VBox alignment="CENTER" spacing="5">
                         <FontIcon iconLiteral="fas-calendar-alt" />
-                        <Text text="Attività">
+                        <Text text="Articoli">
                             <font>
                                 <Font size="9.0" />
                             </font>
@@ -72,7 +72,7 @@
                 <graphic>
                     <VBox alignment="CENTER" spacing="5">
                         <FontIcon iconLiteral="far-clipboard" />
-                        <Text text="Schede">
+                        <Text text="Crea scheda">
                             <font>
                                 <Font size="9.0" />
                             </font>

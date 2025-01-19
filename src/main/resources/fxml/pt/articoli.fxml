@@ -3,7 +3,6 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
@@ -11,13 +10,13 @@
 <?import javafx.scene.text.Text?>
 <?import org.kordamp.ikonli.javafx.FontIcon?>
 
-<BorderPane xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unical.informatica.progettouid.controller.Trainer.ImpostazioniPTController">
+<BorderPane stylesheets="@../../styles/calendar.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unical.informatica.progettouid.controller.Trainer.ArticoliController">
     <top>
         <VBox>
             <children>
-                <Label alignment="CENTER" maxWidth="Infinity" text="Impostazioni">
+                <Label alignment="CENTER" maxWidth="Infinity" text="Attività">
                     <graphic>
-                        <FontIcon iconLiteral="fas-cogs" />
+                        <FontIcon iconLiteral="fas-calendar-alt" />
                     </graphic>
                     <padding>
                         <Insets bottom="10" top="10" />
@@ -101,33 +100,22 @@
     </left>
 
     <center>
-        <VBox spacing="10.0" BorderPane.alignment="CENTER">
-            <children>
-                <Label text="Impostazioni" />
-                <VBox alignment="CENTER" spacing="10.0">
-                    <children>
-                        <Label fx:id="nomeLabel" text="Nome" />
-                        <Label fx:id="cognomeLabel" text="Cognome" />
-                        <Label fx:id="dataNascitaLabel" text="Data di nascita" />
-                        <Label fx:id="emailLabel" text="Email" />
-                        <Button fx:id="logoutButton" mnemonicParsing="false" onAction="#logout" text="Logout" />
-                        <Label text="Tema" />
-                    </children>
-                    <padding>
-                        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
-                    </padding>
-                </VBox>
-                  <HBox spacing="10.0">
-                      <children>
-                          <RadioButton mnemonicParsing="false" text="Light" />
-                          <RadioButton mnemonicParsing="false" text="Dark" />
-                      </children>
-                  </HBox>
-            </children>
+        <VBox alignment="TOP_CENTER" spacing="10">
             <padding>
-                <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                <Insets left="10" right="10" />
             </padding>
+         <children>
+            <Label text="Leggi gli articoli " />
+            <HBox alignment="CENTER" spacing="10.0">
+               <children>
+                  <Button mnemonicParsing="false" onAction="#loadContentPerCategoria" text="Nutrizione" />
+                  <Button mnemonicParsing="false" onAction="#loadContentPerCategoria" text="Riposo" />
+                  <Button mnemonicParsing="false" onAction="#loadContentPerCategoria" text="Recupero" />
+                  <Button mnemonicParsing="false" onAction="#loadContentPerCategoria" text="Tecniche di allenamento" />
+               </children>
+            </HBox>
+            <VBox fx:id="vboxContent" />
+         </children>
         </VBox>
     </center>
-
 </BorderPane>

@@ -903,6 +903,29 @@ public class DBConnection {
         });
     }
 
+    public Task<List<Articolo>> getArticoli(String categoria) {
+        return asyncCall(() -> {
+            List<Articolo> articoli = new ArrayList<>();
+            if (isConnected()) {
+                String query = "SELECT * FROM Articoli WHERE Categoria = ? ";
+                PreparedStatement stmt = con.prepareStatement(query);
+                stmt.setString(1, categoria);
+                try (ResultSet rs = stmt.executeQuery()) {
+                    while (rs.next()) {
+                        articoli.add( new Articolo(
+                                rs.getInt("ID"),
+                                rs.getString("Titolo"),
+                                rs.getString("Descrizione"),
+                                rs.getString("Categoria"),
+                                rs.getString("URL")));
+                    }
+                }
+                stmt.close();
+            }
+            return articoli;
+        });
+    }
+
     /*public LocalDate getInizioSettimana() {
         LocalDate today = LocalDate.now();
         DayOfWeek dayOfWeek = today.getDayOfWeek();

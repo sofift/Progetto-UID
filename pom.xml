@@ -68,6 +68,12 @@
             <artifactId>slf4j-api</artifactId>
             <version>1.7.36</version> <!-- Usa la versione corretta -->
         </dependency>
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-web</artifactId>
+            <version>21</version> <!-- sostituisci con la versione di JavaFX che stai usando -->
+        </dependency>
+
 
         <!-- Logback Classic (implementazione per SLF4J) -->
         <dependency>

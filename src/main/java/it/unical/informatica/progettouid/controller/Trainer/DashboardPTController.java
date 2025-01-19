@@ -181,18 +181,17 @@ public class DashboardPTController {
         Button button = (Button) event.getSource();
         try {
             switch (button.getId()) {
-                case "dashboardTrainer":
+                case "dashboardPT":
                     SceneHandlerPT.getInstance().setDashboardView();
                     break;
-                case "attivitaPT":
-                    SceneHandlerPT.getInstance().setAttivitaPTView();
+                case "articoli":
+                    SceneHandlerPT.getInstance().setArticoliView();
                     break;
                 case "creazioneScheda":
                     SceneHandlerPT.getInstance().setCreazioneSchedaView();
                     break;
                 case "impostazioniPT":
                     SceneHandlerPT.getInstance().setImpostazioniView();
-                    break;
             }
         } catch (Exception e) {
             e.printStackTrace();

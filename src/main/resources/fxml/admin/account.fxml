@@ -1,27 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.chart.BarChart?>
-<?import javafx.scene.chart.CategoryAxis?>
-<?import javafx.scene.chart.NumberAxis?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ListView?>
-<?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.StackPane?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
-<?import javafx.scene.text.Text?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 <?import org.kordamp.ikonli.javafx.FontIcon?>
 
-<BorderPane fx:id="root" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unical.informatica.progettouid.controller.Admin.AdminDashboardController">
+<BorderPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="it.unical.informatica.progettouid.controller.Admin.AccountController">
 
     <top>
-        <VBox fx:id="mainContent" styleClass="top" stylesheets="@../../styles/home.css">
-            <Label text="Dashboard">
+        <VBox styleClass="top" stylesheets="@../../styles/home.css">
+            <Label text="Account">
                 <graphic>
-                    <FontIcon iconLiteral="fas-home" />
+                    <FontIcon iconLiteral="far-user" />
                 </graphic>
                 <padding>
                     <Insets bottom="10" top="10" />
@@ -172,57 +164,31 @@
     </left>
 
     <center>
-        <VBox spacing="20" stylesheets="@../../styles/admin/light/homeAdmin.css">
+        <VBox alignment="CENTER" spacing="20" styleClass="content-area">
             <padding>
-                <Insets bottom="20" left="20" right="20" top="20" />
+                <Insets top="50" right="20" bottom="20" left="20"/>
             </padding>
 
-            <HBox fx:id="statsContainer" spacing="20" styleClass="stats-container">
-                <StackPane styleClass="stat-card">
-                    <VBox alignment="CENTER">
-                        <Label styleClass="stat-amount" text="25,687.50" />
-                        <Label styleClass="stat-label" text="Scheduled" />
-                    </VBox>
-                </StackPane>
+            <VBox alignment="CENTER" spacing="15" styleClass="account-info">
+                <FontIcon iconLiteral="far-user-circle" iconSize="64"/>
 
-                <StackPane styleClass="stat-card">
-                    <VBox alignment="CENTER">
-                        <Label styleClass="stat-amount" text="11,036.34" />
-                        <Label styleClass="stat-label" text="Paid" />
-                    </VBox>
-                </StackPane>
+                <Label fx:id="usernameLabel" styleClass="account-label">
+                    <font>
+                        <Font size="24.0"/>
+                    </font>
+                </Label>
 
-                <StackPane styleClass="stat-card">
-                    <VBox alignment="CENTER">
-                        <Label styleClass="stat-amount" text="220.00" />
-                        <Label styleClass="stat-label" text="Overdue" />
-                    </VBox>
-                </StackPane>
-            </HBox>
+                <GridPane vgap="10" hgap="15" alignment="CENTER">
+                    <Label text="Nome:" styleClass="info-label" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                    <Label fx:id="nomeLabel" styleClass="info-value" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
 
-            <VBox styleClass="chart-container">
-                <Label styleClass="section-title" text="Attendance" />
-                <BarChart fx:id="attendanceChart">
-                    <xAxis>
-                        <CategoryAxis label="Day" />
-                    </xAxis>
-                    <yAxis>
-                        <NumberAxis label="Members" />
-                    </yAxis>
-                </BarChart>
+                    <Label text="Cognome:" styleClass="info-label" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+                    <Label fx:id="cognomeLabel" styleClass="info-value" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+
+                    <Label text="Ruolo:" styleClass="info-label" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+                    <Label text="Amministratore" styleClass="info-value" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+                </GridPane>
             </VBox>
-
-            <HBox spacing="20">
-                <VBox styleClass="section-container" HBox.hgrow="ALWAYS">
-                    <Label styleClass="section-title" text="My Bookings" />
-                    <ListView fx:id="bookingsList" VBox.vgrow="ALWAYS" />
-                </VBox>
-
-                <VBox styleClass="section-container" HBox.hgrow="ALWAYS">
-                    <Label styleClass="section-title" text="Notifications" />
-                    <ListView fx:id="notificationsList" VBox.vgrow="ALWAYS" />
-                </VBox>
-            </HBox>
         </VBox>
     </center>
 </BorderPane>

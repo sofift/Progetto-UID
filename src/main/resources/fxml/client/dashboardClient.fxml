@@ -11,10 +11,10 @@
 <?import javafx.scene.text.Text?>
 <?import org.kordamp.ikonli.javafx.FontIcon?>
 
-<BorderPane fx:id="root" stylesheets="@../../styles/home.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unical.informatica.progettouid.controller.client.DashboardClientController">
+<BorderPane fx:id="root" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unical.informatica.progettouid.controller.client.DashboardClientController">
 
    <top>
-      <VBox fx:id="mainContent" styleClass="top">
+      <VBox fx:id="mainContent" styleClass="top" stylesheets="@../../styles/home.css">
             <Label text="Dashboard">
                <graphic>
                   <FontIcon iconLiteral="fas-home" />
@@ -30,11 +30,11 @@
    </top>
 
    <left>
-      <VBox maxWidth="95.0" minWidth="95.0" spacing="10.0">
+      <VBox maxWidth="95.0" minWidth="95.0" spacing="10.0" styleClass="sidebar" stylesheets="@../../styles/sidebar.css">
          <children>
             <Button fx:id="dashboardClient" maxWidth="Infinity" onAction="#onNavigationButtonClick" styleClass="sidebar-button">
                <graphic>
-                  <VBox alignment="CENTER" spacing="5">
+                  <VBox alignment="CENTER" spacing="5" styleClass="sidebar-button">
                      <children>
                         <FontIcon iconLiteral="fas-home" />
                         <Text text="Home">
@@ -48,7 +48,7 @@
             </Button>
             <Button fx:id="attivitaClient" maxWidth="Infinity" onAction="#onNavigationButtonClick" styleClass="sidebar-button">
                <graphic>
-                  <VBox alignment="CENTER" spacing="5">
+                  <VBox alignment="CENTER" spacing="5" styleClass="sidebar-button">
                      <children>
                         <FontIcon iconLiteral="fas-calendar-alt" />
                         <Text text="Attività">
@@ -62,7 +62,7 @@
             </Button>
             <Button fx:id="prenotazionePT" maxWidth="Infinity" onAction="#onNavigationButtonClick" styleClass="sidebar-button">
                <graphic>
-                  <VBox alignment="CENTER" spacing="5">
+                  <VBox alignment="CENTER" spacing="5" styleClass="sidebar-button">
                      <children>
                         <FontIcon iconLiteral="fas-dumbbell" />
                         <Text text="Personal trainer">
@@ -76,7 +76,7 @@
             </Button>
             <Button fx:id="schedaClient" maxWidth="Infinity" onAction="#onNavigationButtonClick" styleClass="sidebar-button">
                <graphic>
-                  <VBox alignment="CENTER" spacing="5">
+                  <VBox alignment="CENTER" spacing="5" styleClass="sidebar-button">
                      <children>
                         <FontIcon iconLiteral="far-clipboard" />
                         <Text text="Scheda">
@@ -90,7 +90,7 @@
             </Button>
             <Button fx:id="abbonamentoClient" maxWidth="Infinity" onAction="#onNavigationButtonClick" styleClass="sidebar-button">
                <graphic>
-                  <VBox alignment="CENTER" spacing="5">
+                  <VBox alignment="CENTER" spacing="5" styleClass="sidebar-button">
                      <children>
                         <FontIcon iconLiteral="far-credit-card" />
                         <Text text="Il tuo abbonamento">
@@ -104,7 +104,7 @@
             </Button>
             <Button fx:id="impostazioniClient" maxWidth="Infinity" onAction="#onNavigationButtonClick" styleClass="sidebar-button">
                <graphic>
-                  <VBox alignment="CENTER" spacing="5">
+                  <VBox alignment="CENTER" spacing="5" styleClass="sidebar-button">
                      <children>
                         <FontIcon iconLiteral="fas-cogs" />
                         <Text text="Impostazioni">
@@ -118,7 +118,7 @@
             </Button>
             <Button maxWidth="Infinity" onAction="#onNavigationButtonClick" styleClass="sidebar-button">
                <graphic>
-                  <VBox alignment="CENTER" spacing="5">
+                  <VBox alignment="CENTER" spacing="5" styleClass="sidebar-button">
                      <children>
                         <FontIcon iconLiteral="far-question-circle" />
                         <Text text="Help">
@@ -138,11 +138,11 @@
    </left>
 
    <center>
-      <VBox id="centerVBox" fx:id="vboxCenter" spacing="20" styleClass="centerVBox">
+      <VBox id="centerVBox" fx:id="vboxCenter" spacing="20" styleClass="centerVBox" stylesheets="@../../styles/client/dark/homeClient.css">
          <padding>
             <Insets bottom="20" left="20" right="20" top="20" />
          </padding>
-         <Label fx:id="bentornatoLabel" />
+         <Label fx:id="bentornatoLabel" styleClass="main-text" />
          <VBox fx:id="vboxAccessi" />
 
          <HBox spacing="20" VBox.vgrow="ALWAYS">

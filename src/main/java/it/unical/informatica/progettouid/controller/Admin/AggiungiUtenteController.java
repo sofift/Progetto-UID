@@ -260,7 +260,6 @@ public class AggiungiUtenteController {
         updateFormProgress();
     }
 
-    // Navigation methods
     @FXML
     private void navigateToHome() throws Exception {
         SceneHandlerAdmin.getInstance().setDashboardView();
@@ -277,7 +276,32 @@ public class AggiungiUtenteController {
     }
 
     @FXML
+    private void navigateToAddUser() throws Exception {
+        SceneHandlerAdmin.getInstance().setAddUser();
+    }
+
+    @FXML
+    private void navigateToAddPT() throws Exception {
+        SceneHandlerAdmin.getInstance().setAddPT();
+    }
+
+    @FXML
+    private void navigateToAddCourse() throws Exception {
+        SceneHandlerAdmin.getInstance().setAddCourse();
+    }
+
+    @FXML
     private void navigateToBilling() throws Exception {
         SceneHandlerAdmin.getInstance().setBilling();
+    }
+
+    @FXML
+    private void navigateToAccount() throws Exception {
+        SceneHandlerAdmin.getInstance().setAccount();
+    }
+
+    @FXML
+    private void navigateToSettings() throws Exception {
+        SceneHandlerAdmin.getInstance().setSettings();
     }
 }

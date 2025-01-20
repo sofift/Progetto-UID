@@ -186,17 +186,18 @@ public class DBConnection {
         return asyncCall(() -> {
             List<PersonalTrainer> trainers = FXCollections.observableArrayList();
             if (isConnected()) {
-                String query = "SELECT * FROM PersonalTrainer ;";
+                String query = "SELECT * FROM PersonalTrainer;";
                 PreparedStatement stmt = con.prepareStatement(query);
                 ResultSet rs = stmt.executeQuery();
                 while (rs.next()) {
                     trainers.add(new PersonalTrainer(
-                            rs.getInt("id"),
+                            rs.getInt("ID"),
                             rs.getString("Nome"),
                             rs.getString("Cognome"),
                             rs.getString("DataNascita"),
                             rs.getString("Specializzazione"),
                             rs.getString("Email"),
+                            "", // Password vuota per motivi di sicurezza
                             rs.getString("Telefono")));
                 }
                 stmt.close();
@@ -204,6 +205,7 @@ public class DBConnection {
             return trainers;
         });
     }
+
 
     public Task<List<String>> getNomeAllPT() {
         return asyncCall(() -> {
@@ -228,22 +230,23 @@ public class DBConnection {
         return asyncCall(() -> {
             if (isConnected()) {
                 int idClient = ClientSession.getInstance().getCurrentClient().id();
-                String query = "SELECT pt.nome, pt.cognome, pt.DataNascita, pt.specializzazione, pt.email, pt.telefono" +
-                        " FROM PersonalTrainer pt, Schede s " +
-                        "WHERE s.ClienteID = ?;";
+                String query = "SELECT pt.* " +
+                        "FROM PersonalTrainer pt, Schede s " +
+                        "WHERE s.ClienteID = ? " +
+                        "AND s.PersonalTrainerID = pt.ID;";  // Aggiunta condizione di join
                 PreparedStatement stmt = con.prepareStatement(query);
                 stmt.setInt(1, idClient);
                 ResultSet rs = stmt.executeQuery();
                 if (rs.next()) {
                     return new PersonalTrainer(
-                            rs.getInt("id"),
+                            rs.getInt("ID"),
                             rs.getString("Nome"),
                             rs.getString("Cognome"),
                             rs.getString("DataNascita"),
                             rs.getString("Specializzazione"),
                             rs.getString("Email"),
+                            "", // Password vuota per motivi di sicurezza
                             rs.getString("Telefono"));
-
                 }
                 stmt.close();
             }
@@ -468,10 +471,20 @@ public class DBConnection {
                 try (PreparedStatement stmt = con.prepareStatement(query)) {
                     stmt.setString(1, email);
                     try (ResultSet rs = stmt.executeQuery()) {
-                        String storedHash = rs.getString("Password");
-                        if (rs.next() && BCrypt.checkpw(password, storedHash)) {
-
-                            return new PersonalTrainer(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5), rs.getString(6), rs.getString(7));
+                        if (rs.next()) {  // Prima muoviamo il cursore
+                            String storedHash = rs.getString("Password");
+                            if (BCrypt.checkpw(password, storedHash)) {
+                                return new PersonalTrainer(
+                                        rs.getInt("ID"),
+                                        rs.getString("Nome"),
+                                        rs.getString("Cognome"),
+                                        rs.getString("DataNascita"),
+                                        rs.getString("Specializzazione"),
+                                        rs.getString("Email"),
+                                        "", // Password vuota per motivi di sicurezza
+                                        rs.getString("Telefono")
+                                );
+                            }
                         }
                     }
                 }
@@ -634,12 +647,12 @@ public class DBConnection {
         });
     }
 
-    public Task<PersonalTrainer> getPersonalFromSchedaClient(){
-        return asyncCall(()->{
+    public Task<PersonalTrainer> getPersonalFromSchedaClient() {
+        return asyncCall(() -> {
             int idClient = ClientSession.getInstance().getCurrentClient().id();
             int idPT = -1;
             if(isConnected()) {
-                String query = "SELECT PersonalTrainerID FROM Schede WHERE ClienteID = ? ";
+                String query = "SELECT PersonalTrainerID FROM Schede WHERE ClienteID = ?";
                 PreparedStatement stmt = con.prepareStatement(query);
                 stmt.setInt(1, idClient);
                 try (ResultSet rs = stmt.executeQuery()) {
@@ -652,7 +665,16 @@ public class DBConnection {
                 stmtPT.setInt(1, idPT);
                 try (ResultSet rs = stmtPT.executeQuery()) {
                     if (rs.next()) {
-                        return new PersonalTrainer(idPT, rs.getString("Nome"), rs.getString("Cognome"), rs.getString("DataNascita"), rs.getString("Specializzazione"), rs.getString("Email"), rs.getString("Telefono"));
+                        return new PersonalTrainer(
+                                idPT,
+                                rs.getString("Nome"),
+                                rs.getString("Cognome"),
+                                rs.getString("DataNascita"),
+                                rs.getString("Specializzazione"),
+                                rs.getString("Email"),
+                                "", // Password vuota per motivi di sicurezza
+                                rs.getString("Telefono")
+                        );
                     }
                 }
             }
@@ -923,6 +945,49 @@ public class DBConnection {
                 stmt.close();
             }
             return articoli;
+        });
+    }
+
+    public Task<Boolean> insertCorso(NuovoCorso corso) {
+        return asyncCall(() -> {
+            if (isConnected()) {
+                // First insert the course
+                String queryCorso = "INSERT INTO Corsi (Nome, Descrizione, Durata, PT) VALUES (?, ?, ?, ?);";
+                int corsoId;
+
+                try (PreparedStatement stmt = con.prepareStatement(queryCorso, Statement.RETURN_GENERATED_KEYS)) {
+                    stmt.setString(1, corso.getNome());
+                    stmt.setString(2, corso.getDescrizione());
+                    stmt.setInt(3, corso.getDurata());
+                    stmt.setString(4, corso.getPt());
+                    stmt.executeUpdate();
+
+                    // Get the generated course ID
+                    try (ResultSet rs = stmt.getGeneratedKeys()) {
+                        if (rs.next()) {
+                            corsoId = rs.getInt(1);
+                        } else {
+                            throw new SQLException("Failed to get course ID");
+                        }
+                    }
+                }
+
+                // Then insert the schedule for each day
+                String queryOrari = "INSERT INTO OrarioCorsi (idCorso, giorno, oraInizio, oraFine) VALUES (?, ?, ?, ?);";
+                try (PreparedStatement stmt = con.prepareStatement(queryOrari)) {
+                    for (String giorno : corso.getGiorni()) {
+                        stmt.setInt(1, corsoId);
+                        stmt.setString(2, giorno);
+                        stmt.setString(3, corso.getOrarioInizio().toString());
+                        stmt.setString(4, corso.getOrarioFine().toString());
+                        stmt.addBatch();
+                    }
+                    stmt.executeBatch();
+                }
+
+                return true;
+            }
+            return false;
         });
     }
 

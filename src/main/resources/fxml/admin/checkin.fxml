@@ -38,7 +38,8 @@
             <padding>
                 <Insets bottom="20" top="20" />
             </padding>
-            <Button maxWidth="Infinity" styleClass="sidebar-button">
+
+            <Button maxWidth="Infinity" styleClass="sidebar-button" onAction="#navigateToHome">
                 <graphic>
                     <VBox alignment="CENTER" spacing="5" styleClass="sidebar-button">
                         <FontIcon iconLiteral="fas-home" />
@@ -50,7 +51,8 @@
                     </VBox>
                 </graphic>
             </Button>
-            <Button maxWidth="Infinity" styleClass="sidebar-button">
+
+            <Button maxWidth="Infinity" styleClass="sidebar-button" onAction="#navigateToCheckIn">
                 <graphic>
                     <VBox alignment="CENTER" spacing="5" styleClass="sidebar-button">
                         <FontIcon iconLiteral="fas-user-check" />
@@ -62,25 +64,12 @@
                     </VBox>
                 </graphic>
             </Button>
-            <Button maxWidth="Infinity" styleClass="sidebar-button">
+
+            <Button maxWidth="Infinity" styleClass="sidebar-button" onAction="#navigateToMembers">
                 <graphic>
                     <VBox alignment="CENTER" spacing="5" styleClass="sidebar-button">
-                        <children>
-                            <FontIcon iconLiteral="fas-users" />
-                            <Text text="Membri">
-                                <font>
-                                    <Font size="9.0" />
-                                </font>
-                            </Text>
-                        </children>
-                    </VBox>
-                </graphic>
-            </Button>
-            <Button maxWidth="Infinity" styleClass="sidebar-button">
-                <graphic>
-                    <VBox alignment="CENTER" spacing="5" styleClass="sidebar-button">
-                        <FontIcon iconLiteral="fas-user-plus" />
-                        <Text text="Aggiungi cliente">
+                        <FontIcon iconLiteral="fas-users" />
+                        <Text text="Membri">
                             <font>
                                 <Font size="9.0" />
                             </font>
@@ -88,7 +77,34 @@
                     </VBox>
                 </graphic>
             </Button>
-            <Button maxWidth="Infinity" styleClass="sidebar-button">
+
+            <Button maxWidth="Infinity" styleClass="sidebar-button" onAction="#navigateToAddUser">
+                <graphic>
+                    <VBox alignment="CENTER" spacing="5" styleClass="sidebar-button">
+                        <FontIcon iconLiteral="fas-user-plus" />
+                        <Text text="Aggiungi utente">
+                            <font>
+                                <Font size="9.0" />
+                            </font>
+                        </Text>
+                    </VBox>
+                </graphic>
+            </Button>
+
+            <Button maxWidth="Infinity" styleClass="sidebar-button" onAction="#navigateToAddPT">
+                <graphic>
+                    <VBox alignment="CENTER" spacing="5" styleClass="sidebar-button">
+                        <FontIcon iconLiteral="fas-user-plus" />
+                        <Text text="Aggiungi PT">
+                            <font>
+                                <Font size="9.0" />
+                            </font>
+                        </Text>
+                    </VBox>
+                </graphic>
+            </Button>
+
+            <Button maxWidth="Infinity" styleClass="sidebar-button" onAction="#navigateToAddCourse">
                 <graphic>
                     <VBox alignment="CENTER" spacing="5" styleClass="sidebar-button">
                         <FontIcon iconLiteral="fas-walking" />
@@ -100,7 +116,8 @@
                     </VBox>
                 </graphic>
             </Button>
-            <Button maxWidth="Infinity" styleClass="sidebar-button">
+
+            <Button maxWidth="Infinity" styleClass="sidebar-button" onAction="#navigateToBilling">
                 <graphic>
                     <VBox alignment="CENTER" spacing="5" styleClass="sidebar-button">
                         <FontIcon iconLiteral="far-credit-card" />
@@ -112,7 +129,8 @@
                     </VBox>
                 </graphic>
             </Button>
-            <Button maxWidth="Infinity" styleClass="sidebar-button">
+
+            <Button maxWidth="Infinity" styleClass="sidebar-button" onAction="#navigateToAccount">
                 <graphic>
                     <VBox alignment="CENTER" spacing="5" styleClass="sidebar-button">
                         <FontIcon iconLiteral="far-user" />
@@ -124,7 +142,8 @@
                     </VBox>
                 </graphic>
             </Button>
-            <Button maxWidth="Infinity" styleClass="sidebar-button">
+
+            <Button maxWidth="Infinity" styleClass="sidebar-button" onAction="#navigateToSettings">
                 <graphic>
                     <VBox alignment="CENTER" spacing="5" styleClass="sidebar-button">
                         <FontIcon iconLiteral="fas-cogs" />
@@ -136,6 +155,7 @@
                     </VBox>
                 </graphic>
             </Button>
+
             <Button maxWidth="Infinity" styleClass="sidebar-button">
                 <graphic>
                     <VBox alignment="CENTER" spacing="5" styleClass="sidebar-button">

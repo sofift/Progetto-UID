@@ -1,9 +1,32 @@
 package it.unical.informatica.progettouid.controller.Admin;
 
+import it.unical.informatica.progettouid.model.Admin;
+import it.unical.informatica.progettouid.model.AdminSession;
 import it.unical.informatica.progettouid.view.SceneHandlerAdmin;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
+import javafx.scene.control.Label;
+import java.net.URL;
+import java.util.ResourceBundle;
 
-public class BillingController {
+public class AccountController implements Initializable {
+    @FXML private Label usernameLabel;
+    @FXML private Label nomeLabel;
+    @FXML private Label cognomeLabel;
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        loadAdminInfo();
+    }
+
+    private void loadAdminInfo() {
+        Admin currentAdmin = AdminSession.getInstance().getCurrentAdmin();
+        if (currentAdmin != null) {
+            usernameLabel.setText(currentAdmin.email());
+            nomeLabel.setText(currentAdmin.nome());
+            cognomeLabel.setText(currentAdmin.cognome());
+        }
+    }
 
     @FXML
     private void navigateToHome() throws Exception {
@@ -49,5 +72,4 @@ public class BillingController {
     private void navigateToSettings() throws Exception {
         SceneHandlerAdmin.getInstance().setSettings();
     }
-
 }

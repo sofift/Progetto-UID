@@ -7,6 +7,7 @@ import javafx.concurrent.Task;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 
 import java.sql.*;
+import java.sql.Date;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -252,21 +253,19 @@ public class DBConnection {
 
     public Task<List<Corsi>> getCorsi() {
         return asyncCall(() -> {
-            List<Corsi> corsi = new ArrayList<>();
+            List<Corsi> corsi = FXCollections.observableArrayList();
             if (isConnected()) {
-                String query = "SELECT *, pt.Nome as NomeTrainer, pt.Cognome as CognomeTrainer " +
-                        "FROM Corsi c " +
-                        "JOIN PersonalTrainer pt ON c.idTrainer = pt.ID ";
+                String query = "SELECT *" +
+                        "FROM Corsi c ";
                 PreparedStatement stmt = con.prepareStatement(query);
                 ResultSet rs = stmt.executeQuery();
                 while (rs.next()) {
                     corsi.add(new Corsi(
-                            rs.getInt("ID"),
-                            rs.getString("Nome"),
-                            rs.getString("Descrizione"),
-                            rs.getInt("idTrainer"),
-                            rs.getString("NomeTrainer"),
-                            rs.getString("CognomeTrainer")
+                            rs.getInt(1),
+                            rs.getString(2),
+                            rs.getString(3),
+                            rs.getInt(4),
+                            rs.getString(5)
                     ));
 
                 }
@@ -281,21 +280,19 @@ public class DBConnection {
             String today = LocalDate.now().getDayOfWeek().getDisplayName(TextStyle.FULL, Locale.ITALIAN).toLowerCase();
             List<Corsi> corsi = FXCollections.observableArrayList();
             if (isConnected()) {
-                String query = "SELECT c.ID, c.Nome, c.Descrizione, c.idTrainer, pt.Nome AS NomeTrainer, pt.Cognome AS CognomeTrainer " +
+                String query = "SELECT c.ID, c.Nome, c.Descrizione, c.idTrainer " +
                         "FROM Corsi c JOIN OrarioCorsi oc ON c.ID = oc.idCorso " +
-                        "JOIN PersonalTrainer pt ON c.idTrainer = pt.ID " +
                         "WHERE oc.giorno = ?";
                 PreparedStatement stmt = con.prepareStatement(query);
                 stmt.setString(1, today);
                 ResultSet rs = stmt.executeQuery();
                 while (rs.next()) {
                     corsi.add(new Corsi(
-                            rs.getInt("ID"),
-                            rs.getString("Nome"),
-                            rs.getString("Descrizione"),
-                            rs.getInt("idTrainer"),
-                            rs.getString("NomeTrainer"),
-                            rs.getString("CognomeTrainer")
+                            rs.getInt(1),
+                            rs.getString(2),
+                            rs.getString(3),
+                            rs.getInt(4),
+                            rs.getString(5)
                     ));
 
                 }
@@ -309,28 +306,24 @@ public class DBConnection {
         return asyncCall(() -> {
             List<OrariCorsi> orari = FXCollections.observableArrayList();
             if (isConnected()) {
-                String query = "SELECT c.ID, c.Nome, oc.giorno, oc.oraInizio, oc.oraFine " +
-                        "FROM OrarioCorsi oc " +
-                        "JOIN Corsi c ON oc.idCorso = c.ID " +
+                String query = "SELECT c.id, c.nome, oc.giorno, oc.oraInizio, oc.oraFine " +
+                        "FROM Corsi c " +
+                        "JOIN OrarioCorsi oc ON oc.idCorso = c.ID " +
                         "WHERE c.ID = ?";
-                try(PreparedStatement stmt = con.prepareStatement(query)){
-                    stmt.setInt(1, idCorso);
-                    try(ResultSet rs = stmt.executeQuery())
-                    {
-                        while (rs.next()) {
-                            orari.add(new OrariCorsi(
-                                    rs.getInt(1),
-                                    rs.getString(2),
-                                    rs.getString(3),
-                                    rs.getString(4),
-                                    rs.getString(5)
-                            ));
+                PreparedStatement stmt = con.prepareStatement(query);
+                stmt.setInt(1, idCorso);
+                ResultSet rs = stmt.executeQuery();
+                while (rs.next()) {
+                    orari.add(new OrariCorsi(
+                            rs.getInt(1),
+                            rs.getString(2),
+                            rs.getString(3),
+                            rs.getString(4),
+                            rs.getString(5)
+                    ));
 
-                        }
-                    }
-                    stmt.close();
                 }
-
+                stmt.close();
             }
             return orari;
         });
@@ -370,7 +363,6 @@ public class DBConnection {
         return asyncCall(() -> {
             if (isConnected()) {
                 int idClient = ClientSession.getInstance().getCurrentClient().id();
-                checkAbbonamento(idClient);
                 String query = "SELECT ta.Nome, a.dataInizio, a.dataScadenza, a.stato, ta.descrizione " +
                         "FROM Abbonamenti a " +
                         "JOIN TipiAbbonamento ta ON a.TipoAbbonamentoID = ta.ID " +
@@ -394,36 +386,18 @@ public class DBConnection {
         });
     }
 
-    private void checkAbbonamento(int idClient) throws SQLException {
-        if(isConnected()){
-            String query = "UPDATE Abbonamenti " +
-                    "SET Stato = 'scaduto' " +
-                    "WHERE ClienteID = ? AND DATE(DataScadenza) < DATE('now')";
-            try (PreparedStatement stmt = con.prepareStatement(query)) {
-                stmt.setInt(1, idClient);
-                stmt.executeUpdate();
-            } catch (SQLException e) {
-                throw e;
-            }
-        }
-    }
-
     public Task<List<TipiAbbonamento>> getAllPianiAbbonamento() {
         return asyncCall(() -> {
             List<TipiAbbonamento> piani = FXCollections.observableArrayList();
             if (isConnected()) {
                 String query = "SELECT * FROM TipiAbbonamento ;";
-                try(PreparedStatement stmt = con.prepareStatement(query)){
-                    try(ResultSet rs = stmt.executeQuery()){
-                        while (rs.next()) {
-                            piani.add(new TipiAbbonamento(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getInt(4), rs.getInt(5), rs.getInt(6), rs.getString(7)));
-
-                        }
-                        stmt.close();
-                    }
+                PreparedStatement stmt = con.prepareStatement(query);
+                ResultSet rs = stmt.executeQuery();
+                while (rs.next()) {
+                    piani.add(new TipiAbbonamento(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getInt(4), rs.getInt(5), rs.getInt(6), rs.getString(7)));
 
                 }
-
+                stmt.close();
             }
             return piani;
         });
@@ -641,47 +615,53 @@ public class DBConnection {
                         "FROM PrenotazioniPT p " +
                         "JOIN Clienti c ON c.id = p.idClient " +
                         "WHERE p.idPT = ?;";
-                try(PreparedStatement stmt = con.prepareStatement(query)) {
-                    stmt.setInt(1, idPT);
-                    try (ResultSet rs = stmt.executeQuery()) {
-                        while (rs.next()) {
-                            prenotazioni.add(new PrenotazionePT(
-                                    rs.getInt(idPT),
-                                    rs.getString(2),
-                                    rs.getString(3),
-                                    rs.getString(4),
-                                    rs.getString(5),
-                                    rs.getString(6)));
-                        }
+                PreparedStatement stmt = con.prepareStatement(query);
+                stmt.setInt(1, idPT);
+                try (ResultSet rs = stmt.executeQuery()) {
+                    while (rs.next()) {
+                        prenotazioni.add( new PrenotazionePT(
+                                rs.getInt(idPT),
+                                rs.getString(2),
+                                rs.getString(3),
+                                rs.getString(4),
+                                rs.getString(5),
+                                rs.getString(6)));
                     }
-                    stmt.close();
                 }
+                stmt.close();
             }
             return prenotazioni;
         });
     }
 
-    public Task<PersonalTrainer> getPersonalFromSchedaClient(){
-        return asyncCall(()->{
+    public Task<PersonalTrainer> getPersonalFromSchedaClient() {
+        return asyncCall(() -> {
             int idClient = ClientSession.getInstance().getCurrentClient().id();
             int idPT = -1;
             if(isConnected()) {
-                String query = "SELECT PersonalTrainerID FROM Schede WHERE ClienteID = ? ";
-                try(PreparedStatement stmt = con.prepareStatement(query)) {
-                    stmt.setInt(1, idClient);
-                    try (ResultSet rs = stmt.executeQuery()) {
-                        if (rs.next()) {
-                            idPT = rs.getInt("PersonalTrainerID");
-                        }
+                String query = "SELECT PersonalTrainerID FROM Schede WHERE ClienteID = ?";
+                PreparedStatement stmt = con.prepareStatement(query);
+                stmt.setInt(1, idClient);
+                try (ResultSet rs = stmt.executeQuery()) {
+                    if (rs.next()) {
+                        idPT = rs.getInt("PersonalTrainerID");
                     }
                 }
                 String queryPT = "SELECT * FROM PersonalTrainer WHERE ID = ?";
-                try(PreparedStatement stmtPT = con.prepareStatement(queryPT)) {
-                    stmtPT.setInt(1, idPT);
-                    try (ResultSet rs = stmtPT.executeQuery()) {
-                        if (rs.next()) {
-                            return new PersonalTrainer(idPT, rs.getString("Nome"), rs.getString("Cognome"), rs.getString("DataNascita"), rs.getString("Specializzazione"), rs.getString("Email"), rs.getString("Telefono"));
-                        }
+                PreparedStatement stmtPT = con.prepareStatement(queryPT);
+                stmtPT.setInt(1, idPT);
+                try (ResultSet rs = stmtPT.executeQuery()) {
+                    if (rs.next()) {
+                        return new PersonalTrainer(
+                                idPT,
+                                rs.getString("Nome"),
+                                rs.getString("Cognome"),
+                                rs.getString("DataNascita"),
+                                rs.getString("Specializzazione"),
+                                rs.getString("Email"),
+                                "", // Password vuota per motivi di sicurezza
+                                rs.getString("Telefono")
+                        );
                     }
                 }
             }
@@ -797,99 +777,26 @@ public class DBConnection {
         });
     }
 
-    public int getDurataMesiAbbonamento(int idAbbonamento) {
-        if (isConnected()) {
-            String query = "SELECT DurataMesi FROM TipiAbbonamento WHERE ID = ?";
-            try(PreparedStatement stmt = con.prepareStatement(query)) {
-                stmt.setInt(1, idAbbonamento);
-                try(ResultSet rs = stmt.executeQuery()) {
-                    if (rs.next()) {
-                        System.out.println(rs.getInt(1));
-                        return rs.getInt(1);
-                    }
-                    stmt.close();
-                }
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
-        }
-        return -1;
-    }
-
-    public int getAccessiTotali(int idAbbonamento){
-        if (isConnected()) {
-            String query = "SELECT NumeroAccessiTotali FROM TipiAbbonamento WHERE ID = ?";
-            try(PreparedStatement stmt = con.prepareStatement(query)) {
-                stmt.setInt(1, idAbbonamento);
-                try(ResultSet rs = stmt.executeQuery()) {
-                    if (rs.next()) {
-                        System.out.println(rs.getInt(1));
-                        return rs.getInt(1);
-                    }
-                    stmt.close();
-                }
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
-        }
-        return -1;
-    }
-
-    public Task<Boolean> insertPagamento(int idAbbonamento, int importo, String stato) {
+    public Task<Void> insertPagamento(int idAbbonamento, int importo, String stato) {
         return asyncCall(() -> {
             if (isConnected()) {
                 int idClient = ClientSession.getInstance().getCurrentClient().id();
                 LocalDate today = LocalDate.now();
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
                 String formattedDate = today.format(formatter);
-                String queryPagamento = "INSERT INTO Pagamenti (idClient, idAbbonamento, importo, data, stato) VALUES(?, ?, ?, ?, ?);";
-                try (PreparedStatement stmt = con.prepareStatement(queryPagamento)) {
+                String query = "INSERT INTO Pagamenti (idClient, idAbbonamento, importo, data, stato) VALUES(?, ?, ?, ?, ?);";
+                try (PreparedStatement stmt = con.prepareStatement(query)) {
                     stmt.setInt(1, idClient);
                     stmt.setInt(2, idAbbonamento);
                     stmt.setInt(3,  importo);
                     stmt.setString(4, formattedDate);
                     stmt.setString(5, stato);
                     stmt.executeUpdate();
-                }
-                boolean aggiunto = false;
-                if(stato.equals("avvenuto")){
-                    aggiunto = insertAbbonamento(idClient, idAbbonamento, "attivo");
-                }
 
-                System.out.println("Abbonamento aggiunto" + aggiunto);
-                return true;
+                }
             }
-            return false;
+            return null;
         });
-    }
-
-    public boolean insertAbbonamento(int idClient, int idAbbonamento, String stato) {
-        if (isConnected()) {
-            int durata = getDurataMesiAbbonamento(idAbbonamento);
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-            LocalDate today = LocalDate.now();
-            String formatterToday = today.format(formatter);
-            LocalDate dataScadenza = today.plusMonths(durata);
-            String formatterScadenza = dataScadenza.format(formatter);
-
-            int accessiTotali = getAccessiTotali(idAbbonamento);
-
-            String queryAbbonamento = "INSERT INTO Abbonamenti(ClienteID, TipoAbbonamentoID, DataInizio, DataScadenza,AccessiRimanenti, Stato) VALUES (?, ?, ?, ?, ?, ?); ";
-            try(PreparedStatement stmt = con.prepareStatement(queryAbbonamento)) {
-                stmt.setInt(1, idClient);
-                stmt.setInt(2, idAbbonamento);
-                stmt.setString(3, formatterToday);
-                stmt.setString(4, formatterScadenza);
-                stmt.setInt(5,accessiTotali );
-                stmt.setString (6, stato );
-                stmt.executeUpdate();
-                return true;
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
-
-        }
-        return false;
     }
 
     // far modificare il giorno relativo al giorno della settimana in data effettiva

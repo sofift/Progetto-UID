@@ -15,7 +15,7 @@
 <?import javafx.scene.text.Text?>
 <?import org.kordamp.ikonli.javafx.FontIcon?>
 
-<BorderPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unical.informatica.progettouid.controller.Admin.MembriController">
+<BorderPane fx:id="root" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unical.informatica.progettouid.controller.Admin.MembriController">
 
     <top>
         <VBox styleClass="top" stylesheets="@../../styles/home.css">
@@ -40,7 +40,8 @@
             <padding>
                 <Insets bottom="20" top="20" />
             </padding>
-            <Button maxWidth="Infinity" styleClass="sidebar-button">
+
+            <Button maxWidth="Infinity" styleClass="sidebar-button" onAction="#navigateToHome">
                 <graphic>
                     <VBox alignment="CENTER" spacing="5" styleClass="sidebar-button">
                         <FontIcon iconLiteral="fas-home" />
@@ -52,7 +53,8 @@
                     </VBox>
                 </graphic>
             </Button>
-            <Button maxWidth="Infinity" styleClass="sidebar-button">
+
+            <Button maxWidth="Infinity" styleClass="sidebar-button" onAction="#navigateToCheckIn">
                 <graphic>
                     <VBox alignment="CENTER" spacing="5" styleClass="sidebar-button">
                         <FontIcon iconLiteral="fas-user-check" />
@@ -64,25 +66,12 @@
                     </VBox>
                 </graphic>
             </Button>
-         <Button maxWidth="Infinity" styleClass="sidebar-button">
-            <graphic>
-               <VBox alignment="CENTER" spacing="5" styleClass="sidebar-button">
-                  <children>
-                     <FontIcon iconLiteral="fas-users" />
-                     <Text text="Membri">
-                        <font>
-                           <Font size="9.0" />
-                        </font>
-                     </Text>
-                  </children>
-               </VBox>
-            </graphic>
-         </Button>
-            <Button maxWidth="Infinity" styleClass="sidebar-button">
+
+            <Button maxWidth="Infinity" styleClass="sidebar-button" onAction="#navigateToMembers">
                 <graphic>
                     <VBox alignment="CENTER" spacing="5" styleClass="sidebar-button">
-                        <FontIcon iconLiteral="fas-user-plus" />
-                        <Text text="Aggiungi cliente">
+                        <FontIcon iconLiteral="fas-users" />
+                        <Text text="Membri">
                             <font>
                                 <Font size="9.0" />
                             </font>
@@ -90,7 +79,34 @@
                     </VBox>
                 </graphic>
             </Button>
-            <Button maxWidth="Infinity" styleClass="sidebar-button">
+
+            <Button maxWidth="Infinity" styleClass="sidebar-button" onAction="#navigateToAddUser">
+                <graphic>
+                    <VBox alignment="CENTER" spacing="5" styleClass="sidebar-button">
+                        <FontIcon iconLiteral="fas-user-plus" />
+                        <Text text="Aggiungi utente">
+                            <font>
+                                <Font size="9.0" />
+                            </font>
+                        </Text>
+                    </VBox>
+                </graphic>
+            </Button>
+
+            <Button maxWidth="Infinity" styleClass="sidebar-button" onAction="#navigateToAddPT">
+                <graphic>
+                    <VBox alignment="CENTER" spacing="5" styleClass="sidebar-button">
+                        <FontIcon iconLiteral="fas-user-plus" />
+                        <Text text="Aggiungi PT">
+                            <font>
+                                <Font size="9.0" />
+                            </font>
+                        </Text>
+                    </VBox>
+                </graphic>
+            </Button>
+
+            <Button maxWidth="Infinity" styleClass="sidebar-button" onAction="#navigateToAddCourse">
                 <graphic>
                     <VBox alignment="CENTER" spacing="5" styleClass="sidebar-button">
                         <FontIcon iconLiteral="fas-walking" />
@@ -102,7 +118,8 @@
                     </VBox>
                 </graphic>
             </Button>
-            <Button maxWidth="Infinity" styleClass="sidebar-button">
+
+            <Button maxWidth="Infinity" styleClass="sidebar-button" onAction="#navigateToBilling">
                 <graphic>
                     <VBox alignment="CENTER" spacing="5" styleClass="sidebar-button">
                         <FontIcon iconLiteral="far-credit-card" />
@@ -114,7 +131,8 @@
                     </VBox>
                 </graphic>
             </Button>
-            <Button maxWidth="Infinity" styleClass="sidebar-button">
+
+            <Button maxWidth="Infinity" styleClass="sidebar-button" onAction="#navigateToAccount">
                 <graphic>
                     <VBox alignment="CENTER" spacing="5" styleClass="sidebar-button">
                         <FontIcon iconLiteral="far-user" />
@@ -126,7 +144,8 @@
                     </VBox>
                 </graphic>
             </Button>
-            <Button maxWidth="Infinity" styleClass="sidebar-button">
+
+            <Button maxWidth="Infinity" styleClass="sidebar-button" onAction="#navigateToSettings">
                 <graphic>
                     <VBox alignment="CENTER" spacing="5" styleClass="sidebar-button">
                         <FontIcon iconLiteral="fas-cogs" />
@@ -138,6 +157,7 @@
                     </VBox>
                 </graphic>
             </Button>
+
             <Button maxWidth="Infinity" styleClass="sidebar-button">
                 <graphic>
                     <VBox alignment="CENTER" spacing="5" styleClass="sidebar-button">
@@ -153,7 +173,7 @@
         </VBox>
     </left>
    <center>
-      <VBox prefHeight="200.0" prefWidth="100.0" spacing="10.0" stylesheets="@../../styles/admin/light/membri.css" BorderPane.alignment="CENTER">
+      <VBox prefHeight="200.0" prefWidth="100.0" spacing="10.0" styleClass="main" stylesheets="@../../styles/admin/dark/membri.css" BorderPane.alignment="CENTER">
          <children>
             <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS">
               <tabs>
@@ -166,33 +186,33 @@
                            <children>
                               <HBox alignment="CENTER_LEFT" spacing="10.0">
                                  <children>
-                                    <TextField HBox.hgrow="ALWAYS" />
-                                    <Button styleClass="filter-button" text="FILTRA">
+                                    <TextField fx:id="searchField" HBox.hgrow="ALWAYS" />
+                                    <Button fx:id="filterButton" styleClass="filter-button" text="FILTRA">
                                        <graphic>
                                           <FontIcon iconLiteral="fas-filter" />
                                        </graphic>
                                     </Button>
-                                    <Button styleClass="add-button" text="AGGIUNGI MEMBRO">
+                                    <Button fx:id="addButton" styleClass="add-button" text="AGGIUNGI MEMBRO">
                                        <graphic>
                                           <FontIcon iconLiteral="fas-plus" />
                                        </graphic>
                                     </Button>
-                                    <Button styleClass="invite-button" text="INVITA">
+                                    <Button fx:id="inviteButton" styleClass="invite-button" text="INVITA">
                                        <graphic>
                                           <FontIcon iconLiteral="fas-envelope" />
                                        </graphic>
                                     </Button>
                                  </children>
                               </HBox>
-                              <TableView VBox.vgrow="ALWAYS">
+                              <TableView fx:id="tableView" VBox.vgrow="ALWAYS">
                                  <columns>
-                                    <TableColumn text="MEMBRI" />
-                                    <TableColumn text="CONTATTI" />
-                                    <TableColumn text="ETA'" />
-                                    <TableColumn text="ABBONAMENTO" />
-                                    <TableColumn text="ULTIMA VISITA" />
-                                    <TableColumn text="STATO PAGAMENTO" />
-                                    <TableColumn text="AZIONI" />
+                                    <TableColumn fx:id="membriColumn" text="MEMBRI" />
+                                    <TableColumn fx:id="contattiColumn" text="CONTATTI" />
+                                    <TableColumn fx:id="etaColumn" text="ETA'" />
+                                    <TableColumn fx:id="abbonamentoColumn" text="ABBONAMENTO" />
+                                    <TableColumn fx:id="ultimaVisitaColumn" text="ULTIMA VISITA" />
+                                    <TableColumn fx:id="statoPagamentoColumn" text="STATO PAGAMENTO" />
+                                    <TableColumn fx:id="azioniColumn" text="AZIONI" />
                                  </columns>
                                  <columnResizePolicy>
                                     <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />

@@ -3,6 +3,7 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.FlowPane?>
@@ -11,16 +12,16 @@
 <?import javafx.scene.text.Text?>
 <?import org.kordamp.ikonli.javafx.FontIcon?>
 
-<BorderPane stylesheets="@../../styles/calendar.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unical.informatica.progettouid.controller.client.AttivitaClientController">
+<BorderPane stylesheets="@../../styles/calendar.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unical.informatica.progettouid.controller.client.AttivitaClientController">
    <left>
-      <VBox maxWidth="95.0" minWidth="95.0" spacing="10.0">
+      <VBox maxWidth="95.0" minWidth="95.0" spacing="10.0" styleClass="sidebar" stylesheets="@../../styles/sidebar.css">
          <children>
             <Button fx:id="dashboardClient" maxWidth="Infinity" onAction="#onNavigationButtonClick" styleClass="sidebar-button">
                <graphic>
-                  <VBox alignment="CENTER" spacing="5">
+                  <VBox spacing="5" styleClass="sidebar-button">
                      <children>
                         <FontIcon iconLiteral="fas-home" />
-                        <Text text="Home">
+                        <Text textAlignment="LEFT" text="Home">
                            <font>
                               <Font size="9.0" />
                            </font>
@@ -31,7 +32,7 @@
             </Button>
             <Button fx:id="attivitaClient" maxWidth="Infinity" onAction="#onNavigationButtonClick" styleClass="sidebar-button">
                <graphic>
-                  <VBox alignment="CENTER" spacing="5">
+                  <VBox alignment="CENTER" spacing="5" styleClass="sidebar">
                      <children>
                         <FontIcon iconLiteral="fas-calendar-alt" />
                         <Text text="Attività">
@@ -45,7 +46,7 @@
             </Button>
             <Button fx:id="prenotazionePT" maxWidth="Infinity" onAction="#onNavigationButtonClick" styleClass="sidebar-button">
                <graphic>
-                  <VBox alignment="CENTER" spacing="5">
+                  <VBox alignment="CENTER" spacing="5" styleClass="sidebar-button">
                      <children>
                         <FontIcon iconLiteral="fas-dumbbell" />
                         <Text text="Personal trainer">
@@ -59,7 +60,7 @@
             </Button>
             <Button fx:id="schedaClient" maxWidth="Infinity" onAction="#onNavigationButtonClick" styleClass="sidebar-button">
                <graphic>
-                  <VBox alignment="CENTER" spacing="5">
+                  <VBox alignment="CENTER" spacing="5" styleClass="sidebar-button">
                      <children>
                         <FontIcon iconLiteral="far-clipboard" />
                         <Text text="Scheda">
@@ -73,7 +74,7 @@
             </Button>
             <Button fx:id="abbonamentoClient" maxWidth="Infinity" onAction="#onNavigationButtonClick" styleClass="sidebar-button">
                <graphic>
-                  <VBox alignment="CENTER" spacing="5">
+                  <VBox alignment="CENTER" spacing="5" styleClass="sidebar-button">
                      <children>
                         <FontIcon iconLiteral="far-credit-card" />
                         <Text text="Il tuo abbonamento">
@@ -87,7 +88,7 @@
             </Button>
             <Button fx:id="impostazioniClient" maxWidth="Infinity" onAction="#onNavigationButtonClick" styleClass="sidebar-button">
                <graphic>
-                  <VBox alignment="CENTER" spacing="5">
+                  <VBox alignment="CENTER" spacing="5" styleClass="sidebar-button">
                      <children>
                         <FontIcon iconLiteral="fas-cogs" />
                         <Text text="Impostazioni">
@@ -101,7 +102,7 @@
             </Button>
             <Button maxWidth="Infinity" onAction="#onNavigationButtonClick" styleClass="sidebar-button">
                <graphic>
-                  <VBox alignment="CENTER" spacing="5">
+                  <VBox alignment="CENTER" spacing="5" styleClass="sidebar-button">
                      <children>
                         <FontIcon iconLiteral="far-question-circle" />
                         <Text text="Help">
@@ -122,7 +123,7 @@
 
    <top>
       <VBox>
-         <Label alignment="CENTER" maxWidth="Infinity" text="Attività">
+         <Label alignment="CENTER" maxWidth="Infinity" styleClass="top" stylesheets="@../../styles/home.css" text="Attività">
             <graphic>
                <FontIcon iconLiteral="fas-calendar-alt" />
             </graphic>
@@ -134,16 +135,32 @@
    </top>
 
    <center>
-      <VBox fx:id="vboxCenter" spacing="10">
+      <VBox spacing="10" styleClass="course-card" stylesheets="@../../styles/client/light/attivita.css">
          <padding>
             <Insets left="10" right="10" />
          </padding>
          <children>
-            <Label text="Corsi" />
-            <Label text="Scopri i nostri corsi!" />
-            <FlowPane fx:id="corsiFlowPane" />
+            <Label styleClass="course-title" text="Corsi" />
+            <Label styleClass="course-card" text="Scopri i nostri corsi!" />
+            <FlowPane fx:id="corsiFlowPane" styleClass="flow-pane" />
             <Separator prefWidth="200.0" />
+            <ScrollPane fx:id="orariCorsiPane">
+               <content>
+                  <VBox fx:id="orariCorsiVBox" />
+               </content>
+            </ScrollPane>
          </children>
       </VBox>
    </center>
+
+   <right>
+      <VBox maxWidth="250" minWidth="200" spacing="10" styleClass="sidebar-right" stylesheets="@../../styles/client/light/attivita.css">
+         <padding>
+            <Insets bottom="20" left="10" right="10" top="20" />
+         </padding>
+         <children>
+            <Label style="-fx-font-weight: bold;" text="Calendari" />
+         </children>
+      </VBox>
+   </right>
 </BorderPane>

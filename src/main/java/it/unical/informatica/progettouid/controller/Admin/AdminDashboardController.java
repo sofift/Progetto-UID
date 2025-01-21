@@ -1,5 +1,8 @@
 package it.unical.informatica.progettouid.controller.Admin;
 
+import it.unical.informatica.progettouid.view.SceneHandlerAdmin;
+import it.unical.informatica.progettouid.view.SceneHandlerClient;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -7,6 +10,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.XYChart;
+import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.Alert;
 import javafx.scene.layout.BorderPane;
@@ -30,6 +34,15 @@ public class AdminDashboardController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        System.out.println("Initializing AdminDashboardController");
+        System.out.println("statsContainer: " + (statsContainer != null ? "found" : "null"));
+        System.out.println("root: " + (root != null ? "found" : "null"));
+
+        if (root == null || statsContainer == null || mainContent == null) {
+            System.err.println("Critical error: Some FXML components were not properly initialized");
+            return;
+        }
+
         setupResponsiveness();
         initializeAttendanceChart();
         initializeListViews();
@@ -41,25 +54,35 @@ public class AdminDashboardController implements Initializable {
     }
 
     private void setupResponsiveness() {
-        root.widthProperty().addListener((obs, oldVal, newVal) -> {
-            double width = newVal.doubleValue();
-            if (width < 800) {
-                statsContainer.setSpacing(10);
-                mainContent.setSpacing(10);
-                statsContainer.setPrefWidth(width - 40);
-            } else {
-                statsContainer.setSpacing(20);
-                mainContent.setSpacing(20);
-                statsContainer.setPrefWidth(width - 60);
-            }
-        });
+        if (root != null && statsContainer != null && mainContent != null) {
+            root.sceneProperty().addListener((obs, oldScene, newScene) -> {
+                if (newScene != null) {
+                    newScene.widthProperty().addListener((observable, oldValue, newValue) -> {
+                        double width = newValue.doubleValue();
+                        if (width < 800) {
+                            statsContainer.setSpacing(10);
+                            mainContent.setSpacing(10);
+                            statsContainer.setPrefWidth(width - 40);
+                        } else {
+                            statsContainer.setSpacing(20);
+                            mainContent.setSpacing(20);
+                            statsContainer.setPrefWidth(width - 60);
+                        }
+                    });
+                }
+            });
 
-        mainContent.heightProperty().addListener((obs, oldVal, newVal) -> {
-            double height = newVal.doubleValue();
-            double listViewHeight = (height - attendanceChart.getHeight() - statsContainer.getHeight() - 100) / 2;
-            bookingsList.setPrefHeight(listViewHeight);
-            notificationsList.setPrefHeight(listViewHeight);
-        });
+            if (mainContent != null) {
+                mainContent.heightProperty().addListener((obs, oldVal, newVal) -> {
+                    if (attendanceChart != null && statsContainer != null) {
+                        double height = newVal.doubleValue();
+                        double listViewHeight = (height - attendanceChart.getHeight() - statsContainer.getHeight() - 100) / 2;
+                        if (bookingsList != null) bookingsList.setPrefHeight(listViewHeight);
+                        if (notificationsList != null) notificationsList.setPrefHeight(listViewHeight);
+                    }
+                });
+            }
+        }
     }
 
     private void initializeAttendanceChart() {
@@ -134,70 +157,11 @@ public class AdminDashboardController implements Initializable {
         notificationsList.setStyle("-fx-background-radius: 5; -fx-background-color: white;");
     }
 
-    private void navigateTo(String fxmlPath) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
-            Parent root = loader.load();
-            Scene scene = new Scene(root);
-            stage.setScene(scene);
-            stage.show();
-        } catch (IOException e) {
-            showError("Errore di Navigazione", "Impossibile caricare la pagina richiesta.");
-            e.printStackTrace();
-        }
-    }
-
     private void showError(String title, String content) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle(title);
         alert.setContentText(content);
         alert.showAndWait();
-    }
-
-    // Metodi di navigazione
-    @FXML
-    private void handleHomeButton() {
-        // Già nella home, non serve implementazione
-    }
-
-    @FXML
-    private void handleCheckInButton() {
-        navigateTo("/it/unical/informatica/progettouid/views/Admin/checkin.fxml");
-    }
-
-    @FXML
-    private void handleMembersButton() {
-        navigateTo("/it/unical/informatica/progettouid/views/Admin/members.fxml");
-    }
-
-    @FXML
-    private void handleAddClientButton() {
-        navigateTo("/it/unical/informatica/progettouid/views/Admin/addClient.fxml");
-    }
-
-    @FXML
-    private void handleAddCourseButton() {
-        navigateTo("/it/unical/informatica/progettouid/views/Admin/addCourse.fxml");
-    }
-
-    @FXML
-    private void handleBillingButton() {
-        navigateTo("/it/unical/informatica/progettouid/views/Admin/billing.fxml");
-    }
-
-    @FXML
-    private void handleAccountButton() {
-        navigateTo("/it/unical/informatica/progettouid/views/Admin/account.fxml");
-    }
-
-    @FXML
-    private void handleSettingsButton() {
-        navigateTo("/it/unical/informatica/progettouid/views/Admin/settings.fxml");
-    }
-
-    @FXML
-    private void handleHelpButton() {
-        navigateTo("/it/unical/informatica/progettouid/views/Admin/help.fxml");
     }
 
     @FXML
@@ -214,5 +178,50 @@ public class AdminDashboardController implements Initializable {
 
     public void setUsername(String username) {
         this.currentUser = username;
+    }
+
+    @FXML
+    private void navigateToHome() throws Exception {
+        SceneHandlerAdmin.getInstance().setDashboardView();
+    }
+
+    @FXML
+    private void navigateToCheckIn() throws Exception {
+        SceneHandlerAdmin.getInstance().setCheckIn();
+    }
+
+    @FXML
+    private void navigateToMembers() throws Exception {
+        SceneHandlerAdmin.getInstance().setClient();
+    }
+
+    @FXML
+    private void navigateToAddUser() throws Exception {
+        SceneHandlerAdmin.getInstance().setAddUser();
+    }
+
+    @FXML
+    private void navigateToAddPT() throws Exception {
+        SceneHandlerAdmin.getInstance().setAddPT();
+    }
+
+    @FXML
+    private void navigateToAddCourse() throws Exception {
+        SceneHandlerAdmin.getInstance().setAddCourse();
+    }
+
+    @FXML
+    private void navigateToBilling() throws Exception {
+        SceneHandlerAdmin.getInstance().setBilling();
+    }
+
+    @FXML
+    private void navigateToAccount() throws Exception {
+        SceneHandlerAdmin.getInstance().setAccount();
+    }
+
+    @FXML
+    private void navigateToSettings() throws Exception {
+        SceneHandlerAdmin.getInstance().setSettings();
     }
 }

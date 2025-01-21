@@ -1,0 +1,24 @@
+.impostazioni-container {
+    -fx-background-color: #1d3750;
+    -fx-text-fill: white;
+}
+
+.impostazioni-container .ikonli-font-icon{
+    -fx-icon-color: white;
+}
+
+.impostazioni-container .label{
+    -fx-text-fill: white;
+}
+
+.impostazioni-container .button{
+    -fx-background-color: #3c679a;
+}
+
+.impostazioni-container .button:hover {
+    -fx-background-color: #284162;
+}
+
+.impostazioni-container .radio-button:selected{
+    -fx-background-color: #3c679a;
+}

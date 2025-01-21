@@ -1,0 +1,137 @@
+/* Base styles */
+.root {
+    -fx-background-color: white;
+}
+
+/* Top header styles */
+.label {
+    -fx-text-fill: #1a3246;
+    -fx-font-size: 18px;
+}
+
+.label .ikonli-font-icon {
+    -fx-icon-color: #1a3246;
+}
+
+/* Sidebar styles */
+.sidebar-button {
+    -fx-background-color: transparent;
+    -fx-background-radius: 10px;
+    -fx-padding: 10px;
+    -fx-min-width: 75px;
+    -fx-max-width: 75px;
+}
+
+.sidebar-button:hover {
+    -fx-background-color: #f0f0f0;
+}
+
+.sidebar-button .ikonli-font-icon {
+    -fx-icon-color: #1a3246;
+}
+
+.sidebar-button .text {
+    -fx-fill: #1a3246;
+}
+
+/* ScrollPane customization */
+.scroll-pane {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+
+.scroll-pane > .viewport {
+    -fx-background-color: transparent;
+}
+
+.scroll-bar:vertical,
+.scroll-bar:horizontal {
+    -fx-background-color: transparent;
+}
+
+.scroll-bar:vertical .thumb,
+.scroll-bar:horizontal .thumb {
+    -fx-background-color: #1a3246;
+    -fx-background-radius: 5px;
+}
+
+/* Trainer list container */
+.trainer-card {
+    -fx-background-color: white;
+    -fx-border-color: #e0e0e0;
+    -fx-border-radius: 10px;
+    -fx-padding: 15px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 0);
+}
+
+.trainer-card:hover {
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 15, 0, 0, 0);
+}
+
+.trainer-name {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #1a3246;
+}
+
+.trainer-info {
+    -fx-font-size: 14px;
+    -fx-text-fill: #495057;
+}
+
+/* Booking form container */
+#bookingFormContainer {
+    -fx-background-color: #f8f9fa;
+    -fx-background-radius: 10px;
+    -fx-padding: 20px;
+}
+
+.form-label {
+    -fx-font-size: 14px;
+    -fx-text-fill: #1a3246;
+}
+
+.text-field {
+    -fx-background-color: white;
+    -fx-background-radius: 5px;
+    -fx-border-color: #dee2e6;
+    -fx-border-radius: 5px;
+    -fx-padding: 5px;
+}
+
+.text-field:focused {
+    -fx-border-color: #1a3246;
+}
+
+.text-area {
+    -fx-background-color: white;
+    -fx-border-color: #dee2e6;
+    -fx-border-radius: 5px;
+}
+
+.text-area:focused {
+    -fx-border-color: #1a3246;
+}
+
+/* Button styles */
+.button {
+    -fx-background-color: #1a3246;
+    -fx-text-fill: white;
+    -fx-background-radius: 10px;
+    -fx-padding: 8px 15px;
+}
+
+.button:hover {
+    -fx-background-color: white;
+    -fx-text-fill: #1a3246;
+    -fx-border-color: #1a3246;
+    -fx-border-radius: 10px;
+}
+
+.button .ikonli-font-icon {
+    -fx-icon-color: white;
+}
+
+.button:hover .ikonli-font-icon {
+    -fx-icon-color: #1a3246;
+}

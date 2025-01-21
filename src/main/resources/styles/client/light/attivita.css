@@ -1,0 +1,175 @@
+/* Content area styles */
+Label {
+    -fx-text-fill: #1a3246;
+    -fx-font-size: 14px;
+}
+
+Label.title {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+}
+
+.separator {
+    -fx-background-color: #e0e0e0;
+}
+
+/* ScrollPane customization */
+.scroll-pane {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+
+.scroll-pane > .viewport {
+    -fx-background-color: transparent;
+}
+
+.scroll-bar:vertical,
+.scroll-bar:horizontal {
+    -fx-background-color: transparent;
+}
+
+.scroll-bar:vertical .thumb,
+.scroll-bar:horizontal .thumb {
+    -fx-background-color: #1a3246;
+    -fx-background-radius: 5px;
+}
+
+/* FlowPane styles */
+.flow-pane {
+    -fx-background-color: transparent;
+    -fx-hgap: 10;
+    -fx-vgap: 10;
+}
+
+/* Course card styles */
+.course-card {
+    -fx-background-color: white;
+    -fx-background-radius: 10px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 0);
+    -fx-padding: 15px;
+}
+
+.course-card:hover {
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 15, 0, 0, 0);
+}
+
+.course-title {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #1a3246;
+}
+
+/* Button styles */
+.button {
+    -fx-background-color: #1a3246;
+    -fx-text-fill: white;
+    -fx-background-radius: 10px;
+    -fx-padding: 8px 15px;
+}
+
+.button:hover {
+    -fx-background-color: white;
+    -fx-text-fill: #1a3246;
+    -fx-border-color: #1a3246;
+    -fx-border-radius: 10px;
+}
+
+.button .ikonli-font-icon {
+    -fx-icon-color: white;
+}
+
+.button:hover .ikonli-font-icon {
+    -fx-icon-color: #1a3246;
+}
+
+/* Calendar section styles */
+VBox.sidebar-right Label {
+    -fx-font-size: 16px;
+    -fx-padding: 0 0 10px 0;
+}
+
+/* Top header styles */
+VBox.header {
+    -fx-background-color: white;
+    -fx-padding: 10px;
+    -fx-border-color: #e0e0e0;
+    -fx-border-width: 0 0 1px 0;
+}
+
+.header Label {
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+}
+
+/* Stili per i corsi */
+.course-button {
+    -fx-background-color: #1a3246;
+    -fx-text-fill: white;
+    -fx-background-radius: 10px;
+    -fx-padding: 15px 25px;
+    -fx-min-width: 200px;
+    -fx-min-height: 50px;
+    -fx-font-size: 14px;
+}
+
+.course-button:hover {
+    -fx-background-color: white;
+    -fx-text-fill: #1a3246;
+    -fx-border-color: #1a3246;
+    -fx-border-radius: 10px;
+    -fx-border-width: 2px;
+}
+
+.course-card {
+    -fx-background-color: white;
+    -fx-padding: 15px;
+    -fx-background-radius: 10px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 0);
+    -fx-min-width: 250px;
+}
+
+.course-card:hover {
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 15, 0, 0, 0);
+}
+
+/* Stili per gli orari */
+.orario-container {
+    -fx-background-color: #f8f9fa;
+    -fx-padding: 15px;
+    -fx-background-radius: 10px;
+    -fx-spacing: 10px;
+    -fx-margin: 10px 0;
+}
+
+.day-label {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #1a3246;
+}
+
+.time-label {
+    -fx-font-size: 14px;
+    -fx-text-fill: #495057;
+}
+
+.description-text {
+    -fx-fill: #6c757d;
+    -fx-font-size: 13px;
+    -fx-wrap-text: true;
+}
+
+.prenota-button {
+    -fx-background-color: #1a3246;
+    -fx-text-fill: white;
+    -fx-background-radius: 5px;
+    -fx-padding: 8px 15px;
+    -fx-font-size: 13px;
+}
+
+.prenota-button:hover {
+    -fx-background-color: white;
+    -fx-text-fill: #1a3246;
+    -fx-border-color: #1a3246;
+    -fx-border-radius: 5px;
+    -fx-border-width: 1px;
+}

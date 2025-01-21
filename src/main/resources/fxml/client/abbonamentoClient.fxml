@@ -11,12 +11,12 @@
 <?import javafx.scene.text.Text?>
 <?import org.kordamp.ikonli.javafx.FontIcon?>
 
-<BorderPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unical.informatica.progettouid.controller.client.AbbonamentoClientController">
+<BorderPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unical.informatica.progettouid.controller.client.AbbonamentoClientController">
 
     <top>
-        <VBox>
+        <VBox styleClass="top" stylesheets="@../../styles/home.css">
             <children>
-                <Label alignment="CENTER" maxWidth="Infinity" text="Il tuo abbonamento">
+                <Label maxWidth="Infinity" styleClass="top" text="Il tuo abbonamento">
                     <graphic>
                         <FontIcon iconLiteral="far-credit-card" />
                     </graphic>
@@ -32,11 +32,11 @@
     </top>
 
     <left>
-        <VBox maxWidth="95.0" minWidth="95.0" spacing="10.0">
+        <VBox maxWidth="95.0" minWidth="95.0" spacing="10.0" styleClass="sidebar" stylesheets="@../../styles/sidebar.css">
             <children>
                 <Button fx:id="dashboardClient" maxWidth="Infinity" onAction="#onNavigationButtonClick" styleClass="sidebar-button">
                     <graphic>
-                        <VBox alignment="CENTER" spacing="5">
+                        <VBox alignment="CENTER" spacing="5" styleClass="sidebar-button">
                             <children>
                                 <FontIcon iconLiteral="fas-home" />
                                 <Text text="Home">
@@ -50,7 +50,7 @@
                 </Button>
                 <Button fx:id="attivitaClient" maxWidth="Infinity" onAction="#onNavigationButtonClick" styleClass="sidebar-button">
                     <graphic>
-                        <VBox alignment="CENTER" spacing="5">
+                        <VBox alignment="CENTER" spacing="5" styleClass="sidebar-button">
                             <children>
                                 <FontIcon iconLiteral="fas-calendar-alt" />
                                 <Text text="Attività">
@@ -64,7 +64,7 @@
                 </Button>
                 <Button fx:id="prenotazionePT" maxWidth="Infinity" onAction="#onNavigationButtonClick" styleClass="sidebar-button">
                     <graphic>
-                        <VBox alignment="CENTER" spacing="5">
+                        <VBox alignment="CENTER" spacing="5" styleClass="sidebar-button">
                             <children>
                                 <FontIcon iconLiteral="fas-dumbbell" />
                                 <Text text="Personal trainer">
@@ -78,7 +78,7 @@
                 </Button>
                 <Button fx:id="schedaClient" maxWidth="Infinity" onAction="#onNavigationButtonClick" styleClass="sidebar-button">
                     <graphic>
-                        <VBox alignment="CENTER" spacing="5">
+                        <VBox alignment="CENTER" spacing="5" styleClass="sidebar-button">
                             <children>
                                 <FontIcon iconLiteral="far-clipboard" />
                                 <Text text="Scheda">
@@ -92,7 +92,7 @@
                 </Button>
                 <Button fx:id="abbonamentoClient" maxWidth="Infinity" onAction="#onNavigationButtonClick" styleClass="sidebar-button">
                     <graphic>
-                        <VBox alignment="CENTER" spacing="5">
+                        <VBox alignment="CENTER" spacing="5" styleClass="sidebar-button">
                             <children>
                                 <FontIcon iconLiteral="far-credit-card" />
                                 <Text text="Il tuo abbonamento">
@@ -106,7 +106,7 @@
                 </Button>
                 <Button fx:id="impostazioniClient" maxWidth="Infinity" onAction="#onNavigationButtonClick" styleClass="sidebar-button">
                     <graphic>
-                        <VBox alignment="CENTER" spacing="5">
+                        <VBox alignment="CENTER" spacing="5" styleClass="sidebar-button">
                             <children>
                                 <FontIcon iconLiteral="fas-cogs" />
                                 <Text text="Impostazioni">
@@ -120,7 +120,7 @@
                 </Button>
                 <Button maxWidth="Infinity" onAction="#onNavigationButtonClick" styleClass="sidebar-button">
                     <graphic>
-                        <VBox alignment="CENTER" spacing="5">
+                        <VBox alignment="CENTER" spacing="5" styleClass="sidebar-button">
                             <children>
                                 <FontIcon iconLiteral="far-question-circle" />
                                 <Text text="Help">
@@ -140,12 +140,12 @@
     </left>
 
     <center>
-        <VBox fx:id="centerBox" spacing="15.0" style="-fx-background-color: white; -fx-background-radius: 10;">
+        <VBox fx:id="centerBox" spacing="15.0" stylesheets="@../../styles/client/light/abbonamentoClient.css">
             <padding>
                 <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
             </padding>
 
-            <Label style="-fx-font-size: 24; -fx-font-weight: bold;" text="Il tuo abbonamento" />
+            <Label styleClass="main-text" text="Il tuo abbonamento" />
 
             <VBox fx:id="datiAbbonamentoVBox" spacing="10.0" style="-fx-background-color: #f8f9fa; -fx-background-radius: 5; -fx-padding: 15;" />
 
@@ -161,8 +161,8 @@
     </center>
 
     <right>
-        <ScrollPane fx:id="scrollPiani" fitToWidth="true" maxWidth="300.0" prefWidth="300.0" style="-fx-background: transparent; -fx-background-color: transparent;">
-            <VBox fx:id="vBoxPianiOfferti" spacing="20.0" />
+        <ScrollPane fx:id="scrollPiani" fitToWidth="true" maxWidth="300.0" prefWidth="300.0" stylesheets="@../../styles/client/light/abbonamentoClient.css">
+            <VBox fx:id="vBoxPianiOfferti" prefWidth="296.0" spacing="20.0" />
          <BorderPane.margin>
             <Insets bottom="20.0" right="20.0" top="20.0" />
          </BorderPane.margin>

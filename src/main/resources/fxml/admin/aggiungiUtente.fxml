@@ -48,7 +48,8 @@
             <padding>
                 <Insets bottom="20" top="20" />
             </padding>
-            <Button maxWidth="Infinity" styleClass="sidebar-button">
+
+            <Button maxWidth="Infinity" styleClass="sidebar-button" onAction="#navigateToHome">
                 <graphic>
                     <VBox alignment="CENTER" spacing="5" styleClass="sidebar-button">
                         <FontIcon iconLiteral="fas-home" />
@@ -60,7 +61,8 @@
                     </VBox>
                 </graphic>
             </Button>
-            <Button maxWidth="Infinity" styleClass="sidebar-button">
+
+            <Button maxWidth="Infinity" styleClass="sidebar-button" onAction="#navigateToCheckIn">
                 <graphic>
                     <VBox alignment="CENTER" spacing="5" styleClass="sidebar-button">
                         <FontIcon iconLiteral="fas-user-check" />
@@ -72,21 +74,21 @@
                     </VBox>
                 </graphic>
             </Button>
-            <Button maxWidth="Infinity" styleClass="sidebar-button">
+
+            <Button maxWidth="Infinity" styleClass="sidebar-button" onAction="#navigateToMembers">
                 <graphic>
                     <VBox alignment="CENTER" spacing="5" styleClass="sidebar-button">
-                        <children>
-                            <FontIcon iconLiteral="fas-users" />
-                            <Text text="Membri">
-                                <font>
-                                    <Font size="9.0" />
-                                </font>
-                            </Text>
-                        </children>
+                        <FontIcon iconLiteral="fas-users" />
+                        <Text text="Membri">
+                            <font>
+                                <Font size="9.0" />
+                            </font>
+                        </Text>
                     </VBox>
                 </graphic>
             </Button>
-            <Button maxWidth="Infinity" styleClass="sidebar-button">
+
+            <Button maxWidth="Infinity" styleClass="sidebar-button" onAction="#navigateToAddUser">
                 <graphic>
                     <VBox alignment="CENTER" spacing="5" styleClass="sidebar-button">
                         <FontIcon iconLiteral="fas-user-plus" />
@@ -98,7 +100,21 @@
                     </VBox>
                 </graphic>
             </Button>
-            <Button maxWidth="Infinity" styleClass="sidebar-button">
+
+            <Button maxWidth="Infinity" styleClass="sidebar-button" onAction="#navigateToAddPT">
+                <graphic>
+                    <VBox alignment="CENTER" spacing="5" styleClass="sidebar-button">
+                        <FontIcon iconLiteral="fas-user-plus" />
+                        <Text text="Aggiungi PT">
+                            <font>
+                                <Font size="9.0" />
+                            </font>
+                        </Text>
+                    </VBox>
+                </graphic>
+            </Button>
+
+            <Button maxWidth="Infinity" styleClass="sidebar-button" onAction="#navigateToAddCourse">
                 <graphic>
                     <VBox alignment="CENTER" spacing="5" styleClass="sidebar-button">
                         <FontIcon iconLiteral="fas-walking" />
@@ -110,7 +126,8 @@
                     </VBox>
                 </graphic>
             </Button>
-            <Button maxWidth="Infinity" styleClass="sidebar-button">
+
+            <Button maxWidth="Infinity" styleClass="sidebar-button" onAction="#navigateToBilling">
                 <graphic>
                     <VBox alignment="CENTER" spacing="5" styleClass="sidebar-button">
                         <FontIcon iconLiteral="far-credit-card" />
@@ -122,7 +139,8 @@
                     </VBox>
                 </graphic>
             </Button>
-            <Button maxWidth="Infinity" styleClass="sidebar-button">
+
+            <Button maxWidth="Infinity" styleClass="sidebar-button" onAction="#navigateToAccount">
                 <graphic>
                     <VBox alignment="CENTER" spacing="5" styleClass="sidebar-button">
                         <FontIcon iconLiteral="far-user" />
@@ -134,7 +152,8 @@
                     </VBox>
                 </graphic>
             </Button>
-            <Button maxWidth="Infinity" styleClass="sidebar-button">
+
+            <Button maxWidth="Infinity" styleClass="sidebar-button" onAction="#navigateToSettings">
                 <graphic>
                     <VBox alignment="CENTER" spacing="5" styleClass="sidebar-button">
                         <FontIcon iconLiteral="fas-cogs" />
@@ -146,6 +165,7 @@
                     </VBox>
                 </graphic>
             </Button>
+
             <Button maxWidth="Infinity" styleClass="sidebar-button">
                 <graphic>
                     <VBox alignment="CENTER" spacing="5" styleClass="sidebar-button">
@@ -190,22 +210,22 @@
                         </HBox>
 
                         <Label styleClass="gridpane-label" text="Nome *" GridPane.columnIndex="0" GridPane.rowIndex="1" />
-                        <TextField promptText="Nome" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <TextField fx:id="nameField" promptText="Nome" GridPane.columnIndex="1" GridPane.rowIndex="1" />
 
                         <Label styleClass="gridpane-label" text="Cognome *" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-                        <TextField promptText="Cognome" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+                        <TextField fx:id="surnameField" promptText="Cognome" GridPane.columnIndex="3" GridPane.rowIndex="1" />
 
                         <Label styleClass="gridpane-label" text="Telefono *" GridPane.columnIndex="0" GridPane.rowIndex="2" />
-                        <TextField promptText="Numero di telefono" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                        <TextField fx:id="phoneField" promptText="Numero di telefono" GridPane.columnIndex="1" GridPane.rowIndex="2" />
 
                         <Label styleClass="gridpane-label" text="Email" GridPane.columnIndex="2" GridPane.rowIndex="2" />
-                        <TextField promptText="Email" GridPane.columnIndex="3" GridPane.rowIndex="2" />
+                        <TextField fx:id="emailField" promptText="Email" GridPane.columnIndex="3" GridPane.rowIndex="2" />
 
                         <Label styleClass="gridpane-label" text="Data di Nascita" GridPane.columnIndex="0" GridPane.rowIndex="3" />
-                        <DatePicker promptText="gg/mm/aaaa" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                        <DatePicker fx:id="birthDatePicker" promptText="gg/mm/aaaa" GridPane.columnIndex="1" GridPane.rowIndex="3" />
 
                         <Label styleClass="gridpane-label" text="Genere" GridPane.columnIndex="2" GridPane.rowIndex="3" />
-                        <ComboBox promptText="Seleziona genere" GridPane.columnIndex="3" GridPane.rowIndex="3" />
+                        <ComboBox fx:id="genderComboBox" promptText="Seleziona genere" GridPane.columnIndex="3" GridPane.rowIndex="3" />
 
                         <Label styleClass="gridpane-label" text="Codice Fiscale" GridPane.columnIndex="0" GridPane.rowIndex="4" />
                         <TextField fx:id="codiceFiscale" promptText="Inserisci codice fiscale" GridPane.columnIndex="1" GridPane.rowIndex="4" />
@@ -241,13 +261,13 @@
                         </padding>
 
                         <Label styleClass="gridpane-label" text="Via *" GridPane.columnIndex="0" GridPane.rowIndex="0" />
-                        <TextField promptText="Indirizzo" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+                        <TextField fx:id="addressField" promptText="Indirizzo" GridPane.columnIndex="1" GridPane.rowIndex="0" />
 
                         <Label styleClass="gridpane-label" text="Città *" GridPane.columnIndex="0" GridPane.rowIndex="1" />
-                        <TextField promptText="Città" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <TextField fx:id="cityField" promptText="Città" GridPane.columnIndex="1" GridPane.rowIndex="1" />
 
                         <Label styleClass="gridpane-label" text="CAP *" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-                        <TextField promptText="CAP" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+                        <TextField fx:id="capField" promptText="CAP" GridPane.columnIndex="3" GridPane.rowIndex="1" />
                   <columnConstraints>
                      <ColumnConstraints />
                      <ColumnConstraints />
@@ -274,13 +294,13 @@
                         </padding>
 
                         <Label styleClass="gridpane-label" text="Nome Contatto" GridPane.columnIndex="0" GridPane.rowIndex="0" />
-                        <TextField promptText="Nome completo" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+                        <TextField fx:id="emergencyContactName" promptText="Nome completo" GridPane.columnIndex="1" GridPane.rowIndex="0" />
 
                         <Label styleClass="gridpane-label" text="Telefono" GridPane.columnIndex="2" GridPane.rowIndex="0" />
-                        <TextField promptText="Numero di telefono" GridPane.columnIndex="3" GridPane.rowIndex="0" />
+                        <TextField fx:id="emergencyContactPhone" promptText="Numero di telefono" GridPane.columnIndex="3" GridPane.rowIndex="0" />
 
                         <Label styleClass="gridpane-label" text="Relazione" GridPane.columnIndex="0" GridPane.rowIndex="1" />
-                        <ComboBox promptText="Seleziona relazione" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <ComboBox fx:id="emergencyContactRelation" promptText="Seleziona relazione" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                   <columnConstraints>
                      <ColumnConstraints />
                      <ColumnConstraints />
@@ -307,7 +327,7 @@
                         </padding>
 
                         <Label styleClass="gridpane-label" text="Tipo Abbonamento" GridPane.columnIndex="0" GridPane.rowIndex="0" />
-                        <ComboBox promptText="Seleziona piano" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                        <ComboBox fx:id="subscriptionType" promptText="Seleziona piano" GridPane.columnIndex="1" GridPane.rowIndex="0">
                             <items>
                                 <FXCollections fx:factory="observableArrayList">
                                     <String fx:value="Basic - 12 accessi" />
@@ -332,7 +352,7 @@
                         </graphic>
                     </Label>
 
-                    <TextArea prefRowCount="4" promptText="Testo della liberatoria..." wrapText="true" />
+                    <TextArea fx:id="disclaimerArea" prefRowCount="4" promptText="Testo della liberatoria..." wrapText="true" />
                     <CheckBox text="Ho letto e accetto i termini e le condizioni" />
                 </VBox>
 

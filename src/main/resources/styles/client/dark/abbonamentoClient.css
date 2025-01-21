@@ -1,0 +1,56 @@
+VBox {
+    -fx-background-color: #E8F1F5;
+    -fx-background-radius: 8px;
+    -fx-border-radius: 8px;
+    -fx-border-color: #E8F1F5;
+}
+
+.main-text {
+    -fx-text-fill: #1a3246;
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-padding: 0 0 10px 0;
+}
+
+.label {
+    -fx-text-fill: #1a3246;
+}
+
+.scroll-pane {
+    -fx-background-color: #E8F1F5; /* Sfondo dello ScrollPane */
+    -fx-border-color: #E8F1F5; /* Bordo dello ScrollPane */
+    -fx-border-radius: 8px;
+    -fx-background-radius: 8px;
+}
+
+.scroll-pane .viewport {
+    -fx-background-color: transparent; /* Sfondo trasparente per la vista interna */
+}
+
+.scroll-bar:vertical .thumb {
+    -fx-background-color: #E8F1F5; /* Colore della maniglia verticale */
+    -fx-background-radius: 4px;
+}
+
+.scroll-bar:horizontal .thumb {
+    -fx-background-color: #E8F1F5; /* Colore della maniglia orizzontale */
+    -fx-background-radius: 4px;
+}
+
+.button {
+    -fx-background-color: #1a3246;
+    -fx-text-fill: white;
+    -fx-border-radius: 4px;
+    -fx-background-radius: 4px;
+    -fx-padding: 8px 12px;
+}
+
+.button:hover {
+    -fx-background-color: white;
+    -fx-text-fill: #1a3246;
+    -fx-border-color: #1a3246;
+}
+
+.button:pressed {
+    -fx-background-color: rgb(16, 33, 44);
+}

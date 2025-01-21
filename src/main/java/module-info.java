@@ -9,6 +9,7 @@ module it.unical.informatica.progettouid {
     requires java.management;
     requires java.prefs;
     requires javafx.web;
+    requires javafx.controls;
 
     opens it.unical.informatica.progettouid.controller to javafx.fxml;
     opens it.unical.informatica.progettouid to javafx.fxml;

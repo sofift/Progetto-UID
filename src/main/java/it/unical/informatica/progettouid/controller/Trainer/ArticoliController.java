@@ -15,39 +15,26 @@ import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.web.WebView;
+import org.kordamp.ikonli.javafx.FontIcon;
 
+import java.util.ArrayList;
 import java.util.List;
-
-
-// TODO RIVEDERE MEGLIO LA LIST VIEW, NON MI CARICA GLI ARTICOLI
-// TODO VEDERE COME CARICARE GLI ARTICOLIQUANDO IL PULSANTE TORNA INDEITRO
 
 public class ArticoliController {
     @FXML private VBox vboxContent;
-    @FXML private VBox vboxRight;
+    private List<Articolo> articoliList = new ArrayList<>();
 
-    private void displayArticoli(List<Articolo> articoli) {
+    private void displayArticoli() {
         vboxContent.getChildren().clear();
         ListView<HBox> listArticoli = new ListView<>();
-        listArticoli.setFixedCellSize(100);
-        listArticoli.setPrefHeight(articoli.size() * listArticoli.getFixedCellSize());
-        listArticoli.setCellFactory(lv -> new ListCell<HBox>() {
-            @Override
-            protected void updateItem(HBox item, boolean empty) {
-                super.updateItem(item, empty);
-                if (empty || item == null) {
-                    setText(null);
-                    setGraphic(null);
-                } else {
-                    setGraphic(item);
-                    setPadding(new Insets(4, 0, 4, 0));
-                }
-            }
-        });
+        listArticoli.setFixedCellSize(90);
+        listArticoli.setPrefHeight(articoliList.size() * listArticoli.getFixedCellSize() +5);
+        VBox.setVgrow(listArticoli, Priority.ALWAYS);
 
-        for(Articolo a : articoli){
+        for(Articolo a : articoliList){
             HBox content = new HBox(10);
             content.setAlignment(Pos.CENTER_LEFT);
             content.setPadding(new Insets(0, 16, 0, 16));
@@ -61,34 +48,36 @@ public class ArticoliController {
 
             textContainer.getChildren().addAll(titolo, descrizione);
             Button visualizza = new Button("Visualizza");
-            visualizza.setOnAction(event -> displayArticoloSelezionato(a.id(), a.titolo(), a.URL(), articoli));
+            visualizza.setOnAction(event -> displayArticoloSelezionato( a.titolo(), a.URL()));
 
             content.getChildren().addAll(textContainer, visualizza);
             listArticoli.getItems().add(content);
         }
         vboxContent.getChildren().add(listArticoli);
-        VBox.setVgrow(listArticoli, Priority.ALWAYS);
-
     }
 
-    private void displayArticoloSelezionato(int id, String titolo, String URL, List<Articolo> articoli) {
+    private void displayArticoloSelezionato(String titolo, String URL) {
         vboxContent.getChildren().clear();
-        Button indietro = new Button("<-");
+        Button indietro = new Button();
+        indietro.setGraphic(new FontIcon("fas-arrow-left"));
         indietro.setOnAction(e->{
-            displayArticoli(articoli);
+            displayArticoli();
         });
-        WebView web = new WebView();
-        VBox.setVgrow(web, Priority.ALWAYS);
-        web.getEngine().load(URL);
+        WebView webView = new WebView();
+        VBox.setVgrow(webView, Priority.ALWAYS);
+        webView.getEngine().load(URL);
+        webView.setZoom(0.8);
 
         Label titoloLabel = new Label(titolo);
 
-        vboxRight.getChildren().addAll(titoloLabel, web);
+        vboxContent.getChildren().addAll(indietro, titoloLabel, webView);
     }
 
     public void loadContentPerCategoria(ActionEvent actionEvent) {
-        Button btn = (Button) actionEvent.getSource(); // Ottieni il bottone che ha scatenato l'evento
-        String categoria = btn.getId(); // Utilizza l'ID del bottone come categoria
+        Button btn = (Button) actionEvent.getSource();
+        String categoria = btn.getId();
+
+        if(categoria.equalsIgnoreCase("TecnicheDiAllenamento"))    categoria = "Tecniche di allenamento";
 
         Task<List<Articolo>> task = DBConnection.getInstance().getArticoli(categoria);
         Thread thread = new Thread(task);
@@ -96,12 +85,12 @@ public class ArticoliController {
         thread.start();
 
         task.setOnSucceeded(event -> {
-            List<Articolo> articoli = task.getValue();
-            displayArticoli(articoli);
+            articoliList = task.getValue();
+            displayArticoli();
         });
 
         task.setOnFailed(event -> {
-            System.out.println("Errore durante il caricamento degli articoli: " + task.getException());
+            System.out.println(STR."Errore durante il caricamento degli articoli: \{task.getException()}");
         });
     }
 

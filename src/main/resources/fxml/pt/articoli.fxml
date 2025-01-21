@@ -51,8 +51,8 @@
             <Button fx:id="articoli" maxWidth="Infinity" onAction="#onNavigationButtonClick" styleClass="sidebar-button">
                 <graphic>
                     <VBox alignment="CENTER" spacing="5">
-                        <FontIcon iconLiteral="fas-calendar-alt" />
-                        <Text text="Articoli">
+                        <FontIcon iconLiteral="fas-globe" />
+                        <Text text="Siti e articoli">
                             <font>
                                 <Font size="9.0" />
                             </font>
@@ -105,13 +105,13 @@
                 <Insets left="10" right="10" />
             </padding>
          <children>
-            <Label text="Leggi gli articoli " />
+            <Label text="Qui troverai i siti e gli articoli che ti potrebbero essere utili" />
             <HBox alignment="CENTER" spacing="10.0">
                <children>
-                  <Button mnemonicParsing="false" onAction="#loadContentPerCategoria" text="Nutrizione" />
-                  <Button mnemonicParsing="false" onAction="#loadContentPerCategoria" text="Riposo" />
-                  <Button mnemonicParsing="false" onAction="#loadContentPerCategoria" text="Recupero" />
-                  <Button mnemonicParsing="false" onAction="#loadContentPerCategoria" text="Tecniche di allenamento" />
+                  <Button fx:id="Nutrizione" mnemonicParsing="false" onAction="#loadContentPerCategoria" text="Nutrizione" />
+                  <Button fx:id="Riposo" mnemonicParsing="false" onAction="#loadContentPerCategoria" text="Riposo" />
+                  <Button fx:id="Recupero" mnemonicParsing="false" onAction="#loadContentPerCategoria" text="Recupero" />
+                  <Button fx:id="TecnicheDiAllenamento" mnemonicParsing="false" onAction="#loadContentPerCategoria" text="Tecniche di allenamento" />
                </children>
             </HBox>
             <VBox fx:id="vboxContent" />

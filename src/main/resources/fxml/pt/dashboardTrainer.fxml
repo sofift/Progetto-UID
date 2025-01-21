@@ -56,8 +56,8 @@
             <Button fx:id="articoli" maxWidth="Infinity" onAction="#onNavigationButtonClick" styleClass="sidebar-button">
                 <graphic>
                     <VBox alignment="CENTER" spacing="5">
-                        <FontIcon iconLiteral="fas-calendar-alt" />
-                        <Text text="Articoli">
+                        <FontIcon iconLiteral="fas-globe" />
+                        <Text text="Siti e articoli">
                             <font>
                                 <Font size="9.0" />
                             </font>

@@ -8,20 +8,21 @@ import it.unical.informatica.progettouid.view.SceneHandlerClient;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.Label;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 
 import java.util.List;
 import java.util.Optional;
 
+// TODO button prenota non funziona
+// aggiornare tabella prenotaizoni
 
 public class AttivitaClientController {
     @FXML private FlowPane corsiFlowPane;
-    @FXML private VBox orariCorsiVBox;
+    @FXML private VBox vboxCenter;
 
     @FXML
     public void initialize() {
@@ -30,6 +31,9 @@ public class AttivitaClientController {
 
     private void loadCorsi() {
         Task<List<Corsi>> taskCorsi = DBConnection.getInstance().getCorsi();
+        Thread thread = new Thread(taskCorsi);
+        thread.setDaemon(true);
+        thread.start();
 
         taskCorsi.setOnSucceeded(e->{
             List<Corsi> corsi = taskCorsi.getValue();
@@ -52,21 +56,49 @@ public class AttivitaClientController {
 
     private void mostraOrari(int idCorso, String descrizione) {
         Task<List<OrariCorsi>> taskOrari = DBConnection.getInstance().getOrarioCorsi(idCorso);
+        Thread thread = new Thread(taskOrari);
+        thread.setDaemon(true);
+        thread.start();
         taskOrari.setOnSucceeded(e->{
             List<OrariCorsi> orari = taskOrari.getValue();
 
-            for(OrariCorsi c : orari){
-                Label giorno = new Label(c.giorno());
-                Label oraInizio = new Label(STR."Dalle \{c.oraInizio()}alle \{c.oraFine()}");
-                Text testoDesc = new Text(descrizione);
-                Button prenota = new Button("Prenota");
-                prenota.setOnAction(event -> {
-                    confermaPrenotazione(c);
-                });
-                orariCorsiVBox.getChildren().addAll(giorno, oraInizio, testoDesc, prenota);
-            }
+            displayOrariCorsi(orari, descrizione);
+
 
         });
+        taskOrari.setOnFailed(e->{
+            System.out.println(STR."Errore durante il caricamento dei corsi \{taskOrari.getException()}");
+        });
+    }
+
+    private void displayOrariCorsi(List<OrariCorsi> orari, String descrizione) {
+        ListView<HBox> listviewCorsi = new ListView<>();
+        listviewCorsi.setFixedCellSize(90);
+        listviewCorsi.setPrefHeight(orari.size() * listviewCorsi.getFixedCellSize() + 5);
+        VBox.setVgrow(listviewCorsi, Priority.ALWAYS);
+
+        for(OrariCorsi c : orari){
+            HBox content = new HBox(20);
+            content.setAlignment(Pos.CENTER_LEFT);
+            content.setPadding(new Insets(0, 16, 0, 16));
+            VBox textContainer = new VBox(5);
+            Label nomeCorso = new Label(c.nomeCorso());
+            nomeCorso.setStyle("-fx-font-size: 14px; -fx-font-weight: bold;");
+            Label giornoOra = new Label(STR."Tutti i \{c.giorno()}, dalle \{c.oraInizio()} alle \{c.oraFine()}");
+
+            Label testoDesc = new Label(descrizione);
+            testoDesc.setWrapText(true);
+
+            textContainer.getChildren().addAll(nomeCorso, giornoOra, testoDesc);
+            Button prenota = new Button("Prenota");
+
+            prenota.setOnAction(event -> {
+                confermaPrenotazione(c);
+            });
+            content.getChildren().addAll(textContainer, prenota);
+            listviewCorsi.getItems().addAll(content);
+        }
+        vboxCenter.getChildren().add(listviewCorsi);
     }
 
     private void confermaPrenotazione(OrariCorsi corso) {

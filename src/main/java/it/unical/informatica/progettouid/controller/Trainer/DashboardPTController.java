@@ -150,10 +150,10 @@ public class DashboardPTController {
         thread.setDaemon(true);
         thread.start();
         task.setOnSucceeded(event -> {
-            if(stato == "accetta"){
+            if(stato.equals("accetta")){
                 AlertManager al = new AlertManager(Alert.AlertType.CONFIRMATION, "Accettata", null, "Richiesta accettata");
                 al.display();
-            }else if(stato == "rifiuta"){
+            }else if(stato.equals("rifiuta")){
                 AlertManager al = new AlertManager(Alert.AlertType.CONFIRMATION, "Rifiutata", null, "Richiesta rifiutata");
                 al.display();
             }

@@ -1,0 +1,132 @@
+/* Base styles */
+.root {
+    -fx-background-color: #1a3246;
+}
+
+/* Top header styles */
+.label {
+    -fx-text-fill: white;
+}
+
+.label .ikonli-font-icon {
+    -fx-icon-color: white;
+}
+
+/* Sidebar styles */
+.sidebar-button {
+    -fx-background-color: transparent;
+    -fx-background-radius: 10px;
+    -fx-padding: 10px;
+    -fx-min-width: 75px;
+    -fx-max-width: 75px;
+}
+
+.sidebar-button:hover {
+    -fx-background-color: #233c52;
+}
+
+.sidebar-button .ikonli-font-icon {
+    -fx-icon-color: white;
+}
+
+.sidebar-button .text {
+    -fx-fill: white;
+}
+
+/* ScrollPane customization */
+.scroll-pane {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+
+.scroll-pane > .viewport {
+    -fx-background-color: transparent;
+}
+
+.scroll-bar:vertical,
+.scroll-bar:horizontal {
+    -fx-background-color: transparent;
+}
+
+.scroll-bar:vertical .thumb,
+.scroll-bar:horizontal .thumb {
+    -fx-background-color: white;
+    -fx-background-radius: 5px;
+}
+
+/* Center content styles */
+#vboxCenter {
+    -fx-background-color: transparent;
+}
+
+.day-section {
+    -fx-background-color: #233c52;
+    -fx-background-radius: 10px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 10, 0, 0, 0);
+    -fx-padding: 15px;
+}
+
+.day-section:hover {
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 15, 0, 0, 0);
+    -fx-background-color: #2a4256;
+}
+
+.day-header {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+}
+
+.exercise-item {
+    -fx-background-color: #2a4256;
+    -fx-background-radius: 5px;
+    -fx-padding: 10px;
+}
+
+/* Right sidebar styles */
+.pt-info-section, .actions-section {
+    -fx-background-color: #233c52;
+    -fx-background-radius: 10px;
+    -fx-padding: 15px;
+}
+
+.section-header {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+}
+
+.pt-info {
+    -fx-text-fill: #e9ecef;
+}
+
+/* Action buttons */
+.action-button {
+    -fx-background-color: white;
+    -fx-text-fill: #1a3246;
+    -fx-background-radius: 10px;
+    -fx-padding: 10px 15px;
+}
+
+.action-button:hover {
+    -fx-background-color: #1a3246;
+    -fx-text-fill: white;
+    -fx-border-color: white;
+    -fx-border-radius: 10px;
+}
+
+.action-button .ikonli-font-icon {
+    -fx-icon-color: #1a3246;
+}
+
+.action-button:hover .ikonli-font-icon {
+    -fx-icon-color: white;
+}
+
+.action-button .label {
+    -fx-text-fill: #1a3246;
+}
+
+.action-button:hover .label {
+    -fx-text-fill: white;
+}

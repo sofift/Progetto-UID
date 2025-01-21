@@ -45,8 +45,16 @@ public class AttivitaClientController {
         corsiFlowPane.getChildren().clear();
         for(Corsi c: corsi){
             Button corso = new Button(c.nome());
+            // Aggiungi classe CSS per lo stile del bottone corso
+            corso.getStyleClass().add("course-button");
             corso.setOnAction(event -> mostraOrari(c.id(), c.descrizione()));
-            corsiFlowPane.getChildren().add(corso);
+
+            // Crea un VBox per contenere il corso (opzionale per layout migliore)
+            VBox courseCard = new VBox(10); // spacing 10
+            courseCard.getStyleClass().add("course-card");
+            courseCard.getChildren().add(corso);
+
+            corsiFlowPane.getChildren().add(courseCard);
         }
     }
 

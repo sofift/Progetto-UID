@@ -74,7 +74,7 @@ public class CheckInController {
             if (exception instanceof IllegalArgumentException) {
                 statusLabel.setText(exception.getMessage());
             } else {
-                statusLabel.setText("Errore durante il check-in.");
+                statusLabel.setText("Errore durante il check-in");
                 exception.printStackTrace();
             }
         });

@@ -196,6 +196,7 @@
                     </padding>
                     <children>
 
+                        <Label fx:id="statusLabel" styleClass="status-label" />
                         <Label alignment="TOP_CENTER" text="Check-in">
                             <graphic>
                                 <FontIcon iconLiteral="fas-clock" />

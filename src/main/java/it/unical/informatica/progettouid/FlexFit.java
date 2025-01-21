@@ -1,12 +1,9 @@
 package it.unical.informatica.progettouid;
 
 import it.unical.informatica.progettouid.model.AdminInitializer;
-import it.unical.informatica.progettouid.util.ThemeManager;
-import it.unical.informatica.progettouid.view.SceneHandlerClient;
 import it.unical.informatica.progettouid.view.SceneHandlerPrimaPagina;
 import javafx.application.Application;
 import javafx.stage.Stage;
-import it.unical.informatica.progettouid.controller.client.ImpostazioniController;
 
 public class FlexFit extends Application {
     @Override

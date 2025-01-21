@@ -871,31 +871,48 @@ public class DBConnection {
     public Task<Boolean> checkIn(String code) {
         return asyncCall(() -> {
             if (isConnected()) {
+                // Prima verifica se il client esiste
+                String verifyClient = "SELECT Id FROM Clienti WHERE Id = ?";
+                try (PreparedStatement checkStmt = con.prepareStatement(verifyClient)) {
+                    checkStmt.setString(1, code);
+                    ResultSet checkRs = checkStmt.executeQuery();
+                    if (!checkRs.next()) {
+                        throw new IllegalArgumentException("Codice cliente non valido.");
+                    }
+                }
+
+                // Poi verifica l'abbonamento
                 String verifyquery = """
-                        SELECT c.Id, a.AccessiRimanenti\s
-                                        FROM Clienti c
-                                        LEFT JOIN Abbonamenti a ON c.Id = a.ClienteID\s
-                                        WHERE c.Id = ?\s
-                                        AND a.Stato = 'attivo'\s
-                                        AND a.DataScadenza >= date('now')
-                                        AND a.AccessiRimanenti > 0 """;
+                SELECT c.Id, a.AccessiRimanenti 
+                FROM Clienti c
+                JOIN Abbonamenti a ON c.Id = a.ClienteID 
+                WHERE c.Id = ? 
+                AND a.Stato = 'attivo' 
+                AND a.DataScadenza >= date('now')
+                AND a.AccessiRimanenti > 0
+                ORDER BY a.DataScadenza DESC
+                LIMIT 1""";
+
                 try (PreparedStatement stmt = con.prepareStatement(verifyquery)) {
                     stmt.setString(1, code);
                     ResultSet rs = stmt.executeQuery();
 
                     if (!rs.next()) {
-                        throw new IllegalArgumentException("Codice non valido o abbonamento scaduto.");
+                        throw new IllegalArgumentException("Cliente senza abbonamento valido o accessi esauriti.");
                     }
+
                     int clientId = rs.getInt("Id");
                     int accessiRimanenti = rs.getInt("AccessiRimanenti");
 
+                    // Registra l'accesso
                     String insertQuery = "INSERT INTO AccessiPalestra (ClienteID, DataOraIngresso) VALUES (?, datetime('now', 'localtime'))";
                     try (PreparedStatement stmt2 = con.prepareStatement(insertQuery)) {
                         stmt2.setInt(1, clientId);
                         stmt2.executeUpdate();
                     }
 
-                    String updateQuery = "UPDATE Abbonamenti SET AccessiRimanenti = ? WHERE ClienteID = ? AND Stato = 'attivo'";
+                    // Aggiorna gli accessi rimanenti
+                    String updateQuery = "UPDATE Abbonamenti SET AccessiRimanenti = ? WHERE ClienteID = ? AND Stato = 'attivo' AND DataScadenza >= date('now')";
                     try (PreparedStatement stmt3 = con.prepareStatement(updateQuery)) {
                         stmt3.setInt(1, accessiRimanenti - 1);
                         stmt3.setInt(2, clientId);

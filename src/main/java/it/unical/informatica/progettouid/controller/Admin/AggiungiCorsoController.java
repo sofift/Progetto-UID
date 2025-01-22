@@ -106,7 +106,7 @@ public class AggiungiCorsoController implements Initializable {
 
     private void setupButtons() {
         annullaButton.setOnAction(e -> handleAnnulla());
-        salvaCorso.setOnAction(e -> handleSalva());
+        //salvaCorso.setOnAction(e -> handleSalva());
     }
 
     private void setupValidation() {
@@ -141,7 +141,7 @@ public class AggiungiCorsoController implements Initializable {
     }
 
     @FXML
-    private void handleSalva() {
+    /*private void handleSalva() {
         if (!validateForm()) {
             showError("Compila tutti i campi obbligatori");
             return;
@@ -193,7 +193,7 @@ public class AggiungiCorsoController implements Initializable {
         } catch (Exception e) {
             showError("Errore durante il salvataggio del corso: " + e.getMessage());
         }
-    }
+    }*/
 
     private void handleAnnulla() {
         if (hasUnsavedChanges()) {

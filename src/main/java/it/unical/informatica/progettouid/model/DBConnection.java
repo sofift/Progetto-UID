@@ -197,6 +197,7 @@ public class DBConnection {
                             rs.getString("DataNascita"),
                             rs.getString("Specializzazione"),
                             rs.getString("Email"),
+                            null,
                             rs.getString("Telefono")));
                 }
                 stmt.close();
@@ -242,6 +243,7 @@ public class DBConnection {
                             rs.getString("DataNascita"),
                             rs.getString("Specializzazione"),
                             rs.getString("Email"),
+                            null,
                             rs.getString("Telefono"));
 
                 }
@@ -255,17 +257,18 @@ public class DBConnection {
         return asyncCall(() -> {
             List<Corsi> corsi = FXCollections.observableArrayList();
             if (isConnected()) {
-                String query = "SELECT *" +
-                        "FROM Corsi c ";
+                String query = "SELECT c.*, pt.Nome AS NomeTrainer, pt.Cognome AS CognomeTrainer " +
+                        "FROM Corsi c JOIN PersonalTrainer pt ON c.idTrainer = pt.ID";
                 PreparedStatement stmt = con.prepareStatement(query);
                 ResultSet rs = stmt.executeQuery();
                 while (rs.next()) {
                     corsi.add(new Corsi(
-                            rs.getInt(1),
-                            rs.getString(2),
-                            rs.getString(3),
-                            rs.getInt(4),
-                            rs.getString(5)
+                            rs.getInt("ID"),
+                            rs.getString("Nome"),
+                            rs.getString("Descrizione"),
+                            rs.getInt("idTrainer"),
+                            rs.getString("NomeTrainer"),
+                            rs.getString("CognomeTrainer")
                     ));
 
                 }
@@ -280,19 +283,22 @@ public class DBConnection {
             String today = LocalDate.now().getDayOfWeek().getDisplayName(TextStyle.FULL, Locale.ITALIAN).toLowerCase();
             List<Corsi> corsi = FXCollections.observableArrayList();
             if (isConnected()) {
-                String query = "SELECT c.ID, c.Nome, c.Descrizione, c.idTrainer " +
-                        "FROM Corsi c JOIN OrarioCorsi oc ON c.ID = oc.idCorso " +
+                String query = "SELECT c.ID, c.Nome AS NomeCorso, c.Descrizione, c.idTrainer, pt.Nome AS NomeTrainer, pt.Cognome AS CognomeTrainer  " +
+                        "FROM Corsi c " +
+                        "JOIN OrarioCorsi oc ON c.ID = oc.idCorso " +
+                        "JOIN PersonalTrainer pt ON c.idTrainer = pt.ID " +
                         "WHERE oc.giorno = ?";
                 PreparedStatement stmt = con.prepareStatement(query);
                 stmt.setString(1, today);
                 ResultSet rs = stmt.executeQuery();
                 while (rs.next()) {
                     corsi.add(new Corsi(
-                            rs.getInt(1),
-                            rs.getString(2),
-                            rs.getString(3),
-                            rs.getInt(4),
-                            rs.getString(5)
+                            rs.getInt("ID"),
+                            rs.getString("NomeCorso"),
+                            rs.getString("Descrizione"),
+                            rs.getInt("idTrainer"),
+                            rs.getString("NomeTrainer"),
+                            rs.getString("CognomeTrainer")
                     ));
 
                 }
@@ -470,8 +476,15 @@ public class DBConnection {
                     try (ResultSet rs = stmt.executeQuery()) {
                         String storedHash = rs.getString("Password");
                         if (rs.next() && BCrypt.checkpw(password, storedHash)) {
-
-                            return new PersonalTrainer(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5), rs.getString(6), rs.getString(7));
+                            return new PersonalTrainer(
+                                    rs.getInt("ID"),
+                                    rs.getString("Nome"),
+                                    rs.getString("Cognome"),
+                                    rs.getString("DataNascita"),
+                                    rs.getString("Specializzazione"),
+                                    rs.getString("Email"),
+                                    rs.getString(password),
+                                    rs.getString("Telefono"));
                         }
                     }
                 }
@@ -792,7 +805,6 @@ public class DBConnection {
                     stmt.setString(4, formattedDate);
                     stmt.setString(5, stato);
                     stmt.executeUpdate();
-
                 }
             }
             return null;
@@ -802,18 +814,20 @@ public class DBConnection {
     // far modificare il giorno relativo al giorno della settimana in data effettiva
     private String getDataDaGiorno(String giorno) {
         Map<String, DayOfWeek> giorni = Map.of(
-                "Lunedì", DayOfWeek.MONDAY,
-                "Martedì", DayOfWeek.TUESDAY,
-                "Mercoledì", DayOfWeek.WEDNESDAY,
-                "Giovedì", DayOfWeek.THURSDAY,
-                "Venerdì", DayOfWeek.FRIDAY,
-                "Sabato", DayOfWeek.SATURDAY,
-                "Domenica", DayOfWeek.SUNDAY
+                "lunedì", DayOfWeek.MONDAY,
+                "martedì", DayOfWeek.TUESDAY,
+                "mercoledì", DayOfWeek.WEDNESDAY,
+                "giovedì", DayOfWeek.THURSDAY,
+                "venerdì", DayOfWeek.FRIDAY,
+                "sabato", DayOfWeek.SATURDAY,
+                "domenica", DayOfWeek.SUNDAY
         );
         LocalDate today = LocalDate.now();
         LocalDate startOfWeek = today.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
         DayOfWeek targetDay = giorni.get(giorno.toLowerCase());
-        LocalDate targetDate = startOfWeek.with(TemporalAdjusters.nextOrSame(targetDay));
+        LocalDate targetDate = today.with(today.getDayOfWeek().getValue() < targetDay.getValue() ?
+                TemporalAdjusters.nextOrSame(targetDay) :
+                TemporalAdjusters.next(targetDay));
         return targetDate.format(DateTimeFormatter.ISO_LOCAL_DATE);
     }
 
@@ -935,50 +949,42 @@ public class DBConnection {
         });
     }
 
-    /*public LocalDate getInizioSettimana() {
-        LocalDate today = LocalDate.now();
-        DayOfWeek dayOfWeek = today.getDayOfWeek();
-        int daysFromMonday = dayOfWeek.getValue() - DayOfWeek.MONDAY.getValue();
-        return today.minusDays(daysFromMonday);
-    }
-
-    public Task<Void> aggiornaConteggioPresenzeCorsi(int idCorso, String data){
+    public Task<Boolean> hasPrenotazioneCorso(int idCorso, String giorno) {
         return asyncCall(() -> {
             if (isConnected()) {
-                LocalDate inizioSettimana = getInizioSettimana();
-                String query = "INSERT INTO ConteggioPrenotazioni (idCorso, dataPrenotazione, contatore) VALUES (?, ?, 1) ON DUPLICATE KEY UPDATE contatore = contatore + 1;";
+                String dataCorso = getDataDaGiorno(giorno);
+                int idClient = ClientSession.getInstance().getCurrentClient().id();
+                String query = "SELECT COUNT(*) FROM PrenotazioniCorsi WHERE idCorso = ? AND idClient = ? AND dataPrenotazione = ?";
+
                 try (PreparedStatement stmt = con.prepareStatement(query)) {
                     stmt.setInt(1, idCorso);
-                    stmt.setDate(2, Date.valueOf(inizioSettimana));
-                    stmt.executeUpdate();
-                } catch (SQLException e) {
-                    e.printStackTrace();
+                    stmt.setInt(2, idClient);
+                    stmt.setString(3, dataCorso);
+                    try(ResultSet rs = stmt.executeQuery()){
+                        if(rs.next()) return rs.getInt(1) > 0;
+                    }
+
                 }
             }
-            return null;
+            return false;
         });
-
     }
 
-    public Task<List<ConteggioCorso>> getConteggiSettimanali(int idCorso){
-        return asyncCall(()->{
-           if(isConnected()){
-               List<ConteggioCorso> conteggi = new ArrayList<>();
-               LocalDate inizioSettimana = getInizioSettimana();
-               String query = "SELECT contatore FROM ConteggioPrenotazioni WHERE idCorso = ? AND settimanaCorrente = ?";
-               try (PreparedStatement stmt = con.prepareStatement(query)) {
-                   stmt.setInt(1, idCorso);
-                   stmt.setDate(2, Date.valueOf(inizioSettimana));
-                   try (ResultSet rs = stmt.executeQuery()) {
-                       if (rs.next()) {
-                           conteggi.add(new ConteggioCorso(idCorso, inizioSettimana, rs.getInt("contatore")));
-                       }
-                   }
-               } catch (SQLException e) {
-                   e.printStackTrace();
-               }
-               return conteggi;
-           }
+    public Task<Boolean> hasPrenotazioneOggi(int idCorso) {
+        return asyncCall(() -> {
+            if (!isConnected()) return false;
+
+            int idClient = ClientSession.getInstance().getCurrentClient().id();
+            String query = "SELECT COUNT(*) FROM PrenotazioniCorsi WHERE idCorso = ? AND idClient = ? AND dataPrenotazione = CURRENT_DATE";
+
+            try (PreparedStatement stmt = con.prepareStatement(query)) {
+                stmt.setInt(1, idCorso);
+                stmt.setInt(2, idClient);
+                ResultSet rs = stmt.executeQuery();
+                return rs.next() && rs.getInt(1) > 0;
+            }
         });
-    }*/
+    }
+
+
 }

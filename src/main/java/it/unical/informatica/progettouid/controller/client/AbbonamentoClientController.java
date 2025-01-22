@@ -200,25 +200,20 @@ public class AbbonamentoClientController {
     }
 
     private void registraPagamento(int idAbbonamento, int importo, String stato) {
-        Task<Boolean> task = DBConnection.getInstance().insertPagamento(idAbbonamento, importo, stato);
+        Task<Void> task = DBConnection.getInstance().insertPagamento(idAbbonamento, importo, stato);
         Thread thread = new Thread(task);
         thread.start();
 
         task.setOnSucceeded(e->{
-            if(task.getValue()){
-                if(stato.equals("avvenuto")){
+            if(stato.equals("avvenuto")){
                     AlertManager conferma  = new AlertManager(Alert.AlertType.CONFIRMATION, "Pagamento avvenuto con successo", null, "Pagamento andato a buon fine");
                     conferma.display();
-                }
-                else if(stato.equals("fallito")){
+            }
+            else if(stato.equals("fallito")){
                     AlertManager fal  = new AlertManager(Alert.AlertType.ERROR, "Pagamento fallito", null, "Pagamento non andato a buonfine");
                     fal.display();
-                }
             }
-            else{
-                AlertManager prob = new AlertManager(Alert.AlertType.WARNING, "Errore", null, "Si è verificato un errore durante il pagamento");
-                prob.display();
-            }
+
         });
 
         task.setOnFailed(e->{

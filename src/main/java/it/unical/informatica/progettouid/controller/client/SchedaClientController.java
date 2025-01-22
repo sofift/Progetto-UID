@@ -16,7 +16,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-// TODO: cambiare il compobox con i nomi dei personal, stessa cosa dei client nel trainer
+
 public class SchedaClientController {
     @FXML private VBox ptInfoContainer;
     @FXML private VBox vboxCenter;
@@ -357,8 +357,12 @@ public class SchedaClientController {
         dialog.setContentText("Invio messaggio al tuo PT...");
         dialog.showAndWait().ifPresent(response -> {
             if (!response.isEmpty()) {
-                Task<Void> task = DBConnection.getInstance().insertNotifyTrainer(id, response);
-
+                String nomeCognomeClient = ClientSession.getInstance().getCurrentClient().nome() + ClientSession.getInstance().getCurrentClient().cognome();
+                String message = "Richiesta: " + response + "dal cliente " + nomeCognomeClient;
+                Task<Void> task = DBConnection.getInstance().insertNotifyTrainer(id, message);
+                Thread thread = new Thread(task);
+                thread.setDaemon(true);
+                thread.start();
                 task.setOnSucceeded(event->{
                     AlertManager conferma = new AlertManager(Alert.AlertType.CONFIRMATION, "Conferma", null, "Il tuo messagio è stato appena inviato");
                     conferma.display();

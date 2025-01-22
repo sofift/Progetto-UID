@@ -58,21 +58,14 @@ public class PrenotazionePTController{
         }
     }
 
-    // creazione sezione per ogni trainer --> il CSS è da mettere nel foglio di stile
     private VBox createTrainerCard(PersonalTrainer trainer) {
         VBox card = new VBox();
-//        card.setStyle("-fx-background-color: white; -fx-border-color: #cccccc; " +
-//                "-fx-border-radius: 5; -fx-background-radius: 5; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 0);");
-//        card.setPadding(new Insets(15));
-//        card.setSpacing(5);
 
         Label nameLabel = new Label(STR."\{trainer.nome()} \{trainer.nome()}");
-//        nameLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 14px;");
 
         Text specLabel = new Text(trainer.specializzazione());
 
         Button bookButton = new Button("Prenota sessione");
-//        bookButton.setStyle("-fx-background-color: #4CAF50; -fx-text-fill: white;");
         bookButton.setOnAction(e -> showBookingForm(trainer));
 
 
@@ -82,20 +75,15 @@ public class PrenotazionePTController{
 
     // mostra form laterale per la prenotazione
     private void showBookingForm(PersonalTrainer trainer) {
-        bookingFormContainer.getChildren().clear();         // pulisce la aprte destra del border pane ogni votla che si preme sul button prenotazione
+        bookingFormContainer.getChildren().clear();
 
-        Label title = new Label("Prenota sessione con " + trainer.nome());
-        //title.setStyle("-fx-font-size: 16px; -fx-font-weight: bold;");
+        Label title = new Label(STR."Prenota sessione con \{trainer.nome()}");
 
         DatePicker datePicker = new DatePicker(LocalDate.now());
         datePicker.setMaxWidth(Double.MAX_VALUE);
 
-        ComboBox<String> timeComboBox = new ComboBox<>();
-//        for (int i = 8; i <= 20; i++) {
-//            timeComboBox.getItems().add(String.format("%02d:00", i));
-//            timeComboBox.getItems().add(String.format("%02d:30", i));
-//        }
-//        timeComboBox.setMaxWidth(Double.MAX_VALUE);
+        TextField time = new TextField();
+        time.setPrefWidth(50);
 
         TextArea notes = new TextArea();
         notes.setPromptText("Note aggiuntive...");
@@ -103,16 +91,15 @@ public class PrenotazionePTController{
 
         Button confirmButton = new Button("Conferma Prenotazione");
         confirmButton.setMaxWidth(Double.MAX_VALUE);
-//        confirmButton.setStyle("-fx-background-color: #4CAF50; -fx-text-fill: white;");
         confirmButton.setOnAction(e -> handleBooking(trainer.id(), datePicker.getValue(),
-                timeComboBox.getValue(), notes.getText()));
+                time.getText(), notes.getText()));
 
         bookingFormContainer.getChildren().addAll(
                 title,
                 new Label("Data:"),
                 datePicker,
                 new Label("Ora:"),
-                timeComboBox,
+                time,
                 new Label("Note:"),
                 notes,
                 confirmButton
@@ -136,22 +123,32 @@ public class PrenotazionePTController{
 
         task.setOnSucceeded(event -> {
             if(task.getValue()){
-                String message = STR."Hai una nuova prenotazione dal cliente\{currentClient.nome()}\{currentClient.cognome()}.";
+                String message = "Hai una nuova prenotazione dal cliente " + currentClient.nome() + " " + currentClient.cognome();
                 if(!notes.isEmpty()) {
-                    message += STR."""
-                    Richiesta:\{notes}""";
+                    message += " Richiesta: " + notes;
                 }
                 Task<Void> task1 = DBConnection.getInstance().insertNotifyTrainer(trainerID, message);
+                Thread thread1 = new Thread(task1);
+                thread1.setDaemon(true);
+                thread1.start();
+
+                task1.setOnSucceeded(e->{
+                    AlertManager succ = new AlertManager(Alert.AlertType.CONFIRMATION, "Conferma", null, "Prenotazione inviata al personal trainer, riceverai una notifica di conferma non appena possibile");
+                    succ.display();
+                });
+
+                task1.setOnFailed(e -> {
+                    task1.getException().printStackTrace();
+                });
+
             }
 
-            AlertManager succ = new AlertManager(Alert.AlertType.CONFIRMATION, "Conferma", null, "Prenotazione inviata al personal trainer, riceverai una notifica di conferma non appena possibile");
-            succ.display();
+
         });
 
         task.setOnFailed(event -> {
             Throwable ex = task.getException();
-            ex.printStackTrace();  // Stampa l'errore completo in console
-
+            ex.printStackTrace();
             AlertManager errore = new AlertManager(Alert.AlertType.ERROR, "Errore prenotazione", null, STR."Si è verificato un errore durante la prenotazione: \{ex.getMessage()}");
             errore.display();
 
@@ -166,7 +163,7 @@ public class PrenotazionePTController{
             return false;
         }
 
-        if (date.isBefore(LocalDate.now())) {
+        if (date.isBefore(LocalDate.now()) || date.isEqual(LocalDate.now())) {
             AlertManager er = new AlertManager(Alert.AlertType.WARNING, "Data non valida", null, "Seleziona una data futura.");
             er.display();
             return false;

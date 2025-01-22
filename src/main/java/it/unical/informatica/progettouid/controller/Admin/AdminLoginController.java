@@ -71,10 +71,10 @@ public class AdminLoginController {
 
     }
 
-    //@FXML
+    @FXML
     public void handleBack() {
         try {
-            SceneHandlerPrimaPagina.getInstance().init(SceneHandlerPrimaPagina.getInstance().getStage());
+            SceneHandlerPrimaPagina.getInstance().loadPrimaPagina();
         } catch (Exception e) {
             showAlert(Alert.AlertType.ERROR,
                     "Errore di Navigazione",

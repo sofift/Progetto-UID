@@ -6,6 +6,7 @@ import it.unical.informatica.progettouid.view.SceneHandlerClient;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
@@ -99,7 +100,9 @@ public class DashboardClientController {
         corsiListView.getItems().clear();
         corsiListView.setFixedCellSize(90);
         corsiListView.setPrefHeight(corsi.size() * corsiListView.getFixedCellSize() +5);
+
         VBox.setVgrow(corsiListView, Priority.ALWAYS);
+
         if (corsi.isEmpty()) {
             HBox emptyContent = new HBox();
             emptyContent.setAlignment(Pos.CENTER);
@@ -112,21 +115,20 @@ public class DashboardClientController {
 
         for(Corsi c: corsi){
             HBox content = new HBox(10);
-            // visualizza nome corso, orario, durata e personal
             content.setAlignment(Pos.CENTER_LEFT);
+            content.setPadding(new Insets(0, 16, 0, 16));
 
             Label nomeCorso = new Label(c.nome());
 
             Label nomeTrainer = new Label(c.nomeTrainer());
             Label cognomeTrainer = new Label(c.cognomeTrainer());
 
-            // TODO : LOGICA PER SALVARE LA PRENOTAZIONE
             Button prenota = new Button("Prenota");
             prenota.setOnAction(e -> {
                 AlertManager conf = new AlertManager(Alert.AlertType.CONFIRMATION, "Conferma prenotazione", null, STR."Confermi la prenotazione per il corso \{c.nome()}?");
                 Optional<ButtonType> result = conf.showAndWait();
                 if (result.isPresent() && result.get() == ButtonType.OK) {
-                    salvaPrenotazioneCorso(c.id());
+                    confermaPrenotazione(c.id());
                 } else {
                     System.out.println("Cancellazione annullata.");
                 }
@@ -136,6 +138,23 @@ public class DashboardClientController {
             corsiListView.getItems().add(content);
 
         }
+    }
+
+    private void confermaPrenotazione(int idCorso) {
+        Task<Boolean> checkTask = DBConnection.getInstance().hasPrenotazioneOggi(idCorso);
+        Thread checkThread = new Thread(checkTask);
+        checkThread.setDaemon(true);
+        checkThread.start();
+
+        checkTask.setOnSucceeded(e -> {
+            if (checkTask.getValue()) {
+                AlertManager alert = new AlertManager(Alert.AlertType.WARNING, "Errore", null,
+                        "Hai già una prenotazione per questo corso oggi");
+                alert.display();
+                return;
+            }
+            salvaPrenotazioneCorso(idCorso);
+        });
     }
 
     private void salvaPrenotazioneCorso(int idCorso) {

@@ -71,7 +71,7 @@ public class TrainerLoginController {
     @FXML
     public void handleBack() {
         try {
-            SceneHandlerPrimaPagina.getInstance().init(SceneHandlerPrimaPagina.getInstance().getStage());
+            SceneHandlerPrimaPagina.getInstance().loadPrimaPagina();
         } catch (Exception e) {
             AlertManager err = new AlertManager(Alert.AlertType.ERROR, "Errore di navigazione", "Impossibile tornare indietro", STR."Si è verificato un errore: \{e.getMessage()}");
             e.printStackTrace();

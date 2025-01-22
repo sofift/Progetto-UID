@@ -43,7 +43,6 @@ public class CreaSchedaController {
     private Client selectedClient = null;
     private int idScheda;
 
-    // TODO: implementare la logica di visualizzazione delle tabelle se il client ha una scheda o meno
 
     @FXML
     private void initialize() {
@@ -53,6 +52,8 @@ public class CreaSchedaController {
                 Client client = clientMap.get(newSelection);
                 if (client != null) {
                     selectedClient = client;
+                    dataInizioPicker.setValue(null);
+                    dataFinePicker.setValue(null);
                     verificaSchedaClient();
                 }
             }

@@ -123,23 +123,9 @@ public class PrenotazionePTController{
 
         task.setOnSucceeded(event -> {
             if(task.getValue()){
-                String message = "Hai una nuova prenotazione dal cliente " + currentClient.nome() + " " + currentClient.cognome();
-                if(!notes.isEmpty()) {
-                    message += " Richiesta: " + notes;
-                }
-                Task<Void> task1 = DBConnection.getInstance().insertNotifyTrainer(trainerID, message);
-                Thread thread1 = new Thread(task1);
-                thread1.setDaemon(true);
-                thread1.start();
 
-                task1.setOnSucceeded(e->{
-                    AlertManager succ = new AlertManager(Alert.AlertType.CONFIRMATION, "Conferma", null, "Prenotazione inviata al personal trainer, riceverai una notifica di conferma non appena possibile");
-                    succ.display();
-                });
-
-                task1.setOnFailed(e -> {
-                    task1.getException().printStackTrace();
-                });
+                AlertManager succ = new AlertManager(Alert.AlertType.CONFIRMATION, "Conferma", null, "Prenotazione inviata al personal trainer, riceverai una notifica di conferma non appena possibile");
+                succ.display();
 
             }
 

@@ -57,6 +57,7 @@ public class TrainerLoginController {
         });
 
         task.setOnFailed(event -> {
+            task.getException().printStackTrace();
             Platform.runLater(() -> {
                 controlloAccessoLabel.setVisible(true);
                 controlloAccessoLabel.setText("Errore durante la verifica delle credenziali.");

@@ -483,7 +483,7 @@ public class DBConnection {
                                     rs.getString("DataNascita"),
                                     rs.getString("Specializzazione"),
                                     rs.getString("Email"),
-                                    rs.getString(password),
+                                    password,
                                     rs.getString("Telefono"));
                         }
                     }
@@ -552,13 +552,14 @@ public class DBConnection {
         return asyncCall(() -> {
             if (isConnected()) {
                 int idClient = ClientSession.getInstance().getCurrentClient().id();
-                String query = "INSERT INTO PrenotazioniPT (idPT, idClient, data, oraPrenotazione, notes) VALUES(?, ?, ?, ?, ?);";
+                String query = "INSERT INTO PrenotazioniPT (idPT, idClient, data, oraPrenotazione, notes, stato) VALUES(?, ?, ?, ?, ?, ?);";
                 try (PreparedStatement stmt = con.prepareStatement(query)) {
                     stmt.setInt(1, trainerId);
                     stmt.setInt(2, idClient);
                     stmt.setString(3, data);
                     stmt.setString(4, oraPrenotazione);
                     stmt.setString(5, notes);
+                    stmt.setString(6, "in attesa");
                     stmt.executeUpdate();
                     return true;
                 }
@@ -624,21 +625,23 @@ public class DBConnection {
             List<PrenotazionePT> prenotazioni = new ArrayList<>();
             if (isConnected()) {
                 int idPT = PTSession.getInstance().getCurrentTrainer().id();
-                String query = "SELECT c.nome, c.cognome, p.data, p.oraPrenotazione, p.notes " +
+                String query = "SELECT p.ID, p.data, p.oraPrenotazione, p.notes, p.stato, c.nome, c.cognome " +
                         "FROM PrenotazioniPT p " +
                         "JOIN Clienti c ON c.id = p.idClient " +
-                        "WHERE p.idPT = ?;";
+                        "WHERE p.idPT = ? ORDER BY p.id DESC ;";
                 PreparedStatement stmt = con.prepareStatement(query);
                 stmt.setInt(1, idPT);
                 try (ResultSet rs = stmt.executeQuery()) {
                     while (rs.next()) {
                         prenotazioni.add( new PrenotazionePT(
+                                rs.getInt("ID"),
                                 rs.getInt(idPT),
-                                rs.getString(2),
-                                rs.getString(3),
-                                rs.getString(4),
-                                rs.getString(5),
-                                rs.getString(6)));
+                                rs.getString("Nome"),
+                                rs.getString("Cognome"),
+                                rs.getString("Data"),
+                                rs.getString("oraPrenotazione"),
+                                rs.getString("notes"),
+                                rs.getString("stato")));
                     }
                 }
                 stmt.close();
@@ -987,4 +990,17 @@ public class DBConnection {
     }
 
 
+    public Task<Void> updatePrenotazionePT(int idPrenotazione, String stato) {
+        return asyncCall(() -> {
+            if (isConnected()) {
+                String query = "UPDATE PrenotazioniPT SET stato = ? WHERE ID = ?";
+                try (PreparedStatement stmt = con.prepareStatement(query)) {
+                    stmt.setString(1, stato);
+                    stmt.setInt(2, idPrenotazione);
+                    stmt.executeUpdate();
+                }
+            }
+            return null;
+        });
+    }
 }

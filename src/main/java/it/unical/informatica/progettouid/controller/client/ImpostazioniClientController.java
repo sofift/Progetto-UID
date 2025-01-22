@@ -56,6 +56,7 @@ public class ImpostazioniClientController {
         }
     }
 
+
     /*
     @FXML private RadioButton lightTheme;
     @FXML private RadioButton darkTheme;
@@ -107,13 +108,15 @@ public class ImpostazioniClientController {
         scene.getStylesheets().add(stylesheet);
     }
 
+    */
+
     public void logout(ActionEvent actionEvent) throws Exception {
         try {
             SceneHandlerClient.getInstance().logout();
         } catch (Exception e) {
             AlertManager al = new AlertManager(Alert.AlertType.ERROR, "Errore", "Errore durante il logout", "Si è verificato un errore durante il logout. Riprova");
             al.showAndWait();
-        }}
+        }
+    }
 
-     */
 }

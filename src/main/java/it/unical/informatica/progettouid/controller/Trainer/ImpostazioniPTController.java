@@ -23,13 +23,10 @@ public class ImpostazioniPTController {
     @FXML
     private Label emailLabel;
     @FXML
-    private Button logoutButton;
-    @FXML
     private Label nomeLabel;
-    @FXML
-    private PasswordField passwordField;
     private PersonalTrainer personal = null;
 
+    @FXML
     void initialize() {
         personal = PTSession.getInstance().getCurrentTrainer();
         nomeLabel.setText(STR."Nome: \{personal.nome()}");

@@ -73,29 +73,15 @@ public class SceneHandlerPrimaPagina {
         if (this.scene != null) {
             this.scene.setRoot(loadFXML(fxmlPath));
         }
-/*
-        try {
-            System.out.println("Tentativo di caricamento del file FXML: " + fxmlPath);
-            URL resource = FlexFit.class.getResource(fxmlPath);
-
-            if (resource == null) {
-                throw new IllegalStateException("File FXML non trovato: " + fxmlPath);
-            }
-
-            FXMLLoader loader = new FXMLLoader(resource);
-
-            Parent view = loader.load();
-            mainPane.getChildren().clear();
-            mainPane.setCenter(view);
-            stage.setTitle("Login " + getUserTypeTitle(userType));
-        } catch (Exception e) {
-            System.err.println("Errore nel caricamento della pagina di login: " + e.getMessage());
-            System.err.println("Path tentato: " + fxmlPath);
-            throw e;
-        }*/
     }
 
-
+    public void resetToLogin() {
+        if (this.stage != null) {
+            this.scene = new Scene(loadFXML("/fxml/primaPagina.fxml"), WINDOW_WIDTH, WINDOW_HEIGHT);
+            this.stage.setScene(this.scene);
+            this.stage.show();
+        }
+    }
 
     public void switchToAdminView() throws Exception {
         SceneHandlerAdmin.getInstance().init(stage);

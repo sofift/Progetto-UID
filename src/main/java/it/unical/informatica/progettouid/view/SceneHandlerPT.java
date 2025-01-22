@@ -1,6 +1,7 @@
 package it.unical.informatica.progettouid.view;
 
 import it.unical.informatica.progettouid.FlexFit;
+import it.unical.informatica.progettouid.model.ClientSession;
 import it.unical.informatica.progettouid.model.PTSession;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -61,15 +62,10 @@ public class SceneHandlerPT {
 
     // Metodo per gestire il logout
     public void logout() throws Exception {
-        try{
-            PTSession.getInstance().logout();
-
-            SceneHandlerPrimaPagina handler = SceneHandlerPrimaPagina.getInstance();
-            handler.init(this.stage);
-        } catch (Exception e) {
-            System.err.println(STR."Errore durante il logout: \{e.getMessage()}");
-            throw new RuntimeException("Impossibile completare il logout", e);
-        }
+        PTSession.getInstance().logout();
+        SceneHandlerPrimaPagina.getInstance().resetToLogin();
+        this.stage = null;
+        this.scene = null;
     }
 
     public void setImpostazioniView() throws Exception {

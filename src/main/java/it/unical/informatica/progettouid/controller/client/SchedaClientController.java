@@ -144,7 +144,7 @@ public class SchedaClientController {
                String selectedPt = diplayPt.getValue();
                if (selectedPt != null && ptMap.containsKey(selectedPt)) {
                    int selectedId = ptMap.get(selectedPt);
-                   System.out.println(STR."ID del personal trainer selezionato: \{selectedId}");
+
                }
            });
        });

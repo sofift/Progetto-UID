@@ -39,10 +39,6 @@ public class DashboardClientController {
 
         task.setOnSucceeded(event -> {
             InfoAccessiAbbonamento abbonamento= task.getValue();
-            System.out.println("Abbonamento: " + abbonamento);
-            System.out.println("Scadenza: " + abbonamento.dataScadenza());
-            System.out.println("Tipo Abbonamento: " + abbonamento.tipoAbbonamento());
-
             if(abbonamento == null){
                 Label nessunAbbonamento = new Label("Non è abbonato, scopri i piani disponibili e adatti a te: ");
                 Button piani = new Button("Scopri");

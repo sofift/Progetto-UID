@@ -77,8 +77,10 @@ public class ArticoliController {
         Button btn = (Button) actionEvent.getSource();
         String categoria = btn.getId();
 
-        if(categoria.equalsIgnoreCase("TecnicheDiAllenamento"))    categoria = "Tecniche di allenamento";
-
+        if(categoria.equals("TecnicheDiAllenamento"))    categoria = "Tecniche di allenamento";
+        else if(categoria.equals("Nutrizione")) categoria = "Tecniche di allenamento";
+        else if(categoria.equals("Riposo")) categoria = "Riposo";
+        else if(categoria.equals("Recupero")) categoria = "Recupero";
         Task<List<Articolo>> task = DBConnection.getInstance().getArticoli(categoria);
         Thread thread = new Thread(task);
         thread.setDaemon(true);

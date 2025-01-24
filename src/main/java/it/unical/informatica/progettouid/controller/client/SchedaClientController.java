@@ -291,11 +291,8 @@ public class SchedaClientController {
     private void displayPTInfo(PersonalTrainer PTInfo) {
         if(PTInfo != null) {
             VBox ptCard = new VBox(10);
-            //ptCard.getStyleClass().add("pt-card");
 
             Label nameLabel = new Label(PTInfo.nome());
-            //nameLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 14px;");
-
             Label specializzazioneLabel = new Label(PTInfo.specializzazione());
             Label emailLabel = new Label(PTInfo.email());
             Label phoneLabel = new Label(PTInfo.telefono());
@@ -346,7 +343,7 @@ public class SchedaClientController {
 
     @FXML
     private void condividiScheda(){
-        AlertManager al = new AlertManager(Alert.AlertType.INFORMATION, "Funzionalità in arrivo", null, "Presto sarà possibile visualizzare la scheda in formato pdf");
+        AlertManager al = new AlertManager(Alert.AlertType.INFORMATION, "Funzionalità in arrivo", null, "Presto sarà possibile condividere la scheda");
         al.display();
     }
 

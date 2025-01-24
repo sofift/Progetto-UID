@@ -117,12 +117,7 @@
                         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
                     </padding>
                 </VBox>
-                  <HBox spacing="10.0">
-                      <children>
-                          <RadioButton mnemonicParsing="false" text="Light" />
-                          <RadioButton mnemonicParsing="false" text="Dark" />
-                      </children>
-                  </HBox>
+
             </children>
             <padding>
                 <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />

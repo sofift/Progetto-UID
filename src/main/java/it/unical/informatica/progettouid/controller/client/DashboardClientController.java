@@ -130,7 +130,7 @@ public class DashboardClientController {
                 }
             });
 
-            content.getChildren().addAll(nomeCorso /*orario*/, nomeTrainer, cognomeTrainer /*posti*/, prenota);
+            content.getChildren().addAll(nomeCorso, nomeTrainer, cognomeTrainer, prenota);
             corsiListView.getItems().add(content);
 
         }

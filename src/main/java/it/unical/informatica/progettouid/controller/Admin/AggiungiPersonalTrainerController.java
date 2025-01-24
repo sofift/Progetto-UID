@@ -47,13 +47,8 @@ public class AggiungiPersonalTrainerController implements Initializable {
         setupSpecializzazioni();
         setupValidation();
         setupButtons();
-        setupPasswordField();
     }
 
-    private void setupPasswordField() {
-        copyPasswordButton.setOnAction(e -> copyPasswordToClipdoard());
-        copyPasswordButton.setDisable(true);
-    }
 
     private void copyPasswordToClipdoard() {
         if (generatedPassword != null && generatedPassword.isEmpty()) {
@@ -103,6 +98,18 @@ public class AggiungiPersonalTrainerController implements Initializable {
                 isValidEmail(emailField.getText()) &&
                 isValidPhone(telefonoField.getText());
 
+        if (isValid) {
+            if (generatedPassword == null) {
+                generatedPassword = PasswordUtils.generateSecurePassword();
+                passwordField.setText(generatedPassword);
+                copyPasswordButton.setDisable(false);
+            }
+        } else {
+            passwordField.clear();
+            copyPasswordButton.setDisable(true);
+            generatedPassword = null;
+        }
+
         salvaButton.setDisable(!isValid);
         return isValid;
     }
@@ -133,8 +140,6 @@ public class AggiungiPersonalTrainerController implements Initializable {
         }
 
         try {
-            generatedPassword = PasswordUtils.generateSecurePassword();
-
             // Create a PersonalTrainer record with the generated password
             PersonalTrainer trainer = new PersonalTrainer(
                     0, // ID will be set by database
@@ -161,9 +166,6 @@ public class AggiungiPersonalTrainerController implements Initializable {
                 if (newValue == javafx.concurrent.Worker.State.SUCCEEDED) {
                     Boolean result = task.getValue();
                     if (result != null && result) {
-                        passwordField.setText(generatedPassword);
-                        copyPasswordButton.setDisable(false);
-
                         Alert alert = new Alert(Alert.AlertType.INFORMATION);
                         alert.setTitle("Personal Trainer Aggiunto");
                         alert.setHeaderText("Personal Trainer aggiunto con successo");
@@ -174,7 +176,8 @@ public class AggiungiPersonalTrainerController implements Initializable {
                             Non sarà più possibile visualizzarla dopo la chiusura di questa finestra.
                             """.formatted(generatedPassword));
 
-                        alert.showAndWait().ifPresent(response -> closeWindow());
+                        alert.showAndWait();
+                        resetForm();
                     } else {
                         showError("Errore durante il salvataggio");
                     }
@@ -192,6 +195,18 @@ public class AggiungiPersonalTrainerController implements Initializable {
         } catch (Exception e) {
             showError("Errore: " + e.getMessage());
         }
+    }
+
+    private void resetForm() {
+        nomeField.clear();
+        cognomeField.clear();
+        dataNascitaPicker.setValue(null);
+        specializzazioneCombo.setValue(null);
+        emailField.clear();
+        telefonoField.clear();
+        passwordField.clear();
+        generatedPassword = null;
+        copyPasswordButton.setDisable(true);
     }
 
     private void handleAnnulla() {

@@ -1,50 +1,38 @@
-.billing-container{
-    -fx-background-color: #1a3246;
+.content-area {
+    -fx-background-color: #1a1a1a;
+}
+
+.total-card {
+    -fx-background-color: #2d2d2d;
+}
+
+.card-icon {
+    -fx-icon-color: #3498db;
+}
+
+.amount {
     -fx-text-fill: white;
 }
 
-
-.tab-pane .tab-header-area .tab-header-background {
-    -fx-opacity: 0;
+.label {
+    -fx-text-fill: #adb5bd;
 }
 
-.tab-pane {
-    -fx-tab-min-width:90px;
-}
-
-.tab{
-    -fx-background-insets: 0 1 0 1,0,0;
-}
-.tab-pane .tab {
-    -fx-background-color: #1a3246;
-}
-
-.tab-pane .tab:selected{
-    -fx-background-color: #3c3c3c;
-}
-
-.tab .tab-label {
-    -fx-alignment: CENTER;
-    -fx-font-size: 12px;
-    -fx-font-weight: bold;
-}
-
-.tab:selected .tab-label {
-    -fx-alignment: CENTER;
-}
-
-.payments .button {
-    -fx-background-color: #1a3246;
-}
-
-.payments .ikonli-font-icon{
-    -fx-icon-color: white;
-}
-
-.payments {
+.section-title {
     -fx-text-fill: white;
 }
 
-.payments .tab-header-area .tab-label{
-    -fx-text-fill: #1a3246;
+.chart-container,
+ .table-container {
+    -fx-background-color: #2d2d2d;
+}
+
+.table-view {
+    -fx-background-color: transparent;
+    -fx-border-color: #404040;
+}
+
+.table-view .column-header,
+ .table-view .table-cell {
+    -fx-text-fill: white;
 }

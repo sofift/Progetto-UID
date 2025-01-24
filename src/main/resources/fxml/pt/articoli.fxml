@@ -10,9 +10,9 @@
 <?import javafx.scene.text.Text?>
 <?import org.kordamp.ikonli.javafx.FontIcon?>
 
-<BorderPane stylesheets="@../../styles/calendar.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unical.informatica.progettouid.controller.Trainer.ArticoliController">
+<BorderPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unical.informatica.progettouid.controller.Trainer.ArticoliController">
     <top>
-        <VBox>
+        <VBox styleClass="top" stylesheets="@../../styles/home.css">
             <children>
                 <Label alignment="CENTER" maxWidth="Infinity" text="Attività">
                     <graphic>
@@ -32,13 +32,13 @@
 
 
     <left>
-        <VBox maxWidth="95" minWidth="95" spacing="10" styleClass="sidebar">
+        <VBox maxWidth="95" minWidth="95" spacing="10" styleClass="sidebar" stylesheets="@../../styles/sidebar.css">
             <padding>
                 <Insets bottom="20" top="20" />
             </padding>
             <Button fx:id="dashboardTrainer" maxWidth="Infinity" onAction="#onNavigationButtonClick" styleClass="sidebar-button">
                 <graphic>
-                    <VBox alignment="CENTER" spacing="5">
+                    <VBox alignment="CENTER" spacing="5" styleClass="sidebar-button">
                         <FontIcon iconLiteral="fas-home" />
                         <Text text="Home">
                             <font>
@@ -50,7 +50,7 @@
             </Button>
             <Button fx:id="articoli" maxWidth="Infinity" onAction="#onNavigationButtonClick" styleClass="sidebar-button">
                 <graphic>
-                    <VBox alignment="CENTER" spacing="5">
+                    <VBox alignment="CENTER" spacing="5" styleClass="sidebar-button">
                         <FontIcon iconLiteral="fas-calendar-alt" />
                         <Text text="Articoli">
                             <font>
@@ -62,7 +62,7 @@
             </Button>
             <Button fx:id="creazioneScheda" maxWidth="Infinity" onAction="#onNavigationButtonClick" styleClass="sidebar-button">
                 <graphic>
-                    <VBox alignment="CENTER" spacing="5">
+                    <VBox alignment="CENTER" spacing="5" styleClass="sidebar-button">
                         <FontIcon iconLiteral="far-clipboard" />
                         <Text text="Crea scheda">
                             <font>
@@ -74,7 +74,7 @@
             </Button>
             <Button fx:id="impostazioniPT" maxWidth="Infinity" onAction="#onNavigationButtonClick" styleClass="sidebar-button">
                 <graphic>
-                    <VBox alignment="CENTER" spacing="5">
+                    <VBox alignment="CENTER" spacing="5" styleClass="sidebar-button">
                         <FontIcon iconLiteral="fas-cogs" />
                         <Text text="Impostazioni">
                             <font>
@@ -86,7 +86,7 @@
             </Button>
             <Button maxWidth="Infinity" onAction="#onNavigationButtonClick" styleClass="sidebar-button">
                 <graphic>
-                    <VBox alignment="CENTER" spacing="5">
+                    <VBox alignment="CENTER" spacing="5" styleClass="sidebar-button">
                         <FontIcon iconLiteral="far-question-circle" />
                         <Text text="Help">
                             <font>
@@ -100,13 +100,13 @@
     </left>
 
     <center>
-        <VBox alignment="TOP_CENTER" spacing="10">
+        <VBox alignment="TOP_CENTER" spacing="10" styleClass="center-content" stylesheets="@../../styles/pt/light/articoli.css">
             <padding>
                 <Insets left="10" right="10" />
             </padding>
          <children>
             <Label text="Leggi gli articoli " />
-            <HBox alignment="CENTER" spacing="10.0">
+            <HBox alignment="CENTER" spacing="10.0" styleClass="category-buttons">
                <children>
                   <Button mnemonicParsing="false" onAction="#loadContentPerCategoria" text="Nutrizione" />
                   <Button mnemonicParsing="false" onAction="#loadContentPerCategoria" text="Riposo" />

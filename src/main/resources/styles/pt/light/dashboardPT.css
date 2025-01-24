@@ -1,0 +1,58 @@
+.main-content {
+    -fx-background-color: #f8f9fa;
+}
+
+.dashboard-scroll {
+    -fx-background: transparent;
+    -fx-background-color: transparent;
+}
+
+.dashboard-scroll > .viewport {
+    -fx-background-color: transparent;
+}
+
+.dashboard-card {
+    -fx-background-color: white;
+    -fx-padding: 15px;
+    -fx-spacing: 10;
+    -fx-background-radius: 8px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 2);
+}
+
+.card-title {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2c3e50;
+}
+
+.card-icon {
+    -fx-icon-size: 20px;
+    -fx-icon-color: #4a90e2;
+}
+
+.dismiss-button {
+    -fx-background-color: transparent;
+    -fx-text-fill: #6c757d;
+    -fx-font-size: 12px;
+    -fx-cursor: hand;
+}
+
+.dismiss-button:hover {
+    -fx-text-fill: #4a4a4a;
+}
+
+.list-view {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+
+.list-view .list-cell {
+    -fx-background-color: transparent;
+    -fx-padding: 8px 0;
+    -fx-border-color: #f0f0f0;
+    -fx-border-width: 0 0 1 0;
+}
+
+.list-view .list-cell:hover {
+    -fx-background-color: #f8f9fa;
+}

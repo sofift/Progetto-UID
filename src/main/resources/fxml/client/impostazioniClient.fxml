@@ -11,13 +11,13 @@
 <?import javafx.scene.text.Text?>
 <?import org.kordamp.ikonli.javafx.FontIcon?>
 
-<BorderPane xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unical.informatica.progettouid.controller.client.ImpostazioniClientController">
+<BorderPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unical.informatica.progettouid.controller.client.ImpostazioniClientController">
    <left>
-      <VBox maxWidth="95.0" minWidth="95.0" spacing="10.0">
+      <VBox maxWidth="95.0" minWidth="95.0" spacing="10.0" styleClass="sidebar" stylesheets="@../../styles/sidebar.css">
          <children>
             <Button fx:id="dashboardClient" maxWidth="Infinity" onAction="#onNavigationButtonClick" styleClass="sidebar-button">
                <graphic>
-                  <VBox alignment="CENTER" spacing="5">
+                  <VBox alignment="CENTER" spacing="5" styleClass="sidebar-button">
                      <children>
                         <FontIcon iconLiteral="fas-home" />
                         <Text text="Home">
@@ -31,7 +31,7 @@
             </Button>
             <Button fx:id="attivitaClient" maxWidth="Infinity" onAction="#onNavigationButtonClick" styleClass="sidebar-button">
                <graphic>
-                  <VBox alignment="CENTER" spacing="5">
+                  <VBox alignment="CENTER" spacing="5" styleClass="sidebar-button">
                      <children>
                         <FontIcon iconLiteral="fas-calendar-alt" />
                         <Text text="Attività">
@@ -45,7 +45,7 @@
             </Button>
             <Button fx:id="prenotazionePT" maxWidth="Infinity" onAction="#onNavigationButtonClick" styleClass="sidebar-button">
                <graphic>
-                  <VBox alignment="CENTER" spacing="5">
+                  <VBox alignment="CENTER" spacing="5" styleClass="sidebar-button">
                      <children>
                         <FontIcon iconLiteral="fas-dumbbell" />
                         <Text text="Personal trainer">
@@ -59,7 +59,7 @@
             </Button>
             <Button fx:id="schedaClient" maxWidth="Infinity" onAction="#onNavigationButtonClick" styleClass="sidebar-button">
                <graphic>
-                  <VBox alignment="CENTER" spacing="5">
+                  <VBox alignment="CENTER" spacing="5" styleClass="sidebar-button">
                      <children>
                         <FontIcon iconLiteral="far-clipboard" />
                         <Text text="Scheda">
@@ -73,7 +73,7 @@
             </Button>
             <Button fx:id="abbonamentoClient" maxWidth="Infinity" onAction="#onNavigationButtonClick" styleClass="sidebar-button">
                <graphic>
-                  <VBox alignment="CENTER" spacing="5">
+                  <VBox alignment="CENTER" spacing="5" styleClass="sidebar-button">
                      <children>
                         <FontIcon iconLiteral="far-credit-card" />
                         <Text text="Il tuo abbonamento">
@@ -87,7 +87,7 @@
             </Button>
             <Button fx:id="impostazioniClient" maxWidth="Infinity" onAction="#onNavigationButtonClick" styleClass="sidebar-button">
                <graphic>
-                  <VBox alignment="CENTER" spacing="5">
+                  <VBox alignment="CENTER" spacing="5" styleClass="sidebar-button">
                      <children>
                         <FontIcon iconLiteral="fas-cogs" />
                         <Text text="Impostazioni">
@@ -101,7 +101,7 @@
             </Button>
             <Button maxWidth="Infinity" onAction="#onNavigationButtonClick" styleClass="sidebar-button">
                <graphic>
-                  <VBox alignment="CENTER" spacing="5">
+                  <VBox alignment="CENTER" spacing="5" styleClass="sidebar-button">
                      <children>
                         <FontIcon iconLiteral="far-question-circle" />
                         <Text text="Help">
@@ -120,7 +120,7 @@
       </VBox>
    </left>
    <center>
-      <VBox spacing="10.0" BorderPane.alignment="CENTER">
+      <VBox spacing="10.0" styleClass="impostazioni-container" stylesheets="@../../styles/admin/light/impostazioni.css" BorderPane.alignment="CENTER">
          <children>
             <Label text="Impostazioni" />
             <VBox alignment="CENTER" spacing="10.0">

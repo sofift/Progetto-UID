@@ -1,0 +1,32 @@
+.main-content {
+    -fx-background-color: #1a1a1a;
+}
+
+.dashboard-card {
+    -fx-background-color: #2d2d2d;
+}
+
+.card-title {
+    -fx-text-fill: white;
+}
+
+.card-icon {
+    -fx-icon-color: #3498db;
+}
+
+.dismiss-button {
+    -fx-text-fill: #adb5bd;
+}
+
+.dismiss-button:hover {
+    -fx-text-fill: #ced4da;
+}
+
+.list-view .list-cell {
+    -fx-text-fill: white;
+    -fx-border-color: #404040;
+}
+
+.list-view .list-cell:hover {
+    -fx-background-color: #333333;
+}

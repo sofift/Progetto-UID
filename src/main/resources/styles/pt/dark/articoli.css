@@ -1,0 +1,47 @@
+.center-content {
+    -fx-background-color: #1a1a1a;
+}
+
+.center-content Label {
+    -fx-text-fill: #ffffff;
+}
+
+.center-content Button {
+    -fx-background-color: #3498db;
+    -fx-text-fill: white;
+}
+
+.center-content Button:hover {
+    -fx-background-color: #2980b9;
+}
+
+.center-content Button:pressed {
+    -fx-background-color: #206592;
+}
+
+#vboxContent {
+    -fx-background-color: #2d2d2d;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 10, 0, 0, 2);
+}
+
+.article-container {
+    -fx-background-color: #2d2d2d;
+    -fx-border-color: #404040;
+}
+
+/* Shared Hover Effects */
+.article-container:hover {
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 8, 0, 0, 0);
+    -fx-translate-y: -1px;
+    -fx-transition: all 0.2s ease-in-out;
+}
+
+/* Shared Active States */
+.active-category {
+    -fx-background-color: #2ecc71 !important;
+}
+
+/* Shared Animation */
+.category-buttons Button {
+    -fx-transition: all 0.2s ease-in-out;
+}

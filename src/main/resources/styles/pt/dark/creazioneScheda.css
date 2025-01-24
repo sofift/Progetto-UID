@@ -1,0 +1,50 @@
+.content-area {
+    -fx-background-color: #1a1a1a;
+}
+
+.right-sidebar {
+    -fx-background-color: #2d2d2d;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 10, 0, 0, -5);
+}
+
+.form-label {
+    -fx-text-fill: #ffffff;
+}
+
+.section-header {
+    -fx-text-fill: #ffffff;
+}
+
+.text-area, .dark-theme .text-field {
+    -fx-background-color: #333333;
+    -fx-border-color: #404040;
+    -fx-text-fill: white;
+}
+
+.text-area:focused, .dark-theme .text-field:focused {
+    -fx-border-color: #3498db;
+}
+
+.combo-box, .dark-theme .date-picker {
+    -fx-background-color: #333333;
+    -fx-border-color: #404040;
+    -fx-text-fill: white;
+}
+
+.combo-box:focused, .dark-theme .date-picker:focused {
+    -fx-border-color: #3498db;
+}
+
+.combo-box .list-cell {
+    -fx-background-color: #333333;
+    -fx-text-fill: white;
+}
+
+.date-picker .text-field {
+    -fx-background-color: #333333;
+    -fx-text-fill: white;
+}
+
+.scroll-pane {
+    -fx-background: #2d2d2d;
+}

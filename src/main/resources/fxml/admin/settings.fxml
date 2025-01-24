@@ -1,13 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 <?import org.kordamp.ikonli.javafx.FontIcon?>
 
-<BorderPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="it.unical.informatica.progettouid.controller.Admin.SettingsController">
+<BorderPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unical.informatica.progettouid.controller.Admin.SettingsController">
 
     <top>
         <VBox styleClass="top" stylesheets="@../../styles/home.css">
@@ -31,7 +36,7 @@
                 <Insets bottom="20" top="20" />
             </padding>
 
-            <Button maxWidth="Infinity" styleClass="sidebar-button" onAction="#navigateToHome">
+            <Button maxWidth="Infinity" onAction="#navigateToHome" styleClass="sidebar-button">
                 <graphic>
                     <VBox alignment="CENTER" spacing="5" styleClass="sidebar-button">
                         <FontIcon iconLiteral="fas-home" />
@@ -44,7 +49,7 @@
                 </graphic>
             </Button>
 
-            <Button maxWidth="Infinity" styleClass="sidebar-button" onAction="#navigateToCheckIn">
+            <Button maxWidth="Infinity" onAction="#navigateToCheckIn" styleClass="sidebar-button">
                 <graphic>
                     <VBox alignment="CENTER" spacing="5" styleClass="sidebar-button">
                         <FontIcon iconLiteral="fas-user-check" />
@@ -57,7 +62,7 @@
                 </graphic>
             </Button>
 
-            <Button maxWidth="Infinity" styleClass="sidebar-button" onAction="#navigateToMembers">
+            <Button maxWidth="Infinity" onAction="#navigateToMembers" styleClass="sidebar-button">
                 <graphic>
                     <VBox alignment="CENTER" spacing="5" styleClass="sidebar-button">
                         <FontIcon iconLiteral="fas-users" />
@@ -70,7 +75,7 @@
                 </graphic>
             </Button>
 
-            <Button maxWidth="Infinity" styleClass="sidebar-button" onAction="#navigateToAddUser">
+            <Button maxWidth="Infinity" onAction="#navigateToAddUser" styleClass="sidebar-button">
                 <graphic>
                     <VBox alignment="CENTER" spacing="5" styleClass="sidebar-button">
                         <FontIcon iconLiteral="fas-user-plus" />
@@ -83,7 +88,7 @@
                 </graphic>
             </Button>
 
-            <Button maxWidth="Infinity" styleClass="sidebar-button" onAction="#navigateToAddPT">
+            <Button maxWidth="Infinity" onAction="#navigateToAddPT" styleClass="sidebar-button">
                 <graphic>
                     <VBox alignment="CENTER" spacing="5" styleClass="sidebar-button">
                         <FontIcon iconLiteral="fas-user-plus" />
@@ -96,7 +101,7 @@
                 </graphic>
             </Button>
 
-            <Button maxWidth="Infinity" styleClass="sidebar-button" onAction="#navigateToAddCourse">
+            <Button maxWidth="Infinity" onAction="#navigateToAddCourse" styleClass="sidebar-button">
                 <graphic>
                     <VBox alignment="CENTER" spacing="5" styleClass="sidebar-button">
                         <FontIcon iconLiteral="fas-walking" />
@@ -109,7 +114,7 @@
                 </graphic>
             </Button>
 
-            <Button maxWidth="Infinity" styleClass="sidebar-button" onAction="#navigateToBilling">
+            <Button maxWidth="Infinity" onAction="#navigateToBilling" styleClass="sidebar-button">
                 <graphic>
                     <VBox alignment="CENTER" spacing="5" styleClass="sidebar-button">
                         <FontIcon iconLiteral="far-credit-card" />
@@ -122,7 +127,7 @@
                 </graphic>
             </Button>
 
-            <Button maxWidth="Infinity" styleClass="sidebar-button" onAction="#navigateToAccount">
+            <Button maxWidth="Infinity" onAction="#navigateToAccount" styleClass="sidebar-button">
                 <graphic>
                     <VBox alignment="CENTER" spacing="5" styleClass="sidebar-button">
                         <FontIcon iconLiteral="far-user" />
@@ -135,7 +140,7 @@
                 </graphic>
             </Button>
 
-            <Button maxWidth="Infinity" styleClass="sidebar-button" onAction="#navigateToSettings">
+            <Button maxWidth="Infinity" onAction="#navigateToSettings" styleClass="sidebar-button">
                 <graphic>
                     <VBox alignment="CENTER" spacing="5" styleClass="sidebar-button">
                         <FontIcon iconLiteral="fas-cogs" />
@@ -164,48 +169,51 @@
     </left>
 
     <center>
-        <VBox spacing="20" styleClass="content-area">
+        <VBox spacing="20" styleClass="impostazioni-container" stylesheets="@../../styles/admin/light/impostazioni.css">
             <padding>
-                <Insets top="20" right="20" bottom="20" left="20"/>
+                <Insets bottom="20" left="20" right="20" top="20" />
             </padding>
 
             <VBox spacing="15" styleClass="settings-section">
-                <Label text="Personalizzazione" styleClass="section-header">
+                <Label styleClass="section-header" text="Personalizzazione">
                     <graphic>
-                        <FontIcon iconLiteral="fas-palette"/>
+                        <FontIcon iconLiteral="fas-palette" />
                     </graphic>
                 </Label>
 
                 <VBox spacing="10">
-                    <Label text="Tema"/>
+                    <Label text="Tema" />
                     <HBox spacing="15">
-                        <RadioButton fx:id="lightTheme" text="Light" selected="true" toggleGroup="$themeGroup"/>
-                        <RadioButton fx:id="darkTheme" text="Dark" toggleGroup="$themeGroup"/>
+                        <RadioButton fx:id="lightTheme" selected="true" text="Light">
+                     <toggleGroup>
+                        <ToggleGroup fx:id="themeGroup" />
+                     </toggleGroup></RadioButton>
+                        <RadioButton fx:id="darkTheme" text="Dark" toggleGroup="$themeGroup" />
                         <fx:define>
-                            <ToggleGroup fx:id="themeGroup"/>
+                            <ToggleGroup fx:id="themeGroup" />
                         </fx:define>
                     </HBox>
                 </VBox>
             </VBox>
 
             <VBox spacing="15" styleClass="settings-section">
-                <Label text="Sicurezza" styleClass="section-header">
+                <Label styleClass="section-header" text="Sicurezza">
                     <graphic>
-                        <FontIcon iconLiteral="fas-shield-alt"/>
+                        <FontIcon iconLiteral="fas-shield-alt" />
                     </graphic>
                 </Label>
 
-                <Button text="Cambia Password" onAction="#handleChangePassword">
+                <Button onAction="#handleChangePassword" text="Cambia Password">
                     <graphic>
-                        <FontIcon iconLiteral="fas-key"/>
+                        <FontIcon iconLiteral="fas-key" />
                     </graphic>
                 </Button>
             </VBox>
 
             <VBox spacing="15" styleClass="settings-section">
-                <Button fx:id="logoutButton" text="Logout" onAction="#handleLogout" styleClass="logout-button">
+                <Button fx:id="logoutButton" onAction="#handleLogout" styleClass="logout-button" text="Logout">
                     <graphic>
-                        <FontIcon iconLiteral="fas-sign-out-alt"/>
+                        <FontIcon iconLiteral="fas-sign-out-alt" />
                     </graphic>
                 </Button>
             </VBox>

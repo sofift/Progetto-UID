@@ -17,10 +17,10 @@
 <?import javafx.scene.text.Text?>
 <?import org.kordamp.ikonli.javafx.FontIcon?>
 
-<BorderPane stylesheets="@../../styles/home.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unical.informatica.progettouid.controller.Trainer.CreaSchedaController">
+<BorderPane stylesheets="@../../styles/home.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unical.informatica.progettouid.controller.Trainer.CreaSchedaController">
 
     <top>
-        <VBox>
+        <VBox styleClass="top" stylesheets="@../../styles/home.css">
             <children>
                 <Label alignment="CENTER" maxWidth="Infinity" text="Schede clienti">
                     <graphic>
@@ -40,13 +40,13 @@
 
 
     <left>
-        <VBox maxWidth="95" minWidth="95" spacing="10" styleClass="sidebar">
+        <VBox maxWidth="95" minWidth="95" spacing="10" styleClass="sidebar" stylesheets="@../../styles/sidebar.css">
             <padding>
                 <Insets bottom="20" top="20" />
             </padding>
             <Button fx:id="dashboardTrainer" maxWidth="Infinity" onAction="#onNavigationButtonClick" styleClass="sidebar-button">
                 <graphic>
-                    <VBox alignment="CENTER" spacing="5">
+                    <VBox alignment="CENTER" spacing="5" styleClass="sidebar-button">
                         <FontIcon iconLiteral="fas-home" />
                         <Text text="Home">
                             <font>
@@ -58,7 +58,7 @@
             </Button>
             <Button fx:id="articoli" maxWidth="Infinity" onAction="#onNavigationButtonClick" styleClass="sidebar-button">
                 <graphic>
-                    <VBox alignment="CENTER" spacing="5">
+                    <VBox alignment="CENTER" spacing="5" styleClass="sidebar-button">
                         <FontIcon iconLiteral="fas-calendar-alt" />
                         <Text text="Articoli">
                             <font>
@@ -70,7 +70,7 @@
             </Button>
             <Button fx:id="creazioneScheda" maxWidth="Infinity" onAction="#onNavigationButtonClick" styleClass="sidebar-button">
                 <graphic>
-                    <VBox alignment="CENTER" spacing="5">
+                    <VBox alignment="CENTER" spacing="5" styleClass="sidebar-button">
                         <FontIcon iconLiteral="far-clipboard" />
                         <Text text="Crea scheda">
                             <font>
@@ -82,7 +82,7 @@
             </Button>
             <Button fx:id="impostazioniPT" maxWidth="Infinity" onAction="#onNavigationButtonClick" styleClass="sidebar-button">
                 <graphic>
-                    <VBox alignment="CENTER" spacing="5">
+                    <VBox alignment="CENTER" spacing="5" styleClass="sidebar-button">
                         <FontIcon iconLiteral="fas-cogs" />
                         <Text text="Impostazioni">
                             <font>
@@ -94,7 +94,7 @@
             </Button>
             <Button maxWidth="Infinity" onAction="#onNavigationButtonClick" styleClass="sidebar-button">
                 <graphic>
-                    <VBox alignment="CENTER" spacing="5">
+                    <VBox alignment="CENTER" spacing="5" styleClass="sidebar-button">
                         <FontIcon iconLiteral="far-question-circle" />
                         <Text text="Help">
                             <font>
@@ -108,7 +108,7 @@
     </left>
 
     <center>
-        <VBox fx:id="vboxCenter" spacing="20" styleClass="content-area">
+        <VBox fx:id="vboxCenter" spacing="20" styleClass="content-area" stylesheets="@../../styles/pt/light/creazioneScheda.css">
             <padding>
                 <Insets bottom="20" left="20" right="20" top="20" />
             </padding>
@@ -130,7 +130,7 @@
         <!-- Stack Pane per gestire la visualizzazione dei due pannelli -->
         <StackPane maxWidth="410.0" prefHeight="600.0" prefWidth="270.0">
             <!-- Pannello principale con obiettivi e note -->
-            <VBox fx:id="schedaInfoPanel" maxWidth="300" spacing="15" styleClass="right-sidebar">
+            <VBox fx:id="schedaInfoPanel" maxWidth="300" spacing="15" styleClass="right-sidebar" stylesheets="@../../styles/pt/light/creazioneScheda.css">
                 <padding>
                     <Insets bottom="20" left="20" right="20" top="20" />
                 </padding>

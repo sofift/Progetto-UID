@@ -1,24 +1,26 @@
-.main {
-    -fx-background-color: #1a3246;
+.content-area {
+    -fx-background-color: #1a1a1a;
+}
+
+.table-container {
+    -fx-background-color: #2d2d2d;
+}
+
+.table-view .column-header {
+    -fx-background-color: #333333;
+    -fx-border-color: #404040;
     -fx-text-fill: white;
 }
 
-.button{
-    -fx-background-color: white;
-    -fx-text-fill: #1a3246;
-    -fx-border-color: #1a3246;
-}
-
-.button .ikonli-font-icon {
-    -fx-icon-color: #1a3246;
-}
-
-.button:hover {
-    -fx-background-color: #1a3246;
+.table-view .table-cell {
     -fx-text-fill: white;
-    -fx-border-color: white;
+    -fx-border-color: transparent transparent #404040 transparent;
 }
 
-.button:hover .ikonli-font-icon{
-    -fx-icon-color: white;
+.table-view .table-row-cell {
+    -fx-background-color: #2d2d2d;
+}
+
+.table-view .table-row-cell:selected {
+    -fx-background-color: #404040;
 }

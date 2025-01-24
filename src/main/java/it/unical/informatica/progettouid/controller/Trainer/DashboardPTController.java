@@ -13,6 +13,8 @@ import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class DashboardPTController {
     @FXML private ListView<HBox> prenotazioniList;
@@ -21,7 +23,7 @@ public class DashboardPTController {
 
     public void initialize() {
         prenotazioniList.setFixedCellSize(60);
-        notificationsList.setFixedCellSize(60);// Altezza fissa per ogni cella (in pixel)
+        notificationsList.setFixedCellSize(60);
         String nomePT = PTSession.getInstance().getCurrentTrainer().nome();
         benvenutoLabel.setText(STR."Benvenuto \{nomePT}");
         loadPrenotazioni();
@@ -40,12 +42,14 @@ public class DashboardPTController {
         task.setOnSucceeded(event -> {
             List<PrenotazionePT> prenotazioni = task.getValue();
 
+            System.out.println(prenotazioni);
             displayPrenotazioni(prenotazioni);
 
 
 
         });
         task.setOnFailed(event -> {
+            task.getException().printStackTrace();
             System.out.println("Errore durante il caricamento dei corsi di oggi (listVirw): " + task.getException().getMessage());
         });
 
@@ -66,25 +70,55 @@ public class DashboardPTController {
         }
         for (PrenotazionePT p : prenotazioni) {
             HBox content = new HBox(10);
-            // visualizza nome corso, orario, durata e personal
             content.setAlignment(Pos.CENTER_LEFT);
-
             Label nomeClient = new Label(p.nomeClient());
-            //nomeCorso.setPrefWidth(150); // Fissa larghezza per allineamento
-
             Label cognomeClient = new Label(p.cognomeClient());
-            //orario.setPrefWidth(100);
-
             Label data = new Label(p.data());
-            //trainer.setPrefWidth(150);
-
             Label orario = new Label(p.oraPrenotazione());
             Label notes = new Label(p.notes());
+            Label stato = new Label(p.stato());
 
-            content.getChildren().addAll(nomeClient, cognomeClient, data, orario, notes);
+            content.getChildren().addAll(nomeClient, cognomeClient, data, orario, notes, stato);
+
+            if(p.stato().equals("in attesa") ){
+                Button accetta = new Button("Accetta");
+                Button rifiuta = new Button("Rifiuta");
+
+                accetta.setOnAction(event -> {
+                    modificaPrenotazione(p.idPrenotazione(), "accettata");
+                    accetta.setDisable(true);
+                    rifiuta.setDisable(true);
+                    loadPrenotazioni();
+                });
+
+                rifiuta.setOnAction(event -> {
+                    modificaPrenotazione(p.idPrenotazione(), "rifiutata");
+                    rifiuta.setDisable(true);
+                    accetta.setDisable(true);
+                });
+                content.getChildren().addAll(accetta, rifiuta);
+            }
+
+
+
             prenotazioniList.getItems().add(content);
             prenotazioniList.setPrefHeight(prenotazioni.size() * prenotazioniList.getFixedCellSize());
         }
+    }
+
+    private void modificaPrenotazione(int idPrenotazione, String stato) {
+        Task<Void> task = DBConnection.getInstance().updatePrenotazionePT(idPrenotazione, stato);
+        Thread thread = new Thread(task);
+        thread.setDaemon(true);
+        thread.start();
+
+        task.setOnSucceeded(e->{
+            loadPrenotazioni();
+        });
+
+        task.setOnFailed(event -> {
+            task.getException().printStackTrace();
+        });
     }
 
     private void loadNotifiche() {
@@ -103,6 +137,7 @@ public class DashboardPTController {
         });
 
         task.setOnFailed(event -> {
+            task.getException().printStackTrace();
             System.out.println(STR."Errore durante il caricamento delle notifiche\{task.getException()}");
         });
     }
@@ -128,6 +163,7 @@ public class DashboardPTController {
                 modificaRichiesta(notifica.id(), "accettata");
                 accetta.setDisable(true);
                 rifiuta.setDisable(true);
+                loadPrenotazioni();
             });
 
             rifiuta.setOnAction(event -> {
@@ -144,16 +180,17 @@ public class DashboardPTController {
         }
     }
 
+
     private void modificaRichiesta(int id, String stato) {
         Task<Void> task = DBConnection.getInstance().updateNotifyPT(id, stato);
         Thread thread = new Thread(task);
         thread.setDaemon(true);
         thread.start();
         task.setOnSucceeded(event -> {
-            if(stato == "accetta"){
+            if(stato.equals("accetta")){
                 AlertManager al = new AlertManager(Alert.AlertType.CONFIRMATION, "Accettata", null, "Richiesta accettata");
                 al.display();
-            }else if(stato == "rifiuta"){
+            }else if(stato.equals("rifiuta")){
                 AlertManager al = new AlertManager(Alert.AlertType.CONFIRMATION, "Rifiutata", null, "Richiesta rifiutata");
                 al.display();
             }
@@ -161,6 +198,7 @@ public class DashboardPTController {
         });
 
         task.setOnFailed(event->{
+            task.getException().printStackTrace();
             System.out.println(STR."Errore durante la modifica della richiesta: \{task.getException()}");
         });
 

@@ -6,9 +6,11 @@ import it.unical.informatica.progettouid.view.SceneHandlerClient;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import java.util.List;
 import java.util.Optional;
@@ -37,7 +39,6 @@ public class DashboardClientController {
 
         task.setOnSucceeded(event -> {
             InfoAccessiAbbonamento abbonamento= task.getValue();
-
             if(abbonamento == null){
                 Label nessunAbbonamento = new Label("Non è abbonato, scopri i piani disponibili e adatti a te: ");
                 Button piani = new Button("Scopri");
@@ -52,16 +53,18 @@ public class DashboardClientController {
 
             }
             else{
-                HBox accessi = new HBox(10);
-                Label accessiRimanentiText = new Label(STR."\{abbonamento.accessiRimanenti()}");
-                Label accessiTotaliText = new Label(STR."\{abbonamento.accessiTotali()}");
                 VBox info = new VBox(10);
-                Label scadenzaAbbText = new Label(abbonamento.dataScadenza());
-                Label tipoAbb = new Label(abbonamento.tipoAbbonamento());
+                HBox accessi = new HBox(10);
+                Label accessiRimanentiText = new Label(STR."Accessi rimanenti: \{abbonamento.accessiRimanenti()}");
+                Label accessiTotaliText = new Label(STR."Accessi totali: \{abbonamento.accessiTotali()}");
+                accessi.getChildren().addAll(accessiRimanentiText, accessiTotaliText);
 
-                info.getChildren().addAll(scadenzaAbbText, tipoAbb);
-                accessi.getChildren().addAll(accessiRimanentiText, accessiTotaliText, info);
-                vboxCenter.getChildren().add(accessi);
+                Label scadenzaAbbText = new Label(STR."Scadenza abbonamento: \{abbonamento.dataScadenza()}");
+                Label tipoAbb = new Label(STR."Tipo abbonamento: \{abbonamento.tipoAbbonamento()}");
+
+                info.getChildren().addAll(accessi, scadenzaAbbText, tipoAbb);
+
+                vboxAccessi.getChildren().add(info);
             }
 
         });
@@ -83,7 +86,7 @@ public class DashboardClientController {
         });
 
         task.setOnFailed(event -> {
-            System.out.println("Errore durante il caricamento dei corsi di oggi (listVirw): " + task.getException().getMessage());
+            System.out.println(STR."Errore durante il caricamento dei corsi di oggi (listVirw): \{task.getException().getMessage()}");
         });
 
         new Thread(task).start();
@@ -91,6 +94,11 @@ public class DashboardClientController {
 
     private void displayCorsi(List<Corsi> corsi) {
         corsiListView.getItems().clear();
+        corsiListView.setFixedCellSize(90);
+        corsiListView.setPrefHeight(corsi.size() * corsiListView.getFixedCellSize() +5);
+
+        VBox.setVgrow(corsiListView, Priority.ALWAYS);
+
         if (corsi.isEmpty()) {
             HBox emptyContent = new HBox();
             emptyContent.setAlignment(Pos.CENTER);
@@ -103,36 +111,46 @@ public class DashboardClientController {
 
         for(Corsi c: corsi){
             HBox content = new HBox(10);
-            // visualizza nome corso, orario, durata e personal
             content.setAlignment(Pos.CENTER_LEFT);
+            content.setPadding(new Insets(0, 16, 0, 16));
 
             Label nomeCorso = new Label(c.nome());
-            //nomeCorso.setPrefWidth(150); // Fissa larghezza per allineamento
 
-            //Label orario = new Label(c.oraInizio());
-            //orario.setPrefWidth(100);
+            Label nomeTrainer = new Label(c.nomeTrainer());
+            Label cognomeTrainer = new Label(c.cognomeTrainer());
 
-            Label trainer = new Label(c.PT());
-            //trainer.setPrefWidth(150);
-
-            //Label posti = new Label(String.valueOf(c.maxPartecipanti()));
-
-            // TODO : LOGICA PER SALVARE LA PRENOTAZIONE
             Button prenota = new Button("Prenota");
             prenota.setOnAction(e -> {
                 AlertManager conf = new AlertManager(Alert.AlertType.CONFIRMATION, "Conferma prenotazione", null, STR."Confermi la prenotazione per il corso \{c.nome()}?");
                 Optional<ButtonType> result = conf.showAndWait();
                 if (result.isPresent() && result.get() == ButtonType.OK) {
-                    salvaPrenotazioneCorso(c.id());
+                    confermaPrenotazione(c.id());
                 } else {
                     System.out.println("Cancellazione annullata.");
                 }
             });
 
-            content.getChildren().addAll(nomeCorso /*orario*/, trainer /*posti*/, prenota);
+            content.getChildren().addAll(nomeCorso /*orario*/, nomeTrainer, cognomeTrainer /*posti*/, prenota);
             corsiListView.getItems().add(content);
 
         }
+    }
+
+    private void confermaPrenotazione(int idCorso) {
+        Task<Boolean> checkTask = DBConnection.getInstance().hasPrenotazioneOggi(idCorso);
+        Thread checkThread = new Thread(checkTask);
+        checkThread.setDaemon(true);
+        checkThread.start();
+
+        checkTask.setOnSucceeded(e -> {
+            if (checkTask.getValue()) {
+                AlertManager alert = new AlertManager(Alert.AlertType.WARNING, "Errore", null,
+                        "Hai già una prenotazione per questo corso oggi");
+                alert.display();
+                return;
+            }
+            salvaPrenotazioneCorso(idCorso);
+        });
     }
 
     private void salvaPrenotazioneCorso(int idCorso) {
@@ -169,6 +187,13 @@ public class DashboardClientController {
 
     private void displayNotifiche(List<Notifica> notifiche) {
         notificationListView.getItems().clear();
+        notificationListView.setFixedCellSize(90);
+        notificationListView.setPrefHeight(notifiche.size() * notificationListView.getFixedCellSize() +5);
+        //VBox.setVgrow(listArticoli, Priority.ALWAYS);
+
+        // Permette alla ListView di adattarsi dinamicamente
+        VBox.setVgrow(notificationListView, Priority.ALWAYS);
+
         if (notifiche == null || notifiche.isEmpty()) {
             HBox emptyContent = new HBox();
             emptyContent.setAlignment(Pos.CENTER);
@@ -185,7 +210,6 @@ public class DashboardClientController {
             notificationListView.getItems().add(content);
         }
     }
-
 
     @FXML
     public void onNavigationButtonClick(ActionEvent event) {

@@ -1,9 +1,14 @@
 package it.unical.informatica.progettouid.model;
 
-public record PrenotazionePT(int idPT, String nomeClient, String cognomeClient, String data, String oraPrenotazione, String notes) {
+public record PrenotazionePT(int idPrenotazione, int idPT, String nomeClient, String cognomeClient, String data, String oraPrenotazione, String notes, String stato) {
     @Override
     public String nomeClient() {
         return nomeClient;
+    }
+
+    @Override
+    public int idPrenotazione() {
+        return idPrenotazione;
     }
 
     @Override
@@ -29,5 +34,10 @@ public record PrenotazionePT(int idPT, String nomeClient, String cognomeClient, 
     @Override
     public String notes() {
         return notes;
+    }
+
+    @Override
+    public String stato() {
+        return stato;
     }
 }

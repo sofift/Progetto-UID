@@ -22,10 +22,10 @@ public class ImpostazioniClientController {
 
     public void initialize() {
         client = ClientSession.getInstance().getCurrentClient();
-        nomeLabel.setText("Nome: " + client.nome() );
-        cognomeLabel.setText("Cognome: " + client.cognome() );
-        dataNascitaLabel.setText("Data di nascita: " + client.dataNascita());
-        emailLabel.setText("Email: " + client.email() );
+        nomeLabel.setText(STR."Nome: \{client.nome()}");
+        cognomeLabel.setText(STR."Cognome: \{client.cognome()}");
+        dataNascitaLabel.setText(STR."Data di nascita: \{client.dataNascita()}");
+        emailLabel.setText(STR."Email: \{client.email()}");
     }
 
     @FXML
@@ -55,6 +55,7 @@ public class ImpostazioniClientController {
             e.printStackTrace();
         }
     }
+
 
     /*
     @FXML private RadioButton lightTheme;
@@ -107,13 +108,15 @@ public class ImpostazioniClientController {
         scene.getStylesheets().add(stylesheet);
     }
 
+    */
+
     public void logout(ActionEvent actionEvent) throws Exception {
         try {
             SceneHandlerClient.getInstance().logout();
         } catch (Exception e) {
             AlertManager al = new AlertManager(Alert.AlertType.ERROR, "Errore", "Errore durante il logout", "Si è verificato un errore durante il logout. Riprova");
             al.showAndWait();
-        }}
+        }
+    }
 
-     */
 }

@@ -186,18 +186,18 @@ public class DBConnection {
         return asyncCall(() -> {
             List<PersonalTrainer> trainers = FXCollections.observableArrayList();
             if (isConnected()) {
-                String query = "SELECT * FROM PersonalTrainer;";
+                String query = "SELECT * FROM PersonalTrainer ;";
                 PreparedStatement stmt = con.prepareStatement(query);
                 ResultSet rs = stmt.executeQuery();
                 while (rs.next()) {
                     trainers.add(new PersonalTrainer(
-                            rs.getInt("ID"),
+                            rs.getInt("id"),
                             rs.getString("Nome"),
                             rs.getString("Cognome"),
                             rs.getString("DataNascita"),
                             rs.getString("Specializzazione"),
                             rs.getString("Email"),
-                            "", // Password vuota per motivi di sicurezza
+                            null,
                             rs.getString("Telefono")));
                 }
                 stmt.close();
@@ -205,7 +205,6 @@ public class DBConnection {
             return trainers;
         });
     }
-
 
     public Task<List<String>> getNomeAllPT() {
         return asyncCall(() -> {
@@ -230,23 +229,23 @@ public class DBConnection {
         return asyncCall(() -> {
             if (isConnected()) {
                 int idClient = ClientSession.getInstance().getCurrentClient().id();
-                String query = "SELECT pt.* " +
-                        "FROM PersonalTrainer pt, Schede s " +
-                        "WHERE s.ClienteID = ? " +
-                        "AND s.PersonalTrainerID = pt.ID;";  // Aggiunta condizione di join
+                String query = "SELECT pt.nome, pt.cognome, pt.DataNascita, pt.specializzazione, pt.email, pt.telefono" +
+                        " FROM PersonalTrainer pt, Schede s " +
+                        "WHERE s.ClienteID = ?;";
                 PreparedStatement stmt = con.prepareStatement(query);
                 stmt.setInt(1, idClient);
                 ResultSet rs = stmt.executeQuery();
                 if (rs.next()) {
                     return new PersonalTrainer(
-                            rs.getInt("ID"),
+                            rs.getInt("id"),
                             rs.getString("Nome"),
                             rs.getString("Cognome"),
                             rs.getString("DataNascita"),
                             rs.getString("Specializzazione"),
                             rs.getString("Email"),
-                            "", // Password vuota per motivi di sicurezza
+                            null,
                             rs.getString("Telefono"));
+
                 }
                 stmt.close();
             }
@@ -258,17 +257,18 @@ public class DBConnection {
         return asyncCall(() -> {
             List<Corsi> corsi = FXCollections.observableArrayList();
             if (isConnected()) {
-                String query = "SELECT *" +
-                        "FROM Corsi c ";
+                String query = "SELECT c.*, pt.Nome AS NomeTrainer, pt.Cognome AS CognomeTrainer " +
+                        "FROM Corsi c JOIN PersonalTrainer pt ON c.idTrainer = pt.ID";
                 PreparedStatement stmt = con.prepareStatement(query);
                 ResultSet rs = stmt.executeQuery();
                 while (rs.next()) {
                     corsi.add(new Corsi(
-                            rs.getInt(1),
-                            rs.getString(2),
-                            rs.getString(3),
-                            rs.getInt(4),
-                            rs.getString(5)
+                            rs.getInt("ID"),
+                            rs.getString("Nome"),
+                            rs.getString("Descrizione"),
+                            rs.getInt("idTrainer"),
+                            rs.getString("NomeTrainer"),
+                            rs.getString("CognomeTrainer")
                     ));
 
                 }
@@ -283,19 +283,22 @@ public class DBConnection {
             String today = LocalDate.now().getDayOfWeek().getDisplayName(TextStyle.FULL, Locale.ITALIAN).toLowerCase();
             List<Corsi> corsi = FXCollections.observableArrayList();
             if (isConnected()) {
-                String query = "SELECT c.ID, c.Nome, c.Descrizione, c.idTrainer " +
-                        "FROM Corsi c JOIN OrarioCorsi oc ON c.ID = oc.idCorso " +
+                String query = "SELECT c.ID, c.Nome AS NomeCorso, c.Descrizione, c.idTrainer, pt.Nome AS NomeTrainer, pt.Cognome AS CognomeTrainer  " +
+                        "FROM Corsi c " +
+                        "JOIN OrarioCorsi oc ON c.ID = oc.idCorso " +
+                        "JOIN PersonalTrainer pt ON c.idTrainer = pt.ID " +
                         "WHERE oc.giorno = ?";
                 PreparedStatement stmt = con.prepareStatement(query);
                 stmt.setString(1, today);
                 ResultSet rs = stmt.executeQuery();
                 while (rs.next()) {
                     corsi.add(new Corsi(
-                            rs.getInt(1),
-                            rs.getString(2),
-                            rs.getString(3),
-                            rs.getInt(4),
-                            rs.getString(5)
+                            rs.getInt("ID"),
+                            rs.getString("NomeCorso"),
+                            rs.getString("Descrizione"),
+                            rs.getInt("idTrainer"),
+                            rs.getString("NomeTrainer"),
+                            rs.getString("CognomeTrainer")
                     ));
 
                 }
@@ -471,20 +474,17 @@ public class DBConnection {
                 try (PreparedStatement stmt = con.prepareStatement(query)) {
                     stmt.setString(1, email);
                     try (ResultSet rs = stmt.executeQuery()) {
-                        if (rs.next()) {  // Prima muoviamo il cursore
-                            String storedHash = rs.getString("Password");
-                            if (BCrypt.checkpw(password, storedHash)) {
-                                return new PersonalTrainer(
-                                        rs.getInt("ID"),
-                                        rs.getString("Nome"),
-                                        rs.getString("Cognome"),
-                                        rs.getString("DataNascita"),
-                                        rs.getString("Specializzazione"),
-                                        rs.getString("Email"),
-                                        "", // Password vuota per motivi di sicurezza
-                                        rs.getString("Telefono")
-                                );
-                            }
+                        String storedHash = rs.getString("Password");
+                        if (rs.next() && BCrypt.checkpw(password, storedHash)) {
+                            return new PersonalTrainer(
+                                    rs.getInt("ID"),
+                                    rs.getString("Nome"),
+                                    rs.getString("Cognome"),
+                                    rs.getString("DataNascita"),
+                                    rs.getString("Specializzazione"),
+                                    rs.getString("Email"),
+                                    password,
+                                    rs.getString("Telefono"));
                         }
                     }
                 }
@@ -552,13 +552,14 @@ public class DBConnection {
         return asyncCall(() -> {
             if (isConnected()) {
                 int idClient = ClientSession.getInstance().getCurrentClient().id();
-                String query = "INSERT INTO PrenotazioniPT (idPT, idClient, data, oraPrenotazione, notes) VALUES(?, ?, ?, ?, ?);";
+                String query = "INSERT INTO PrenotazioniPT (idPT, idClient, data, oraPrenotazione, notes, stato) VALUES(?, ?, ?, ?, ?, ?);";
                 try (PreparedStatement stmt = con.prepareStatement(query)) {
                     stmt.setInt(1, trainerId);
                     stmt.setInt(2, idClient);
                     stmt.setString(3, data);
                     stmt.setString(4, oraPrenotazione);
                     stmt.setString(5, notes);
+                    stmt.setString(6, "in attesa");
                     stmt.executeUpdate();
                     return true;
                 }
@@ -624,21 +625,23 @@ public class DBConnection {
             List<PrenotazionePT> prenotazioni = new ArrayList<>();
             if (isConnected()) {
                 int idPT = PTSession.getInstance().getCurrentTrainer().id();
-                String query = "SELECT c.nome, c.cognome, p.data, p.oraPrenotazione, p.notes " +
+                String query = "SELECT p.ID, p.data, p.oraPrenotazione, p.notes, p.stato, c.nome, c.cognome " +
                         "FROM PrenotazioniPT p " +
                         "JOIN Clienti c ON c.id = p.idClient " +
-                        "WHERE p.idPT = ?;";
+                        "WHERE p.idPT = ? ORDER BY p.id DESC ;";
                 PreparedStatement stmt = con.prepareStatement(query);
                 stmt.setInt(1, idPT);
                 try (ResultSet rs = stmt.executeQuery()) {
                     while (rs.next()) {
                         prenotazioni.add( new PrenotazionePT(
+                                rs.getInt("ID"),
                                 rs.getInt(idPT),
-                                rs.getString(2),
-                                rs.getString(3),
-                                rs.getString(4),
-                                rs.getString(5),
-                                rs.getString(6)));
+                                rs.getString("Nome"),
+                                rs.getString("Cognome"),
+                                rs.getString("Data"),
+                                rs.getString("oraPrenotazione"),
+                                rs.getString("notes"),
+                                rs.getString("stato")));
                     }
                 }
                 stmt.close();
@@ -805,7 +808,6 @@ public class DBConnection {
                     stmt.setString(4, formattedDate);
                     stmt.setString(5, stato);
                     stmt.executeUpdate();
-
                 }
             }
             return null;
@@ -815,18 +817,20 @@ public class DBConnection {
     // far modificare il giorno relativo al giorno della settimana in data effettiva
     private String getDataDaGiorno(String giorno) {
         Map<String, DayOfWeek> giorni = Map.of(
-                "Lunedì", DayOfWeek.MONDAY,
-                "Martedì", DayOfWeek.TUESDAY,
-                "Mercoledì", DayOfWeek.WEDNESDAY,
-                "Giovedì", DayOfWeek.THURSDAY,
-                "Venerdì", DayOfWeek.FRIDAY,
-                "Sabato", DayOfWeek.SATURDAY,
-                "Domenica", DayOfWeek.SUNDAY
+                "lunedì", DayOfWeek.MONDAY,
+                "martedì", DayOfWeek.TUESDAY,
+                "mercoledì", DayOfWeek.WEDNESDAY,
+                "giovedì", DayOfWeek.THURSDAY,
+                "venerdì", DayOfWeek.FRIDAY,
+                "sabato", DayOfWeek.SATURDAY,
+                "domenica", DayOfWeek.SUNDAY
         );
         LocalDate today = LocalDate.now();
         LocalDate startOfWeek = today.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
         DayOfWeek targetDay = giorni.get(giorno.toLowerCase());
-        LocalDate targetDate = startOfWeek.with(TemporalAdjusters.nextOrSame(targetDay));
+        LocalDate targetDate = today.with(today.getDayOfWeek().getValue() < targetDay.getValue() ?
+                TemporalAdjusters.nextOrSame(targetDay) :
+                TemporalAdjusters.next(targetDay));
         return targetDate.format(DateTimeFormatter.ISO_LOCAL_DATE);
     }
 
@@ -871,48 +875,31 @@ public class DBConnection {
     public Task<Boolean> checkIn(String code) {
         return asyncCall(() -> {
             if (isConnected()) {
-                // Prima verifica se il client esiste
-                String verifyClient = "SELECT Id FROM Clienti WHERE Id = ?";
-                try (PreparedStatement checkStmt = con.prepareStatement(verifyClient)) {
-                    checkStmt.setString(1, code);
-                    ResultSet checkRs = checkStmt.executeQuery();
-                    if (!checkRs.next()) {
-                        throw new IllegalArgumentException("Codice cliente non valido.");
-                    }
-                }
-
-                // Poi verifica l'abbonamento
                 String verifyquery = """
-                SELECT c.Id, a.AccessiRimanenti 
-                FROM Clienti c
-                JOIN Abbonamenti a ON c.Id = a.ClienteID 
-                WHERE c.Id = ? 
-                AND a.Stato = 'attivo' 
-                AND a.DataScadenza >= date('now')
-                AND a.AccessiRimanenti > 0
-                ORDER BY a.DataScadenza DESC
-                LIMIT 1""";
-
+                        SELECT c.Id, a.AccessiRimanenti\s
+                                        FROM Clienti c
+                                        LEFT JOIN Abbonamenti a ON c.Id = a.ClienteID\s
+                                        WHERE c.Id = ?\s
+                                        AND a.Stato = 'attivo'\s
+                                        AND a.DataScadenza >= date('now')
+                                        AND a.AccessiRimanenti > 0 """;
                 try (PreparedStatement stmt = con.prepareStatement(verifyquery)) {
                     stmt.setString(1, code);
                     ResultSet rs = stmt.executeQuery();
 
                     if (!rs.next()) {
-                        throw new IllegalArgumentException("Cliente senza abbonamento valido o accessi esauriti.");
+                        throw new IllegalArgumentException("Codice non valido o abbonamento scaduto.");
                     }
-
                     int clientId = rs.getInt("Id");
                     int accessiRimanenti = rs.getInt("AccessiRimanenti");
 
-                    // Registra l'accesso
                     String insertQuery = "INSERT INTO AccessiPalestra (ClienteID, DataOraIngresso) VALUES (?, datetime('now', 'localtime'))";
                     try (PreparedStatement stmt2 = con.prepareStatement(insertQuery)) {
                         stmt2.setInt(1, clientId);
                         stmt2.executeUpdate();
                     }
 
-                    // Aggiorna gli accessi rimanenti
-                    String updateQuery = "UPDATE Abbonamenti SET AccessiRimanenti = ? WHERE ClienteID = ? AND Stato = 'attivo' AND DataScadenza >= date('now')";
+                    String updateQuery = "UPDATE Abbonamenti SET AccessiRimanenti = ? WHERE ClienteID = ? AND Stato = 'attivo'";
                     try (PreparedStatement stmt3 = con.prepareStatement(updateQuery)) {
                         stmt3.setInt(1, accessiRimanenti - 1);
                         stmt3.setInt(2, clientId);
@@ -965,93 +952,55 @@ public class DBConnection {
         });
     }
 
-    public Task<Boolean> insertCorso(NuovoCorso corso) {
+    public Task<Boolean> hasPrenotazioneCorso(int idCorso, String giorno) {
         return asyncCall(() -> {
             if (isConnected()) {
-                // First insert the course
-                String queryCorso = "INSERT INTO Corsi (Nome, Descrizione, Durata, PT) VALUES (?, ?, ?, ?);";
-                int corsoId;
+                String dataCorso = getDataDaGiorno(giorno);
+                int idClient = ClientSession.getInstance().getCurrentClient().id();
+                String query = "SELECT COUNT(*) FROM PrenotazioniCorsi WHERE idCorso = ? AND idClient = ? AND dataPrenotazione = ?";
 
-                try (PreparedStatement stmt = con.prepareStatement(queryCorso, Statement.RETURN_GENERATED_KEYS)) {
-                    stmt.setString(1, corso.getNome());
-                    stmt.setString(2, corso.getDescrizione());
-                    stmt.setInt(3, corso.getDurata());
-                    stmt.setString(4, corso.getPt());
-                    stmt.executeUpdate();
-
-                    // Get the generated course ID
-                    try (ResultSet rs = stmt.getGeneratedKeys()) {
-                        if (rs.next()) {
-                            corsoId = rs.getInt(1);
-                        } else {
-                            throw new SQLException("Failed to get course ID");
-                        }
+                try (PreparedStatement stmt = con.prepareStatement(query)) {
+                    stmt.setInt(1, idCorso);
+                    stmt.setInt(2, idClient);
+                    stmt.setString(3, dataCorso);
+                    try(ResultSet rs = stmt.executeQuery()){
+                        if(rs.next()) return rs.getInt(1) > 0;
                     }
-                }
 
-                // Then insert the schedule for each day
-                String queryOrari = "INSERT INTO OrarioCorsi (idCorso, giorno, oraInizio, oraFine) VALUES (?, ?, ?, ?);";
-                try (PreparedStatement stmt = con.prepareStatement(queryOrari)) {
-                    for (String giorno : corso.getGiorni()) {
-                        stmt.setInt(1, corsoId);
-                        stmt.setString(2, giorno);
-                        stmt.setString(3, corso.getOrarioInizio().toString());
-                        stmt.setString(4, corso.getOrarioFine().toString());
-                        stmt.addBatch();
-                    }
-                    stmt.executeBatch();
                 }
-
-                return true;
             }
             return false;
         });
     }
 
-    /*public LocalDate getInizioSettimana() {
-        LocalDate today = LocalDate.now();
-        DayOfWeek dayOfWeek = today.getDayOfWeek();
-        int daysFromMonday = dayOfWeek.getValue() - DayOfWeek.MONDAY.getValue();
-        return today.minusDays(daysFromMonday);
+    public Task<Boolean> hasPrenotazioneOggi(int idCorso) {
+        return asyncCall(() -> {
+            if (!isConnected()) return false;
+
+            int idClient = ClientSession.getInstance().getCurrentClient().id();
+            String query = "SELECT COUNT(*) FROM PrenotazioniCorsi WHERE idCorso = ? AND idClient = ? AND dataPrenotazione = CURRENT_DATE";
+
+            try (PreparedStatement stmt = con.prepareStatement(query)) {
+                stmt.setInt(1, idCorso);
+                stmt.setInt(2, idClient);
+                ResultSet rs = stmt.executeQuery();
+                return rs.next() && rs.getInt(1) > 0;
+            }
+        });
     }
 
-    public Task<Void> aggiornaConteggioPresenzeCorsi(int idCorso, String data){
+
+    public Task<Void> updatePrenotazionePT(int idPrenotazione, String stato) {
         return asyncCall(() -> {
             if (isConnected()) {
-                LocalDate inizioSettimana = getInizioSettimana();
-                String query = "INSERT INTO ConteggioPrenotazioni (idCorso, dataPrenotazione, contatore) VALUES (?, ?, 1) ON DUPLICATE KEY UPDATE contatore = contatore + 1;";
+                String query = "UPDATE PrenotazioniPT SET stato = ? WHERE ID = ?";
                 try (PreparedStatement stmt = con.prepareStatement(query)) {
-                    stmt.setInt(1, idCorso);
-                    stmt.setDate(2, Date.valueOf(inizioSettimana));
+                    stmt.setString(1, stato);
+                    stmt.setInt(2, idPrenotazione);
                     stmt.executeUpdate();
-                } catch (SQLException e) {
-                    e.printStackTrace();
                 }
             }
             return null;
         });
-
     }
-
-    public Task<List<ConteggioCorso>> getConteggiSettimanali(int idCorso){
-        return asyncCall(()->{
-           if(isConnected()){
-               List<ConteggioCorso> conteggi = new ArrayList<>();
-               LocalDate inizioSettimana = getInizioSettimana();
-               String query = "SELECT contatore FROM ConteggioPrenotazioni WHERE idCorso = ? AND settimanaCorrente = ?";
-               try (PreparedStatement stmt = con.prepareStatement(query)) {
-                   stmt.setInt(1, idCorso);
-                   stmt.setDate(2, Date.valueOf(inizioSettimana));
-                   try (ResultSet rs = stmt.executeQuery()) {
-                       if (rs.next()) {
-                           conteggi.add(new ConteggioCorso(idCorso, inizioSettimana, rs.getInt("contatore")));
-                       }
-                   }
-               } catch (SQLException e) {
-                   e.printStackTrace();
-               }
-               return conteggi;
-           }
-        });
-    }*/
 }

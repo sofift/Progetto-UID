@@ -45,7 +45,7 @@ public class AbbonamentoClientController {
                 scrollPiani.setPrefWidth(500);
                 Label clientNonAbbonato = new Label("Ops, pare che tu non abbia ancora un abbonamento, scorri tra i nostri piani disponibili e scelgi quello più adatto a te");
                 datiAbbonamentoVBox.getChildren().add(clientNonAbbonato);
-                return;
+
             }
             else{
                 displayInfoAbbonamento(info);
@@ -67,17 +67,21 @@ public class AbbonamentoClientController {
         abbonamento.getChildren().addAll(tipoAbbonamentoIcon, tipoAbbonamentoLabel);
 
         VBox infoAbbonamento = new VBox();
-        Label dateInit = new Label("Data inizio:");
-        Label dataInizioLabel = new Label(info.dataInizio());
-        Label dataScad = new Label("Data scadenza:");
-        Label dataScadenzaLabel = new Label(info.dataScadenza());
-        Label stato = new Label("Stato:");
-        Label statoAbbonamentoLabel = new Label(info.stato());
+        Label dataInizioLabel = new Label("Data inizio:" + info.dataInizio());
+        Label dataScadenzaLabel = new Label("Data scadenza:" + info.dataScadenza());
+        Label statoAbbonamentoLabel = new Label("Stato:" + info.stato());
+
 
         infoAbbonamento.getChildren().addAll(dataInizioLabel, dataScadenzaLabel, statoAbbonamentoLabel);
+        if(info.stato().equals("scaduto")){
+            Button rinnovo = new Button("Rinnova il tuo piano");
+            infoAbbonamento.getChildren().add(rinnovo);
+            rinnovo.setOnAction(e->{
+                scrollPiani.setPrefWidth(800);
+            });
+        }
 
-        Button rinnovo = new Button("Rinnova il tuo piano");
-        datiAbbonamentoVBox.getChildren().addAll(abbonamento, infoAbbonamento, rinnovo);
+        datiAbbonamentoVBox.getChildren().addAll(abbonamento, infoAbbonamento);
     }
 
     private void loadPianiOfferti() {
@@ -125,10 +129,13 @@ public class AbbonamentoClientController {
     }
 
     private void showFormAbbonamento(TipiAbbonamento abbonamento) {
-        //scrollPiani.setPrefWidth(300);
         centerBox.getChildren().clear();
         VBox formBox = new VBox(10);
 
+        ScrollPane scroll = new ScrollPane();
+        scroll.setFitToWidth(true);
+        scroll.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
+        scroll.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         Label title = new Label("Acquisto abbonamento");
         Client loggedClient = ClientSession.getInstance().getCurrentClient();
 
@@ -140,15 +147,15 @@ public class AbbonamentoClientController {
 
         Label numeroCartaLabel = new Label("Numero Carta:");
         TextField numeroCartaField = new TextField();
-        numeroCartaField.setPromptText("0000 0000 000000");
+        numeroCartaField.setPromptText("Numero carta");
 
         Label scadenzaLabel = new Label("Scadenza:");
         TextField scadenzaField = new TextField();
-        scadenzaField.setPromptText("mm/aaaa");
+        scadenzaField.setPromptText("MM/YY");
 
         Label cvvLabel = new Label("CVV:");
         TextField cvvField = new TextField();
-        cvvField.setPromptText("123");
+        cvvField.setPromptText("CVV");
 
         Separator separator = new Separator();
 
@@ -168,9 +175,9 @@ public class AbbonamentoClientController {
         confermaButton.setOnAction(e -> processaPagamento(numeroCartaField.getText(), scadenzaField.getText(), cvvField.getText(), abbonamento.id(), abbonamento.prezzo()));
 
         formBox.getChildren().add(hboxButton);
+        scroll.setContent(formBox);
 
-
-        centerBox.getChildren().add(formBox);
+        centerBox.getChildren().add(scroll);
     }
 
     private void processaPagamento(String numeroCarta, String scadenzaLabel, String cvv, int idAbbonamento, int importo) {
@@ -192,8 +199,6 @@ public class AbbonamentoClientController {
         }
     }
 
-    //
-    // TODO: rivedere la finestra di dialogo perchè mi mostra entrmbi gli avvisi di pagamento
     private void registraPagamento(int idAbbonamento, int importo, String stato) {
         Task<Void> task = DBConnection.getInstance().insertPagamento(idAbbonamento, importo, stato);
         Thread thread = new Thread(task);
@@ -201,13 +206,14 @@ public class AbbonamentoClientController {
 
         task.setOnSucceeded(e->{
             if(stato.equals("avvenuto")){
-                AlertManager conferma  = new AlertManager(Alert.AlertType.CONFIRMATION, "Pagamento avvenuto con successo", null, "Pagamento andato a buon fine");
-                conferma.display();
+                    AlertManager conferma  = new AlertManager(Alert.AlertType.CONFIRMATION, "Pagamento avvenuto con successo", null, "Pagamento andato a buon fine");
+                    conferma.display();
             }
             else if(stato.equals("fallito")){
-                AlertManager fal  = new AlertManager(Alert.AlertType.ERROR, "Pagamento fallito", null, "Pagamento non andato a buonfine");
-                fal.display();
+                    AlertManager fal  = new AlertManager(Alert.AlertType.ERROR, "Pagamento fallito", null, "Pagamento non andato a buonfine");
+                    fal.display();
             }
+
         });
 
         task.setOnFailed(e->{

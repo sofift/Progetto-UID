@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.net.URL?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
@@ -55,8 +56,8 @@
             <Button fx:id="articoli" maxWidth="Infinity" onAction="#onNavigationButtonClick" styleClass="sidebar-button">
                 <graphic>
                     <VBox alignment="CENTER" spacing="5" styleClass="sidebar-button">
-                        <FontIcon iconLiteral="fas-calendar-alt" />
-                        <Text text="Articoli">
+                        <FontIcon iconLiteral="fas-globe" />
+                        <Text text="Siti e articoli">
                             <font>
                                 <Font size="9.0" />
                             </font>
@@ -102,40 +103,42 @@
             </Button>
         </VBox>
     </left>
+   <stylesheets>
+      <URL value="@../../styles/homePT.css" />
+      <URL value="@../../styles/home.css" />
+   </stylesheets>
+   <center>
+         <VBox spacing="20" styleClass="main-content" BorderPane.alignment="CENTER">
+             <padding>
+                 <Insets bottom="20" left="20" right="20" top="20" />
+             </padding>
 
-    <center>
-        <ScrollPane fitToWidth="true" styleClass="dashboard-scroll" stylesheets="@../../styles/pt/light/dashboardPT.css">
-            <VBox spacing="20" styleClass="main-content">
-                <padding>
-                    <Insets bottom="20" left="20" right="20" top="20" />
-                </padding>
+             <HBox spacing="20">
+            <children>
+               <Label fx:id="benvenutoLabel" />
+            </children>
+         </HBox>
 
-                <HBox spacing="20">
-               <children>
-                  <Label fx:id="benvenutoLabel" />
-               </children></HBox>
+             <HBox spacing="20">
+                 <VBox styleClass="dashboard-card" HBox.hgrow="ALWAYS">
+                     <HBox alignment="CENTER_LEFT" spacing="10">
+                         <FontIcon iconLiteral="fas-calendar-check" styleClass="card-icon" />
+                         <Label styleClass="card-title" text="My Bookings" />
+                     </HBox>
+                     <ListView fx:id="prenotazioniList" VBox.vgrow="ALWAYS" />
+                 </VBox>
 
-                <HBox spacing="20">
-                    <VBox styleClass="dashboard-card" HBox.hgrow="ALWAYS">
-                        <HBox alignment="CENTER_LEFT" spacing="10">
-                            <FontIcon iconLiteral="fas-calendar-check" styleClass="card-icon" />
-                            <Label styleClass="card-title" text="My Bookings" />
-                        </HBox>
-                        <ListView fx:id="prenotazioniList" VBox.vgrow="ALWAYS" />
-                    </VBox>
-
-                    <VBox styleClass="dashboard-card" HBox.hgrow="ALWAYS">
-                        <HBox alignment="CENTER_LEFT" spacing="10">
-                            <FontIcon iconLiteral="fas-bell" styleClass="card-icon" />
-                            <Label styleClass="card-title" text="Notifications" />
-                            <Region HBox.hgrow="ALWAYS" />
-                            <Button fx:id="eliminaNotifiche" onAction="#deleteNotify" styleClass="dismiss-button" text="DISMISS ALL" />
-                        </HBox>
-                        <ListView fx:id="notificationsList" VBox.vgrow="ALWAYS" />
-                    </VBox>
-                </HBox>
-            </VBox>
-        </ScrollPane>
-    </center>
+                 <VBox styleClass="dashboard-card" HBox.hgrow="ALWAYS">
+                     <HBox alignment="CENTER_LEFT" spacing="10">
+                         <FontIcon iconLiteral="fas-bell" styleClass="card-icon" />
+                         <Label styleClass="card-title" text="Notifications" />
+                         <Region HBox.hgrow="ALWAYS" />
+                         <Button fx:id="eliminaNotifiche" onAction="#deleteNotify" styleClass="dismiss-button" text="DISMISS ALL" />
+                     </HBox>
+                     <ListView fx:id="notificationsList" VBox.vgrow="ALWAYS" />
+                 </VBox>
+             </HBox>
+         </VBox>
+   </center>
 
 </BorderPane>

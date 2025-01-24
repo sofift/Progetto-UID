@@ -16,11 +16,11 @@
         <Text styleClass="mainText" text="Benvenuto in FlexFit Gym" />
         <Text styleClass="normalText" text="Seleziona il tipo di accesso" />
 
-        <Button fx:id="btnClient" onAction="#onClientLogin" prefWidth="200.0" text="Accesso Cliente" />
+        <Button fx:id="btnClient" onAction="#onClientLogin" prefHeight="48.0" prefWidth="231.0" text="Accesso Cliente" />
 
-        <Button fx:id="btnAdmin" onAction="#onAdminLogin" prefWidth="200.0" text="Accesso Amministratore" />
+        <Button fx:id="btnAdmin" onAction="#onAdminLogin" prefHeight="48.0" prefWidth="233.0" text="Accesso Amministratore" />
 
-        <Button fx:id="btnTrainer" onAction="#onTrainerLogin" prefWidth="200.0" text="Accesso Personal Trainer" />
+        <Button fx:id="btnTrainer" onAction="#onTrainerLogin" prefHeight="48.0" prefWidth="230.0" text="Accesso Personal Trainer" />
     </VBox>
 
 </StackPane>

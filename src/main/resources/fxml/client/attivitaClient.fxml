@@ -11,16 +11,16 @@
 <?import javafx.scene.text.Text?>
 <?import org.kordamp.ikonli.javafx.FontIcon?>
 
-<BorderPane stylesheets="@../../styles/calendar.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unical.informatica.progettouid.controller.client.AttivitaClientController">
+<BorderPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unical.informatica.progettouid.controller.client.AttivitaClientController">
    <left>
       <VBox maxWidth="95.0" minWidth="95.0" spacing="10.0" styleClass="sidebar" stylesheets="@../../styles/sidebar.css">
          <children>
             <Button fx:id="dashboardClient" maxWidth="Infinity" onAction="#onNavigationButtonClick" styleClass="sidebar-button">
                <graphic>
-                  <VBox spacing="5" styleClass="sidebar-button">
+                  <VBox alignment="CENTER" spacing="5" styleClass="sidebar-button">
                      <children>
                         <FontIcon iconLiteral="fas-home" />
-                        <Text text="Home" textAlignment="LEFT">
+                        <Text text="Home">
                            <font>
                               <Font size="9.0" />
                            </font>
@@ -31,7 +31,7 @@
             </Button>
             <Button fx:id="attivitaClient" maxWidth="Infinity" onAction="#onNavigationButtonClick" styleClass="sidebar-button">
                <graphic>
-                  <VBox alignment="CENTER" spacing="5" styleClass="sidebar">
+                  <VBox alignment="CENTER" spacing="5" styleClass="sidebar-button">
                      <children>
                         <FontIcon iconLiteral="fas-calendar-alt" />
                         <Text text="Attività">
@@ -121,7 +121,7 @@
    </left>
 
    <top>
-      <VBox>
+      <VBox styleClass="top" stylesheets="@../../styles/home.css">
          <Label alignment="CENTER" maxWidth="Infinity" styleClass="top" stylesheets="@../../styles/home.css" text="Attività">
             <graphic>
                <FontIcon iconLiteral="fas-calendar-alt" />
